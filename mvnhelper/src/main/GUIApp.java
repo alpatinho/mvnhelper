@@ -234,14 +234,18 @@ public class GUIApp extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(jButton1, "Informe o caminho do subsistema.", "Erro!", 2);
                 count++;
             }
+            
+            System.out.println(System.getProperty("user.dir"));
+            System.out.println(System.getProperty("user.dir")+"/main/scripts/compila.bat");
             if (count == 1) {
                 String debug = "";
                 if (jCheckBox1.isSelected()) {
                     debug = "-Ddebug";
                 }
                 Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
-                    "start C:/Users/lucas.bergmann/Desktop/Projetos/mvnhelper/mvnhelper/src/main/scripts/compila.bat",
-                    "C:\\sistemas\\SUBVERSION\\CCRP\\ccrp6.50.0-63493\\ccrp-clipper\\ccrp-libsiret1",
+                    "start",
+                    System.getProperty("user.dir")+"/src/main/scripts/compila.bat",
+                    jTextField2.getText(),
                     "mvn",
                     "clean",
                     "install",
