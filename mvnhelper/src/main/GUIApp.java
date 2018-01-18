@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -189,13 +190,10 @@ public class GUIApp extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox1)
                 .addGap(10, 10, 10)
@@ -231,17 +229,26 @@ public class GUIApp extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             // TODO add your handling code here:
-            String debug = "";
-            if(jCheckBox1.isSelected()) {
-                debug = "-Ddebug";
+            int count = 1;
+            if (jTextField2.getText().equals("")) {
+                JOptionPane.showMessageDialog(jButton1, "Informe o caminho do subsistema.", "Erro!", 2);
+                count++;
             }
-            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c"
-                                                  ,"start C:/Users/lucas.bergmann/Desktop/Projetos/mvnhelper/mvnhelper/src/main/scripts/compila.bat"
-                                                  ,"C:\\sistemas\\SUBVERSION\\CCRP\\ccrp6.50.0-63493\\ccrp-clipper\\ccrp-libsiret1"
-                                                  ,"mvn"
-                                                  ,"clean"
-                                                  ,"install"
-                                                  ,debug});
+            if (count == 1) {
+                String debug = "";
+                if (jCheckBox1.isSelected()) {
+                    debug = "-Ddebug";
+                }
+                Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
+                    "start C:/Users/lucas.bergmann/Desktop/Projetos/mvnhelper/mvnhelper/src/main/scripts/compila.bat",
+                    "C:\\sistemas\\SUBVERSION\\CCRP\\ccrp6.50.0-63493\\ccrp-clipper\\ccrp-libsiret1",
+                    "mvn",
+                    "clean",
+                    "install",
+                    debug});
+            } else {
+                return;
+            }
         } catch (IOException ex) {
             Logger.getLogger(GUIApp.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -304,16 +311,24 @@ public class GUIApp extends javax.swing.JFrame {
                 if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUIApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIApp.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUIApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIApp.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUIApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIApp.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUIApp.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUIApp.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
