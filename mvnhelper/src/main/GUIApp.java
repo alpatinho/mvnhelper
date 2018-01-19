@@ -355,7 +355,8 @@ public class GUIApp extends javax.swing.JFrame {
         jTextField4.setText(caminhoMacro);
         properties.setProperty("prop.caminho.macro", caminhoMacro);
         System.out.println(properties.getProperty("prop.caminho.macro"));
-        listaArquivosComboBox(true);
+        jComboBox2.removeAllItems();
+        listaArquivosComboBox(jTextField4.getText(), false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
@@ -367,7 +368,7 @@ public class GUIApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-
+        //listaArquivosComboBox(false);
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -409,7 +410,7 @@ public class GUIApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-
+        listaArquivosComboBox(jTextField4.getText(), true);
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     /*
@@ -418,12 +419,12 @@ public class GUIApp extends javax.swing.JFrame {
     *               ou para executar
     *
      */
-    private void listaArquivosComboBox(boolean macro) {
+    private void listaArquivosComboBox(String path, boolean macro) {
         File f2;
         if (macro) {
-            f2 = new File(jTextField4.getText() + "/target/classes/win32-bcc5.x-xhb0.99.x");
+            f2 = new File(path + "/target/classes/win32-bcc5.x-xhb0.99.x");
         } else {
-            f2 = new File(jTextField3.getText());
+            f2 = new File(path);
         }
         // diretorio para procurar os executaveis        
 
