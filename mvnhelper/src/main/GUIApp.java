@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -333,12 +334,31 @@ public class GUIApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+                //jTextField4.setText(properties.getProperty("prop.caminho.macro"));
+        Preferences pref = Preferences.userRoot();
+
+        // Retrieve the selected path or use
+        // an empty string if no path has
+        // previously been selected
+        String path = pref.get("DEFAULT_PATH", "");
+
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.showOpenDialog(null);
-        File f = chooser.getSelectedFile();
-        caminhoComponente = f.getAbsolutePath();
-        jTextField2.setText(caminhoComponente);
+
+        // Set the path that was saved in preferences
+        chooser.setCurrentDirectory(new File(path));
+
+        int returnVal = chooser.showOpenDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            chooser.setCurrentDirectory(f);
+            
+            caminhoComponente = f.getAbsolutePath();
+            jTextField2.setText(caminhoComponente);
+            // Save the selected path
+            pref.put("DEFAULT_PATH", f.getAbsolutePath());
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -346,17 +366,31 @@ public class GUIApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        jTextField4.setText(properties.getProperty("prop.caminho.macro"));
+        //jTextField4.setText(properties.getProperty("prop.caminho.macro"));
+        Preferences pref = Preferences.userRoot();
+
+        // Retrieve the selected path or use
+        // an empty string if no path has
+        // previously been selected
+        String path = pref.get("DEFAULT_PATH", "");
+
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.showOpenDialog(null);
-        File f = chooser.getSelectedFile();
-        caminhoMacro = f.getAbsolutePath();
-        jTextField4.setText(caminhoMacro);
-        properties.setProperty("prop.caminho.macro", caminhoMacro);
-        System.out.println(properties.getProperty("prop.caminho.macro"));
-        jComboBox2.removeAllItems();
-        listaArquivosComboBox(jTextField4.getText(), false);
+
+        // Set the path that was saved in preferences
+        chooser.setCurrentDirectory(new File(path));
+
+        int returnVal = chooser.showOpenDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            chooser.setCurrentDirectory(f);
+            
+            caminhoMacro = f.getAbsolutePath();
+            jTextField4.setText(caminhoMacro);
+            // Save the selected path
+            pref.put("DEFAULT_PATH", f.getAbsolutePath());
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
