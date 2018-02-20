@@ -5,6 +5,10 @@
  */
 package main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -16,6 +20,9 @@ import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -109,6 +116,11 @@ public class GUIApp extends javax.swing.JFrame {
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField4ActionPerformed(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField4KeyTyped(evt);
             }
         });
 
@@ -458,6 +470,24 @@ public class GUIApp extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
+    private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
+        // TODO add your handling code here:
+        jComboBox2.removeAllItems();
+        if (!jTextField4.getText().trim().equals("")) {
+            File f = new File(jTextField4.getText());
+
+            if (f.listFiles(new FileExtensionFilter()).length > 0) {
+                for (File file : f.listFiles(new FileExtensionFilter())) {
+                    if (jComboBox2.getItemCount() == 0) {
+                        jComboBox2.addItem(file.getName());
+                    } else if (!existeExe(file.getName())) {
+                        jComboBox2.addItem(file.getName());
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jTextField4KeyTyped
+
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
@@ -466,17 +496,6 @@ public class GUIApp extends javax.swing.JFrame {
                 System.out.println(fileEntry.getName());
             }
         }
-    }
-
-    public boolean existeExe(String exe) {
-        boolean achou = false;
-        for (int i = 0; i < jComboBox2.getItemCount(); i++) {
-            if (jComboBox2.getItemAt(i).equals(exe)) {
-                achou = true;
-            } 
-        }
-
-        return achou;
     }
 
     /**
@@ -491,6 +510,30 @@ public class GUIApp extends javax.swing.JFrame {
         }
     }
 
+    public boolean existeExe(String exe) {
+        boolean achou = false;
+        for (int i = 0; i < jComboBox2.getItemCount(); i++) {
+            if (jComboBox2.getItemAt(i).equals(exe)) {
+                achou = true;
+            }
+        }
+
+        return achou;
+    }
+
+    /* esse codigo serve para fazer algo quando o usuario seleciona um item
+    da combobox
+    class ItemChangeListener implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent event) {
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                Object item = event.getItem();
+                // do something with object
+                System.out.println("teste");
+            }
+        }
+    }
+     */
     /**
      * @param args the command line arguments
      */
