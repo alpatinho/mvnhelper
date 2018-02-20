@@ -85,6 +85,11 @@ public class GUIApp extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton3.setText("Copiar Executável");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Banco:");
@@ -347,7 +352,7 @@ public class GUIApp extends javax.swing.JFrame {
         String path = pref.get("DEFAULT_PATH", "");
 
         JFileChooser chooser = new JFileChooser();
-        chooser.setPreferredSize(new Dimension(700,500));
+        chooser.setPreferredSize(new Dimension(700, 500));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         // Set the path that was saved in preferences
@@ -380,7 +385,7 @@ public class GUIApp extends javax.swing.JFrame {
         String path = pref.get("DEFAULT_PATH", "");
 
         JFileChooser chooser = new JFileChooser();
-        chooser.setPreferredSize(new Dimension(700,500));
+        chooser.setPreferredSize(new Dimension(700, 500));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         // Set the path that was saved in preferences
@@ -481,12 +486,28 @@ public class GUIApp extends javax.swing.JFrame {
                         }
                     }
                 }
-            } else{
+            } else {
                 jComboBox2.removeAllItems();
             }
         }
     }//GEN-LAST:event_jTextField4KeyTyped
-    
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
+                "start",
+                System.getProperty("user.dir") + "/src/main/scripts/copia.bat",
+                jTextField4.getText() + "\\target\\classes\\win32-bcc5.x-xhb0.99.x\\",
+                jTextField3.getText()});
+
+        } catch (IOException ex) {
+            Logger.getLogger(GUIApp.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
