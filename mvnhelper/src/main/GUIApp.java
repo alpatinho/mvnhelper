@@ -5,24 +5,17 @@
  */
 package main;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 /**
  *
@@ -354,6 +347,7 @@ public class GUIApp extends javax.swing.JFrame {
         String path = pref.get("DEFAULT_PATH", "");
 
         JFileChooser chooser = new JFileChooser();
+        chooser.setPreferredSize(new Dimension(700,500));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         // Set the path that was saved in preferences
@@ -386,6 +380,7 @@ public class GUIApp extends javax.swing.JFrame {
         String path = pref.get("DEFAULT_PATH", "");
 
         JFileChooser chooser = new JFileChooser();
+        chooser.setPreferredSize(new Dimension(700,500));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         // Set the path that was saved in preferences
@@ -472,22 +467,26 @@ public class GUIApp extends javax.swing.JFrame {
 
     private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
         // TODO add your handling code here:
-        jComboBox2.removeAllItems();
+        //jComboBox2.removeAllItems();
         if (!jTextField4.getText().trim().equals("")) {
-            File f = new File(jTextField4.getText());
+            if (jTextField4.getText().trim().contains("win32-bcc5.x-xhb0.99.x")) {
+                File f = new File(jTextField4.getText());
 
-            if (f.listFiles(new FileExtensionFilter()).length > 0) {
-                for (File file : f.listFiles(new FileExtensionFilter())) {
-                    if (jComboBox2.getItemCount() == 0) {
-                        jComboBox2.addItem(file.getName());
-                    } else if (!existeExe(file.getName())) {
-                        jComboBox2.addItem(file.getName());
+                if (f.listFiles(new FileExtensionFilter()).length >= 0) {
+                    for (File file : f.listFiles(new FileExtensionFilter())) {
+                        if (jComboBox2.getItemCount() == 0) {
+                            jComboBox2.addItem(file.getName());
+                        } else if (!existeExe(file.getName())) {
+                            jComboBox2.addItem(file.getName());
+                        }
                     }
                 }
+            } else{
+                jComboBox2.removeAllItems();
             }
         }
     }//GEN-LAST:event_jTextField4KeyTyped
-
+    
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
