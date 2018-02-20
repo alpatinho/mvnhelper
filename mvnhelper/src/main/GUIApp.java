@@ -395,7 +395,11 @@ public class GUIApp extends javax.swing.JFrame {
 
         if (f.listFiles(new FileExtensionFilter()).length > 0) {
             for (File file : f.listFiles(new FileExtensionFilter())) {
-                System.out.println(file.getName());
+                if (jComboBox2.getItemCount() == 0) {
+                    jComboBox2.addItem(file.getName());
+                } else if (!existeExe(file.getName())) {
+                    jComboBox2.addItem(file.getName());
+                }
             }
         }
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -462,6 +466,17 @@ public class GUIApp extends javax.swing.JFrame {
                 System.out.println(fileEntry.getName());
             }
         }
+    }
+
+    public boolean existeExe(String exe) {
+        boolean achou = false;
+        for (int i = 0; i < jComboBox2.getItemCount(); i++) {
+            if (jComboBox2.getItemAt(i).equals(exe)) {
+                achou = true;
+            } 
+        }
+
+        return achou;
     }
 
     /**
