@@ -186,6 +186,11 @@ public class GUIApp extends javax.swing.JFrame {
 
         jTextField3.setEditable(false);
         jTextField3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField3KeyTyped(evt);
@@ -194,6 +199,11 @@ public class GUIApp extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton7.setText("Executar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel9.setText("Executar:");
@@ -577,6 +587,31 @@ public class GUIApp extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        try {
+            String setbanco[] = jTextField1.getText().split(" ");
+
+            Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
+                "start",
+                System.getProperty("user.dir") + "/src/main/scripts/executa.bat",
+                setbanco[0],
+                setbanco[1],
+                caminhoExecucao,
+                caminhoExecucao+"/"+jComboBox3.getSelectedItem(),
+                jTextField5.getText()});
+
+        } catch (IOException ex) {
+            Logger.getLogger(GUIApp.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
 
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
