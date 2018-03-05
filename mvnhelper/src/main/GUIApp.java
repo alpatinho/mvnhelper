@@ -25,6 +25,7 @@ public class GUIApp extends javax.swing.JFrame {
 
     private String caminhoComponente;
     private String caminhoMacro;
+    private String caminhoExecucao;
     private String comandoCompilacao;
     private static Properties properties;
     private String workDir;
@@ -101,6 +102,7 @@ public class GUIApp extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Componente sub:");
 
+        jTextField2.setEditable(false);
         jTextField2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,6 +113,7 @@ public class GUIApp extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Componente macro:");
 
+        jTextField4.setEditable(false);
         jTextField4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,6 +184,7 @@ public class GUIApp extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Destino:");
 
+        jTextField3.setEditable(false);
         jTextField3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -201,6 +205,11 @@ public class GUIApp extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setText("Procurar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -324,6 +333,7 @@ public class GUIApp extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -523,8 +533,50 @@ public class GUIApp extends javax.swing.JFrame {
 
     private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
         // TODO add your handling code here:
-       // jComboBox3.addItem();
+        // jComboBox3.addItem();
     }//GEN-LAST:event_jTextField3KeyTyped
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+
+        Preferences pref = Preferences.userRoot();
+
+        // Retrieve the selected path or use
+        // an empty string if no path has
+        // previously been selected
+        String path = pref.get("DEFAULT_PATH", "");
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setPreferredSize(new Dimension(700, 500));
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        // Set the path that was saved in preferences
+        chooser.setCurrentDirectory(new File(path));
+
+        int returnVal = chooser.showOpenDialog(null);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File f = chooser.getSelectedFile();
+            chooser.setCurrentDirectory(f);
+
+            caminhoExecucao = f.getAbsolutePath();
+            jTextField4.setText(caminhoExecucao);
+            // Save the selected path
+            pref.put("DEFAULT_PATH", f.getAbsolutePath());
+        }
+
+        File f = new File(caminhoExecucao);
+
+        if (f.listFiles(new FileExtensionFilter()).length > 0) {
+            for (File file : f.listFiles(new FileExtensionFilter())) {
+                if (jComboBox3.getItemCount() == 0) {
+                    jComboBox3.addItem(file.getName());
+                } else if (!existeExe(file.getName())) {
+                    jComboBox3.addItem(file.getName());
+                }
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
