@@ -7,7 +7,6 @@ package main;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Properties;
@@ -625,19 +624,6 @@ public class GUIApp extends javax.swing.JFrame {
         return achou;
     }
 
-    /* esse codigo serve para fazer algo quando o usuario seleciona um item
-    da combobox
-    class ItemChangeListener implements ItemListener {
-        @Override
-        public void itemStateChanged(ItemEvent event) {
-            if (event.getStateChange() == ItemEvent.SELECTED) {
-                Object item = event.getItem();
-                // do something with object
-                System.out.println("teste");
-            }
-        }
-    }
-     */
     /**
      * @param args the command line arguments
      */
@@ -673,25 +659,12 @@ public class GUIApp extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        File file = new File("./properties/dados.properties");
-        properties = new Properties();
-
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new GUIApp().setVisible(true);
             }
         });
-
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            properties.store(fos, "FILE DADOS PROPERTIES:");
-            fos.close();
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            ex.printStackTrace();
-        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
