@@ -175,22 +175,11 @@ public class GUIApp extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Origem EXE:");
 
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
-
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Destino:");
 
         jTextField3.setEditable(false);
         jTextField3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
         jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextField3KeyTyped(evt);
@@ -361,7 +350,7 @@ public class GUIApp extends javax.swing.JFrame {
                 }
                 Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
                     "start",
-                    System.getProperty("user.dir") + "/src/main/scripts/compila.bat",
+                    System.getProperty("user.dir") + "/src/scripts/compila.bat",
                     jTextField2.getText(),
                     "mvn",
                     "clean",
@@ -476,7 +465,7 @@ public class GUIApp extends javax.swing.JFrame {
                 }
                 Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
                     "start",
-                    System.getProperty("user.dir") + "/src/main/scripts/compila.bat",
+                    System.getProperty("user.dir") + "/src/scripts/compila.bat",
                     jTextField4.getText(),
                     "mvn",
                     "clean",
@@ -498,10 +487,6 @@ public class GUIApp extends javax.swing.JFrame {
             jCheckBox1.setSelected(false);
         }
     }//GEN-LAST:event_jCheckBox2ActionPerformed
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
-
-    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jTextField4KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyTyped
         // TODO add your handling code here:
@@ -531,7 +516,7 @@ public class GUIApp extends javax.swing.JFrame {
 
             Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
                 "start",
-                System.getProperty("user.dir") + "/src/main/scripts/copia.bat",
+                System.getProperty("user.dir") + "/src/scripts/copia.bat",
                 jTextField4.getText() + "\\target\\classes\\win32-bcc5.x-xhb0.99.x\\",
                 jTextField3.getText()});
 
@@ -570,7 +555,7 @@ public class GUIApp extends javax.swing.JFrame {
             chooser.setCurrentDirectory(f);
 
             caminhoExecucao = f.getAbsolutePath();
-            jTextField4.setText(caminhoExecucao);
+            jTextField3.setText(caminhoExecucao);
             // Save the selected path
             pref.put("DEFAULT_PATH", f.getAbsolutePath());
         }
@@ -595,23 +580,18 @@ public class GUIApp extends javax.swing.JFrame {
 
             Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c",
                 "start",
-                System.getProperty("user.dir") + "/src/main/scripts/executa.bat",
+                System.getProperty("user.dir") + "/src/scripts/executa.bat",
                 setbanco[0],
                 setbanco[1],
                 caminhoExecucao,
-                caminhoExecucao+"/"+jComboBox3.getSelectedItem(),
+                caminhoExecucao + "/" + jComboBox3.getSelectedItem(),
                 jTextField5.getText()});
 
         } catch (IOException ex) {
             Logger.getLogger(GUIApp.class.getName()).log(Level.SEVERE, null, ex);
-
         }
 
     }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
 
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
@@ -642,7 +622,6 @@ public class GUIApp extends javax.swing.JFrame {
                 achou = true;
             }
         }
-
         return achou;
     }
 
