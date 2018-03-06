@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main;
 
 import java.awt.Dimension;
@@ -16,18 +11,15 @@ import java.util.prefs.Preferences;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author lucas.bergmann
- */
 public class GUIApp extends javax.swing.JFrame {
 
     private String caminhoComponente;
     private String caminhoMacro;
     private String caminhoExecucao;
     private String comandoCompilacao;
-    private static Properties properties;
     private String workDir;
+    private Configs con = new Configs();
+    private String agencia = con.getProp("agencia");
 
     /**
      * Creates new form GUIApp
@@ -75,6 +67,14 @@ public class GUIApp extends javax.swing.JFrame {
         setTitle("MVNHelper 1.0");
         setPreferredSize(new java.awt.Dimension(466, 700));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setText("Compilar subsistema");
@@ -592,6 +592,20 @@ public class GUIApp extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    //Método de inicialização da ferramenta
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        jTextField5.setText(con.getProp("agencia"));
+        jTextField1.setText(con.getProp("banco"));
+        jTextField2.setText(con.getProp("componentesub"));
+    }//GEN-LAST:event_formWindowActivated
+
+    //Método para encerramento da ferramenta
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        con.saveProp("agencia", jTextField5.getText());
+        con.saveProp("banco", jTextField1.getText());
+        con.saveProp("componentesub", jTextField2.getText());
+    }//GEN-LAST:event_formWindowClosing
+
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
@@ -603,7 +617,7 @@ public class GUIApp extends javax.swing.JFrame {
     }
 
     /**
-     * Class to filter files which have a .exe extension
+     * Filtra apenas arquivos .exe
      *
      */
     class FileExtensionFilter implements FilenameFilter {
@@ -624,15 +638,7 @@ public class GUIApp extends javax.swing.JFrame {
         return achou;
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Metal".equals(info.getName())) {
@@ -657,11 +663,9 @@ public class GUIApp extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUIApp.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public void run() {     
                 new GUIApp().setVisible(true);
             }
         });
