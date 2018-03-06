@@ -74,6 +74,9 @@ public class GUIApp extends javax.swing.JFrame {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
         });
 
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -103,11 +106,6 @@ public class GUIApp extends javax.swing.JFrame {
 
         jTextField2.setEditable(false);
         jTextField2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Componente macro:");
@@ -387,14 +385,11 @@ public class GUIApp extends javax.swing.JFrame {
 
             caminhoComponente = f.getAbsolutePath();
             jTextField2.setText(caminhoComponente);
+            System.out.println(caminhoComponente);
             // Save the selected path
             pref.put("DEFAULT_PATH", f.getAbsolutePath());
         }
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         //jTextField4.setText(properties.getProperty("prop.caminho.macro"));
@@ -596,7 +591,6 @@ public class GUIApp extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         jTextField5.setText(con.getProp("agencia"));
         jTextField1.setText(con.getProp("banco"));
-        jTextField2.setText(con.getProp("componentesub"));
     }//GEN-LAST:event_formWindowActivated
 
     //Método para encerramento da ferramenta
@@ -605,6 +599,11 @@ public class GUIApp extends javax.swing.JFrame {
         con.saveProp("banco", jTextField1.getText());
         con.saveProp("componentesub", jTextField2.getText());
     }//GEN-LAST:event_formWindowClosing
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        jTextField2.setText(con.getProp("componentesub"));
+    }//GEN-LAST:event_formWindowOpened
 
     public void listFilesForFolder(final File folder) {
         for (final File fileEntry : folder.listFiles()) {
