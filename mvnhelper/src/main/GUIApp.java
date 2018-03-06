@@ -370,6 +370,10 @@ public class GUIApp extends javax.swing.JFrame {
         // previously been selected
         String path = pref.get("DEFAULT_PATH", "");
 
+        if (!"".equals(con.getProp("componentesub"))) {
+            path = con.getProp("componentesub");
+        }
+
         JFileChooser chooser = new JFileChooser();
         chooser.setPreferredSize(new Dimension(700, 500));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -387,7 +391,8 @@ public class GUIApp extends javax.swing.JFrame {
             jTextField2.setText(caminhoComponente);
             System.out.println(caminhoComponente);
             // Save the selected path
-            pref.put("DEFAULT_PATH", f.getAbsolutePath());
+            //pref.put("DEFAULT_PATH", f.getAbsolutePath());
+            con.saveProp("componentesub", jTextField2.getText());
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -399,6 +404,10 @@ public class GUIApp extends javax.swing.JFrame {
         // an empty string if no path has
         // previously been selected
         String path = pref.get("DEFAULT_PATH", "");
+
+        if (!"".equals(con.getProp("componentemacro"))) {
+            path = con.getProp("componentemacro");
+        }
 
         JFileChooser chooser = new JFileChooser();
         chooser.setPreferredSize(new Dimension(700, 500));
@@ -416,7 +425,8 @@ public class GUIApp extends javax.swing.JFrame {
             caminhoMacro = f.getAbsolutePath();
             jTextField4.setText(caminhoMacro);
             // Save the selected path
-            pref.put("DEFAULT_PATH", f.getAbsolutePath());
+            //pref.put("DEFAULT_PATH", f.getAbsolutePath());
+            con.saveProp("componentemacro", jTextField4.getText());
         }
 
         File f = new File(caminhoMacro + "/target/classes/win32-bcc5.x-xhb0.99.x");
@@ -597,12 +607,12 @@ public class GUIApp extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         con.saveProp("agencia", jTextField5.getText());
         con.saveProp("banco", jTextField1.getText());
-        con.saveProp("componentesub", jTextField2.getText());
     }//GEN-LAST:event_formWindowClosing
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         jTextField2.setText(con.getProp("componentesub"));
+        jTextField4.setText(con.getProp("componentemacro"));
     }//GEN-LAST:event_formWindowOpened
 
     public void listFilesForFolder(final File folder) {
@@ -662,9 +672,9 @@ public class GUIApp extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(GUIApp.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {     
+            public void run() {
                 new GUIApp().setVisible(true);
             }
         });
