@@ -13,9 +13,6 @@ import javafx.scene.control.TextField;
 
 public class Controller {
 
-    private Properties conf = new Properties();
-    private String confPatch = "FxGUI/Data/DefaultValues.conf";
-
     private AcessoDados valores = new AcessoDados();
 
     @FXML private ResourceBundle resources;
@@ -62,16 +59,6 @@ public class Controller {
 
     @FXML private TextField TFSetBanco;
 
-//
-//    TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
-//    TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe"));
-//    TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
-//    TFOrigemExeExecucao.setText(valores.getValorPadrao("DirCaminhoExe"));
-//    TFSetBanco.setText(valores.getValorPadrao("SetBanco"));
-//    CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
-//    CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
-
-
     @FXML void ActionAgencia(ActionEvent event) {
 
     }
@@ -92,8 +79,8 @@ public class Controller {
 
     }
 
-    @FXML void ActionBuscarSubsistema(ActionEvent event) {////////////////////////////////////////////////////
-        TFSubsistema.setText("teste de valor");
+    @FXML void ActionBuscarSubsistema(ActionEvent event) {
+
     }
 
     @FXML void ActionCompilarMacrosistema(ActionEvent event) {
@@ -141,12 +128,13 @@ public class Controller {
     }
 
     @FXML void initialize() {
-
-        TFSubsistema.setText("Valor inicializado");
-        //TFSubsistema.setText();
-        String x = valores.getValorPadrao("DirSubsistema");
-
-
-
+        TFSubsistema.setText(valores.getValorPadrao("DirSubsistema"));
+        TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
+        TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe"));
+        TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
+        TFOrigemExeExecucao.setText(valores.getValorPadrao("DirCaminhoExe"));
+        TFSetBanco.setText(valores.getValorPadrao("SetBanco"));
+        CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
+        CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
     }
 }
