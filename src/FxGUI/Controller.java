@@ -1,19 +1,22 @@
 package FxGUI;
 
 import java.net.URL;
-import java.util.Properties;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+
+import javax.swing.*;
 
 public class Controller {
 
     private AcessoDados valores = new AcessoDados();
+    private AcessoDiretorios ts = new AcessoDiretorios();
 
     @FXML private ResourceBundle resources;
 
@@ -25,33 +28,33 @@ public class Controller {
 
     @FXML private CheckBox CKBDebugSubsistema;
 
-    @FXML private Button ButtonBuscarSubsistema;
+    @FXML private Button BtnBuscarSubsistema;
 
-    @FXML private Button ButtonBuscarMacrosistema;
+    @FXML private Button BtnBuscarMacrosistema;
 
-    @FXML private Button ButtonCompilarSubsistema;
+    @FXML private Button BtnCompilarSubsistema;
 
-    @FXML private Button ButtonCompilarMacrosistema;
+    @FXML private Button BtnCompilarMacrosistema;
 
     @FXML private CheckBox CKBDebugMacrosistema;
 
     @FXML private TextField TFMacrosistema;
 
-    @FXML private Button ButtonDestinoExe;
+    @FXML private Button BtnDestinoExe;
 
     @FXML private TextField TFDestinoExe;
 
     @FXML private TextField TFOrigemExe;
 
-    @FXML private Button ButtonBuscarOrigemExe;
+    @FXML private Button BtnBuscarOrigemExe;
 
-    @FXML private Button ButtonMoverExe;
+    @FXML private Button BtnMoverExe;
 
     @FXML private TextField TFOrigemExeExecucao;
 
-    @FXML private Button ButtonBuscarExeExecucao;
+    @FXML private Button BtnBuscarExeExecucao;
 
-    @FXML private Button ButtonExecutar;
+    @FXML private Button BtnExecutar;
 
     @FXML private ComboBox<?> CBAgencia;
 
@@ -63,48 +66,49 @@ public class Controller {
 
     }
 
-    @FXML void ActionBoxBanco(ActionEvent event) {
+    @FXML void ActionBanco(ActionEvent event) {
 
+    }
+
+    @FXML void ActionBuscarDestinoExe(ActionEvent event) {
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionBuscarExeExecucao(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionBuscarMacrosistema(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionBuscarOrigemExe(ActionEvent event) {
+        new AcessoDiretorios();
 
     }
 
     @FXML void ActionBuscarSubsistema(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionCompilarMacrosistema(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionCompilarSubsistema(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionDebugMacrosistema(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionDebugSubsistema(ActionEvent event) {
-
-    }
-
-    @FXML void ActionDestinoExe(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionExecutar(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionMacrosistema(ActionEvent event) {
@@ -112,7 +116,7 @@ public class Controller {
     }
 
     @FXML void ActionMoverExe(ActionEvent event) {
-
+        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
     @FXML void ActionOrigemExe(ActionEvent event) {
@@ -136,5 +140,8 @@ public class Controller {
         TFSetBanco.setText(valores.getValorPadrao("SetBanco"));
         CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
         CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
+        CBBanco.setItems(valores.getValores("Bancos"));
+        CBAgencia.setItems(valores.getValores("Agencias"));
+
     }
 }

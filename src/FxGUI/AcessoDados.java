@@ -1,5 +1,11 @@
 package FxGUI;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,12 +20,12 @@ import java.util.Scanner;
 public class AcessoDados {
 
     private static Properties conf = new Properties();
-    private static String dataPatch = "./src/FxGUI/Data/";
+    private static String confPatch = "./src/FxGUI/Data/";
 
     public String getValorPadrao(String campo) {
         String valor;
         try {
-            conf.load(new FileInputStream(dataPatch + "DefaultValues.conf"));
+            conf.load(new FileInputStream(confPatch + "DefaultValues.conf"));
             valor = conf.getProperty(campo);
         } catch (IOException e) {
             return e.getMessage();
@@ -30,25 +36,26 @@ public class AcessoDados {
     public void setValorPadrao(String campo, String valor) {
         try {
             conf.setProperty(campo, valor);
-            conf.store(new FileOutputStream(dataPatch + "DefaultValues.conf"), null);
+            conf.store(new FileOutputStream(confPatch + "DefaultValues.conf"), null);
         } catch (IOException e) {
             e.getMessage();
         }
     }
 
-    public ArrayList getValores(String arquivo) {
+    public ObservableList getValores(String arquivo) {
         ArrayList<String> valores = new ArrayList<>();
+        ObservableList<String> valoresFinal = FXCollections.observableList(valores);
 
-        Path local = Paths.get(dataPatch + arquivo + ".txt");
+        Path local = Paths.get(confPatch + arquivo + ".conf");
         try (Scanner sc = new Scanner(Files.newBufferedReader(local, Charset.defaultCharset()))) {
             sc.useDelimiter("\r\n|\n");
             while (sc.hasNext()) {
                 valores.add(sc.next());
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return valores;
+        return valoresFinal;
     }
+
 }
