@@ -12,7 +12,7 @@ public class Configs {
     public void saveProp(String campo, String valor) {
         try {
             prop.setProperty(campo, valor);
-            prop.store(new FileOutputStream("configuracao.conf"), null);
+            prop.store(new FileOutputStream("FxGUI/Data/DefaultValues.conf"), null);
         } catch (IOException e) {
             e.getMessage();
         }
@@ -21,7 +21,7 @@ public class Configs {
     public String getProp(String campo) {
         String valor = "";
         try {
-            prop.load(new FileInputStream("configuracao.conf"));
+            prop.load(new FileInputStream("FxGUI/Data/DefaultValues.conf"));
             valor = prop.getProperty(campo);
         } catch (IOException e) {
             e.getMessage();
@@ -29,4 +29,6 @@ public class Configs {
         
         return valor;
     }
+
+
 }

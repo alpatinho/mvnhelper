@@ -26,6 +26,9 @@ public class Main extends Application{
         //carrega a cena no stage primario
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+
+
     }
 
 }
