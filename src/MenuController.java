@@ -1,60 +1,49 @@
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 public class MenuController {
 
     private DataAcesso valores = new DataAcesso();
-    private PathAcesso dir = new PathAcesso();
+    private PathAcesso diretorios = new PathAcesso();
     private Stage busca = new Stage();
     private String debug = "";
-
-    @FXML private ResourceBundle resources;
-
-    @FXML private URL location;
+    private String nomeExe = "";
 
     @FXML private TabPane TPPrincipal;
 
     @FXML private TextField TFSubsistema;
 
-    @FXML private CheckBox CKBDebug;
+    @FXML private CheckBox CKDebug;
 
-    @FXML private Button BtnBuscarSubsistema;
+    @FXML private Button BTNBuscarSubsistema;
 
-    @FXML private Button BtnBuscarMacrosistema;
+    @FXML private Button BTNBuscarMacrosistema;
 
-    @FXML private Button BtnCompilarSubsistema;
+    @FXML private Button BTNCompilarSubsistema;
 
-    @FXML private Button BtnCompilarMacrosistema;
+    @FXML private Button BTNCompilarMacrosistema;
 
     @FXML private TextField TFMacrosistema;
 
-    @FXML private Button BtnDestinoExe;
+    @FXML private Button BTNDestinoExe;
 
     @FXML private TextField TFDestinoExe;
 
     @FXML private TextField TFOrigemExe;
 
-    @FXML private Button BtnBuscarOrigemExe;
+    @FXML private Button BTNOrigemExe;
 
-    @FXML private Button BtnMoverExe;
+    @FXML private Button BTNMoverExe;
 
-    @FXML private TextField TFOrigemExeExecucao;
+    @FXML private TextField TFCaminhoExecucao;
 
-    @FXML private Button BtnBuscarExeExecucao;
+    @FXML private Button BTNCaminhoExecucao;
 
-    @FXML private Button BtnExecutar;
+    @FXML private Button BTNExecutar;
 
     @FXML private ComboBox<?> CBAgencia;
 
@@ -62,32 +51,24 @@ public class MenuController {
 
     @FXML private TextField TFSetBanco;
 
-    @FXML void ActionAgencia() {
-
-    }
-
-    @FXML void ActionBanco() {
-
-    }
-
     @FXML void ActionBuscarDestinoExe() {
-        String caminho = dir.buscaDiretorio(busca);
+        String caminho = diretorios.buscaDiretorio(busca);
         if (caminho != null) {
             TFDestinoExe.setText(caminho);
             valores.setValorPadrao("DirDestinoExe", caminho);
         }
     }
 
-    @FXML void ActionBuscarExeExecucao() {
-        String caminho = dir.buscaArquivo(busca);
+    @FXML void ActionBuscarCaminhoExecucao() {
+        String caminho = diretorios.buscaArquivo(busca);
         if (caminho != null) {
-            TFOrigemExeExecucao.setText(caminho);
+            TFCaminhoExecucao.setText(caminho);
             valores.setValorPadrao("DirExeExecucao", caminho);
         }
     }
 
     @FXML void ActionBuscarMacrosistema() {
-        String caminho = dir.buscaDiretorio(busca);
+        String caminho = diretorios.buscaDiretorio(busca);
         if (caminho != null) {
             TFMacrosistema.setText(caminho);
             valores.setValorPadrao("DirMacrosistema", caminho);
@@ -95,7 +76,7 @@ public class MenuController {
     }
 
     @FXML void ActionBuscarOrigemExe() {
-        String caminho = dir.buscaArquivo(busca);
+        String caminho = diretorios.buscaArquivo(busca);
         if (caminho != null) {
             TFOrigemExe.setText(caminho);
             valores.setValorPadrao("DirOrigemExe", caminho);
@@ -103,7 +84,7 @@ public class MenuController {
     }
 
     @FXML void ActionBuscarSubsistema() {
-        String caminho = dir.buscaDiretorio(busca);
+        String caminho = diretorios.buscaDiretorio(busca);
         if (caminho != null) {
             TFSubsistema.setText(caminho);
             valores.setValorPadrao("DirSubsistema", caminho);
@@ -123,6 +104,19 @@ public class MenuController {
                     "install",
                     debug
             });
+
+            //Captura o nome do exe
+            File folder = new File(valores.getValorPadrao("DirMacrosistema")+"\\target\\classes\\win32-bcc5.x-xhb0.99.x");
+            File[] listOfFiles = folder.listFiles();
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile()) {
+                    if(listOfFiles[i].getName().endsWith(".exe"))
+                        nomeExe = listOfFiles[i].getName();
+                    TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe")+"\\"+nomeExe);
+                }
+            }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -147,33 +141,37 @@ public class MenuController {
     }
 
     @FXML void ActionDebug() {
-        if (CKBDebug.isSelected()){
+        if (CKDebug.isSelected()){
             debug = "-Ddebug";
         }else {
             debug = "";
         }
 
-        //testes
-
-        //
-
     }
 
     @FXML void ActionExecutar() {
-        String array[];
+
+        //Captura do path do exe soh o diretorio
+        String DirExeExecucao[];
         String DirExecucao = "";
-        array = TFOrigemExeExecucao.getText().replace("\\", "\\#").split("#");
-        for (int i = 0; i < array.length - 1; i++) {
-            DirExecucao += array[i];
+        DirExeExecucao = TFCaminhoExecucao.getText().replace("\\", "\\#").split("#");
+        for (int i = 0; i < DirExeExecucao.length - 1; i++) {
+            DirExecucao += DirExeExecucao[i];
         }
+
+        //coloca o texto selecionado como PromptText pra execucao
         if (CBBanco.getValue() != null){
             CBBanco.setPromptText((String) CBBanco.getValue());
             valores.setValorPadrao("Bancos", CBBanco.getPromptText());
         }
+
+        //coloca o texto selecionado como PromptText pra execucao
         if (CBAgencia.getValue() != null){
             CBAgencia.setPromptText((String) CBAgencia.getValue());
             valores.setValorPadrao("Agencias", CBAgencia.getPromptText());
         }
+
+        //efetua a execucao do sistema
         try {
             Runtime.getRuntime().exec(new String[]{
                     "cmd.exe",
@@ -183,16 +181,24 @@ public class MenuController {
                     TFSetBanco.getText(),
                     CBBanco.getPromptText(),
                     DirExecucao,
-                    TFOrigemExeExecucao.getText(),
+                    TFCaminhoExecucao.getText(),
                     CBAgencia.getPromptText()
 
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //define os novos valores pardrao para a execucao
+        valores.setValorPadrao("DirExeExecucao", TFCaminhoExecucao.getText());
+        valores.setValorPadrao("DefaultSetBanco", TFSetBanco.getText());
+        valores.setValorPadrao("DefaultBanco", CBBanco.getPromptText());
+        valores.setValorPadrao("DefaultAgencia", CBAgencia.getPromptText());
     }
 
     @FXML void ActionMoverExe() {
+
+        //efetua a copia do exe para a pasta destino
         try {
             Runtime.getRuntime().exec(new String[]{
                     "cmd.exe",
@@ -205,6 +211,9 @@ public class MenuController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //Concatena o destino com o nome do exe para execucao rapida
+        TFCaminhoExecucao.setText(TFDestinoExe.getText()+"\\"+nomeExe);
     }
 
     @FXML void initialize() {
@@ -212,7 +221,7 @@ public class MenuController {
         TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
         TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe"));
         TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
-        TFOrigemExeExecucao.setText(valores.getValorPadrao("DirExeExecucao"));
+        TFCaminhoExecucao.setText(valores.getValorPadrao("DirExeExecucao"));
         TFSetBanco.setText(valores.getValorPadrao("DefaultSetBanco"));
         CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
         CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
