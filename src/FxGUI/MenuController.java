@@ -10,13 +10,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
 
 import javax.swing.*;
 
-public class Controller {
+public class MenuController {
 
-    private AcessoDados valores = new AcessoDados();
-    private AcessoDiretorios ts = new AcessoDiretorios();
+    private DataAcesso valores = new DataAcesso();
+    private PathAcesso dir = new PathAcesso();
+    private Stage busca = new Stage();
 
     @FXML private ResourceBundle resources;
 
@@ -71,11 +73,19 @@ public class Controller {
     }
 
     @FXML void ActionBuscarDestinoExe(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
+        String caminho = dir.start(busca);
+        if (caminho != null) {
+            TFDestinoExe.setText(caminho);
+            valores.setValorPadrao("DirDestinoExe", caminho);
+        }
     }
 
     @FXML void ActionBuscarExeExecucao(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
+        String caminho = dir.start(busca);
+        if (caminho != null) {
+            TFOrigemExeExecucao.setText(caminho);
+            valores.setValorPadrao("DirExeExecucao", caminho);
+        }
     }
 
     @FXML void ActionBuscarMacrosistema(ActionEvent event) {
@@ -83,8 +93,11 @@ public class Controller {
     }
 
     @FXML void ActionBuscarOrigemExe(ActionEvent event) {
-        new AcessoDiretorios();
-
+        String caminho = dir.start(busca);
+        if (caminho != null) {
+            TFOrigemExe.setText(caminho);
+            valores.setValorPadrao("DirOrigemExe", caminho);
+        }
     }
 
     @FXML void ActionBuscarSubsistema(ActionEvent event) {
@@ -136,8 +149,8 @@ public class Controller {
         TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
         TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe"));
         TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
-        TFOrigemExeExecucao.setText(valores.getValorPadrao("DirCaminhoExe"));
-        TFSetBanco.setText(valores.getValorPadrao("SetBanco"));
+        TFOrigemExeExecucao.setText(valores.getValorPadrao("DirExeExecucao"));
+        TFSetBanco.setText(valores.getValorPadrao("DefaultSetBanco"));
         CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
         CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
         CBBanco.setItems(valores.getValores("Bancos"));

@@ -2,10 +2,7 @@ package FxGUI;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class AcessoDados {
+public class DataAcesso {
 
     private static Properties conf = new Properties();
     private static String confPatch = "./src/FxGUI/Data/";
