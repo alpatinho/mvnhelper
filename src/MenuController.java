@@ -1,5 +1,4 @@
-package FxGUI;
-
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,7 +8,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -19,6 +17,7 @@ public class MenuController {
     private DataAcesso valores = new DataAcesso();
     private PathAcesso dir = new PathAcesso();
     private Stage busca = new Stage();
+    private String debug = "";
 
     @FXML private ResourceBundle resources;
 
@@ -28,7 +27,7 @@ public class MenuController {
 
     @FXML private TextField TFSubsistema;
 
-    @FXML private CheckBox CKBDebugSubsistema;
+    @FXML private CheckBox CKBDebug;
 
     @FXML private Button BtnBuscarSubsistema;
 
@@ -37,8 +36,6 @@ public class MenuController {
     @FXML private Button BtnCompilarSubsistema;
 
     @FXML private Button BtnCompilarMacrosistema;
-
-    @FXML private CheckBox CKBDebugMacrosistema;
 
     @FXML private TextField TFMacrosistema;
 
@@ -64,84 +61,104 @@ public class MenuController {
 
     @FXML private TextField TFSetBanco;
 
-    @FXML void ActionAgencia(ActionEvent event) {
+    @FXML void ActionAgencia() {
 
     }
 
-    @FXML void ActionBanco(ActionEvent event) {
+    @FXML void ActionBanco() {
 
     }
 
-    @FXML void ActionBuscarDestinoExe(ActionEvent event) {
-        String caminho = dir.start(busca);
+    @FXML void ActionBuscarDestinoExe() {
+        String caminho = dir.buscaDiretorio(busca);
         if (caminho != null) {
             TFDestinoExe.setText(caminho);
             valores.setValorPadrao("DirDestinoExe", caminho);
         }
     }
 
-    @FXML void ActionBuscarExeExecucao(ActionEvent event) {
-        String caminho = dir.start(busca);
+    @FXML void ActionBuscarExeExecucao() {
+        String caminho = dir.buscaArquivo(busca);
         if (caminho != null) {
             TFOrigemExeExecucao.setText(caminho);
             valores.setValorPadrao("DirExeExecucao", caminho);
         }
     }
 
-    @FXML void ActionBuscarMacrosistema(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
+    @FXML void ActionBuscarMacrosistema() {
+        String caminho = dir.buscaDiretorio(busca);
+        if (caminho != null) {
+            TFMacrosistema.setText(caminho);
+            valores.setValorPadrao("DirMacrosistema", caminho);
+        }
     }
 
-    @FXML void ActionBuscarOrigemExe(ActionEvent event) {
-        String caminho = dir.start(busca);
+    @FXML void ActionBuscarOrigemExe() {
+        String caminho = dir.buscaArquivo(busca);
         if (caminho != null) {
             TFOrigemExe.setText(caminho);
             valores.setValorPadrao("DirOrigemExe", caminho);
         }
     }
 
-    @FXML void ActionBuscarSubsistema(ActionEvent event) {
+    @FXML void ActionBuscarSubsistema() {
+        String caminho = dir.buscaDiretorio(busca);
+        if (caminho != null) {
+            TFSubsistema.setText(caminho);
+            valores.setValorPadrao("DirSubsistema", caminho);
+        }
+    }
+
+    @FXML void ActionCompilarMacrosistema() {
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                    "cmd.exe",
+                    "/c",
+                    "start",
+                    System.getProperty("user.dir") + "./src/scripts/compila.bat",
+                    TFSubsistema.getText(),
+                    "mvn",
+                    "clean",
+                    "install",
+                    debug
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML void ActionCompilarSubsistema() {
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                "cmd.exe",
+                "/c",
+                "start",
+                System.getProperty("user.dir") + "./src/scripts/compila.bat",
+                TFSubsistema.getText(),
+                "mvn",
+                "clean",
+                "install",
+                debug
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML void ActionDebug() {
+        if (CKBDebug.isSelected()){
+            debug = "-Ddebug";
+        }else {
+            debug = "";
+        }
+    }
+
+    @FXML void ActionExecutar() {
         JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
     }
 
-    @FXML void ActionCompilarMacrosistema(ActionEvent event) {
+    @FXML void ActionMoverExe() {
         JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionCompilarSubsistema(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionDebugMacrosistema(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionDebugSubsistema(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionExecutar(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionMacrosistema(ActionEvent event) {
-
-    }
-
-    @FXML void ActionMoverExe(ActionEvent event) {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
-    }
-
-    @FXML void ActionOrigemExe(ActionEvent event) {
-
-    }
-
-    @FXML void ActionOrigemExeExecucao(ActionEvent event) {
-
-    }
-
-    @FXML void ActionSubsistema(ActionEvent event) {
-
     }
 
     @FXML void initialize() {

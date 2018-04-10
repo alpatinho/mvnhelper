@@ -1,5 +1,3 @@
-package FxGUI;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -17,7 +15,7 @@ import java.util.Scanner;
 public class DataAcesso {
 
     private static Properties conf = new Properties();
-    private static String confPatch = "./src/FxGUI/Data/";
+    private static String confPatch = "./src/Data/";
 
     public String getValorPadrao(String campo) {
         String valor;
