@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -116,7 +117,7 @@ public class MenuController {
                     "/c",
                     "start",
                     System.getProperty("user.dir") + "./src/scripts/compila.bat",
-                    TFSubsistema.getText(),
+                    TFMacrosistema.getText(),
                     "mvn",
                     "clean",
                     "install",
@@ -151,14 +152,59 @@ public class MenuController {
         }else {
             debug = "";
         }
+
+        //testes
+
+        //
+
     }
 
     @FXML void ActionExecutar() {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
+        String array[];
+        String DirExecucao = "";
+        array = TFOrigemExeExecucao.getText().replace("\\", "\\#").split("#");
+        for (int i = 0; i < array.length - 1; i++) {
+            DirExecucao += array[i];
+        }
+        if (CBBanco.getValue() != null){
+            CBBanco.setPromptText((String) CBBanco.getValue());
+            valores.setValorPadrao("Bancos", CBBanco.getPromptText());
+        }
+        if (CBAgencia.getValue() != null){
+            CBAgencia.setPromptText((String) CBAgencia.getValue());
+            valores.setValorPadrao("Agencias", CBAgencia.getPromptText());
+        }
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                    "cmd.exe",
+                    "/c",
+                    "start",
+                    System.getProperty("user.dir") + "./src/scripts/executa.bat",
+                    TFSetBanco.getText(),
+                    CBBanco.getPromptText(),
+                    DirExecucao,
+                    TFOrigemExeExecucao.getText(),
+                    CBAgencia.getPromptText()
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML void ActionMoverExe() {
-        JOptionPane.showMessageDialog(null, "Opcao em contrucao!");
+        try {
+            Runtime.getRuntime().exec(new String[]{
+                    "cmd.exe",
+                    "/c",
+                    "start",
+                    System.getProperty("user.dir") + "./src/scripts/copia.bat",
+                    TFOrigemExe.getText(),
+                    TFDestinoExe.getText()
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML void initialize() {

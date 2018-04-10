@@ -1,11 +1,11 @@
 @echo off
-set setbanco1=%1%
-set setbanco2=%2%
-set caminhoExecucao=%3%
-set caminhoComExecutavel=%4%
+set setbanco=%1%
+set Banco=%2%
+set DirExecucao=%3%
+set DirExeExecucao=%4%
 set agencia=%5%
 @echo on
-call cd %caminhoExecucao%
-call %setbanco1% %setbanco2% 
+call cd %DirExecucao%
+call %setbanco% %Banco%
 timeout 3 > NUL
-call r:\exes\te.exe %caminhoExecucao% %caminhoComExecutavel% %agencia% 
+call r:\exes\te.exe %DirExecucao% %DirExeExecucao% %agencia%

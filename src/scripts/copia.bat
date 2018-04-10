@@ -1,5 +1,5 @@
 @echo off
-set caminhoOrigem=%1%
-set caminhoDestino=%2%
+set DirOrigemExe=%1%
+set DirDestinoExe=%2%
 @echo on
-copy /Y %caminhoOrigem%\*.exe %caminhoDestino%
+copy /Y %DirOrigemExe% %DirDestinoExe%
