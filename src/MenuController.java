@@ -1,5 +1,7 @@
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -12,6 +14,7 @@ public class MenuController {
     private Stage busca = new Stage();
     private String debug = "";
     private String nomeExe = "";
+    private Image logoAcc = new Image(getClass().getResourceAsStream("./Img/Acc_Logo.png"));
 
     @FXML private TabPane TPPrincipal;
 
@@ -50,6 +53,16 @@ public class MenuController {
     @FXML private ComboBox<?> CBBanco;
 
     @FXML private TextField TFSetBanco;
+
+    @FXML private Label AccLogo;
+
+    @FXML private Button BTNAdicionarBanco;
+
+    @FXML private Button AdicionarAgencia;
+
+    @FXML private TextField TFPadraoBusca;
+
+    @FXML private Button BTNBuscaPadrao;
 
     @FXML void ActionBuscarDestinoExe() {
         String caminho = diretorios.buscaDiretorio(busca);
@@ -97,7 +110,7 @@ public class MenuController {
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/scripts/compila.bat",
+                    System.getProperty("user.dir") + "./src/Scripts/compila.bat",
                     TFMacrosistema.getText(),
                     "mvn",
                     "clean",
@@ -128,7 +141,7 @@ public class MenuController {
                 "cmd.exe",
                 "/c",
                 "start",
-                System.getProperty("user.dir") + "./src/scripts/compila.bat",
+                System.getProperty("user.dir") + "./src/Scripts/compila.bat",
                 TFSubsistema.getText(),
                 "mvn",
                 "clean",
@@ -177,7 +190,7 @@ public class MenuController {
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/scripts/executa.bat",
+                    System.getProperty("user.dir") + "./src/Scripts/executa.bat",
                     TFSetBanco.getText(),
                     CBBanco.getPromptText(),
                     DirExecucao,
@@ -204,7 +217,7 @@ public class MenuController {
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/scripts/copia.bat",
+                    System.getProperty("user.dir") + "./src/Scripts/copia.bat",
                     TFOrigemExe.getText(),
                     TFDestinoExe.getText()
             });
@@ -216,6 +229,23 @@ public class MenuController {
         TFCaminhoExecucao.setText(TFDestinoExe.getText()+"\\"+nomeExe);
     }
 
+    @FXML void ActionBuscaPadrao() {
+        String caminho = diretorios.buscaDiretorio(busca);
+        if (caminho != null) {
+            TFPadraoBusca.setText(caminho);
+            valores.setValorPadrao("DirDestinoExe", caminho);
+        }
+    }
+
+    @FXML void ActionBuscaBanco() {
+
+    }
+
+    @FXML void ActionBuscarAgencia() {
+
+    }
+
+
     @FXML void initialize() {
         TFSubsistema.setText(valores.getValorPadrao("DirSubsistema"));
         TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
@@ -223,10 +253,12 @@ public class MenuController {
         TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
         TFCaminhoExecucao.setText(valores.getValorPadrao("DirExeExecucao"));
         TFSetBanco.setText(valores.getValorPadrao("DefaultSetBanco"));
+        TFPadraoBusca.setText(valores.getValorPadrao("DirPadraoBusca"));
         CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
         CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
         CBBanco.setItems(valores.getValores("Bancos"));
         CBAgencia.setItems(valores.getValores("Agencias"));
+        AccLogo.setGraphic(new ImageView(logoAcc));
 
     }
 }

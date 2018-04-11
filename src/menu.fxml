@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -72,5 +73,37 @@
                </children></AnchorPane>
       </content>
     </Tab>
+      <Tab text="Config &amp; Info">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="35.0" layoutY="26.0" text="Adicionar dados:">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="AccLogo" layoutX="67.0" layoutY="324.0" prefHeight="17.0" prefWidth="22.0" />
+                  <Button fx:id="BTNAdicionarBanco" layoutX="78.0" layoutY="77.0" mnemonicParsing="false" onAction="#ActionBuscaBanco" text="BANCOS" />
+                  <Button fx:id="AdicionarAgencia" layoutX="183.0" layoutY="77.0" mnemonicParsing="false" onAction="#ActionBuscarAgencia" text="AGENCIAS" />
+                  <Label layoutX="35.0" layoutY="123.0" text="Padrao busca Componentes:">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="TFPadraoBusca" layoutX="78.0" layoutY="179.0" prefHeight="25.0" prefWidth="313.0" />
+                  <Button fx:id="BTNBuscaPadrao" layoutX="411.0" layoutY="179.0" mnemonicParsing="false" onAction="#ActionBuscaPadrao" text="Buscar" />
+                  <Label layoutX="21.0" layoutY="256.0" text="Aplicação desenvolvida por:" />
+                  <Label layoutX="126.0" layoutY="294.0" text="Douglas Paz &amp; Lucas Bergmann">
+                     <font>
+                        <Font name="System Italic" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="354.0" layoutY="33.0" text="MvnHelper V 0.1" />
+                  <Label layoutX="368.0" layoutY="56.0" text="12/04/2018" />
+                  <Separator layoutY="228.0" prefHeight="12.0" prefWidth="530.0" />
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
   </tabs>
 </TabPane>
