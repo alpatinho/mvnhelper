@@ -1,3 +1,5 @@
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -6,70 +8,63 @@ import java.io.IOException;
 
 public class MenuModel {
 
+    private DataAcesso valores = new DataAcesso();
     private PathAcesso diretorios = new PathAcesso();
     private Stage busca = new Stage();
     private String debug = "";
     private String nomeExe = "";
     private Image logoAcc = new Image(getClass().getResourceAsStream("./Img/Acc_Logo.png"));
+    private String pathToScipts = System.getProperty("user.dir") + "Data/Scripts/";
+    private String pathToExe = "\\target\\classes\\win32-bcc5.x-xhb0.99.x";
 
-    public String buscaDiretorio(String dir){
-        /*String caminho = diretorios.buscaDiretorio(busca);
+    public String buscaArquivo(Campos dir, Campos padraoBusca){
+        String caminho = diretorios.buscaArquivo(busca, padraoBusca);
         if (caminho != null) {
             valores.setValorPadrao(dir, caminho);
         }
-        return caminho;*/
-        return null;
+        return caminho;
     }
 
-    //diferencias uma compilacao da outra
-    public void Compila(){
-        /*try {
-            Runtime.getRuntime().exec(new String[]{
+    public String buscaDiretorio(Campos dir, Campos padraoBusca){
+        String caminho = diretorios.buscaDiretorio(busca, padraoBusca);
+        if (caminho != null) {
+            valores.setValorPadrao(dir, caminho);
+        }
+        return caminho;
+    }
+
+    public void Compila(TextField sistema, TextField origem){
+        try {
+            Runtime.getRuntime().exec(
+                new String[]{
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/Scripts/compila.bat",
-                    TFMacrosistema.getText(),
+                    pathToScipts + "compila.bat",
+                    sistema.getText(),
                     "mvn",
                     "clean",
                     "install",
                     debug
-            });
+                }
+            );
 
-            //Captura o nome do exe
-            File folder = new File(valores.getValorPadrao("DirMacrosistema")+"\\target\\classes\\win32-bcc5.x-xhb0.99.x");
-            File[] listOfFiles = folder.listFiles();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile()) {
-                    if(listOfFiles[i].getName().endsWith(".exe"))
-                        nomeExe = listOfFiles[i].getName();
-                    TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe")+"\\"+nomeExe);
+            //Captura e salva o nome do exe define valor de origem
+            if(origem != null) {
+                File folder = new File(valores.getValorPadrao(Campos.MACROSISTEMA) + pathToExe);
+                File[] listOfFiles = folder.listFiles();
+                for (int i = 0; i < listOfFiles.length; i++) {
+                    if (listOfFiles[i].isFile()) {
+                        if (listOfFiles[i].getName().endsWith(".exe"))
+                            valores.setValorPadrao(Campos.NOMEEXE, listOfFiles[i].getName()+ "\\");
+                        origem.setText(valores.getValorPadrao(Campos.SUBSISTEMA) + nomeExe);
+                    }
                 }
             }
 
-
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
-
-        /*try {
-            Runtime.getRuntime().exec(new String[]{
-                    "cmd.exe",
-                    "/c",
-                    "start",
-                    System.getProperty("user.dir") + "./src/Scripts/compila.bat",
-                    TFSubsistema.getText(),
-                    "mvn",
-                    "clean",
-                    "install",
-                    debug
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-
-
+        }
 
     }
 
@@ -81,46 +76,45 @@ public class MenuModel {
         }
     }
 
-    //parametros...
-    public void Mover(){
-        //efetua a copia do exe para a pasta destino
-        /*try {
+    public void Mover(TextField origem, TextField destino, TextField execucao){
+        try {
             Runtime.getRuntime().exec(new String[]{
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/Scripts/copia.bat",
-                    TFOrigemExe.getText(),
-                    TFDestinoExe.getText()
+                    pathToScipts + "copia.bat",
+                    origem.getText(),
+                    destino.getText(),
+                    destino.getText() + valores.getValorPadrao(Campos.NOMEEXE),
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         //Concatena o destino com o nome do exe para execucao rapida
-        TFCaminhoExecucao.setText(TFDestinoExe.getText()+"\\"+nomeExe);*/
+        execucao.setText(destino.getText()+ valores.getValorPadrao(Campos.NOMEEXE));
     }
 
-    //parametros...
-    public void executar(){
-       /* //Captura do path do exe soh o diretorio
+    public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia){
+
+        //Captura do path do exe soh o diretorio
         String DirExeExecucao[];
         String DirExecucao = "";
-        DirExeExecucao = TFCaminhoExecucao.getText().replace("\\", "\\#").split("#");
+        DirExeExecucao = execucao.getText().replace("\\", "\\#").split("#");
         for (int i = 0; i < DirExeExecucao.length - 1; i++) {
             DirExecucao += DirExeExecucao[i];
         }
 
         //coloca o texto selecionado como PromptText pra execucao
-        if (CBBanco.getValue() != null){
-            CBBanco.setPromptText((String) CBBanco.getValue());
-            valores.setValorPadrao("Bancos", CBBanco.getPromptText());
+        if (banco.getValue() != null){
+            banco.setPromptText(banco.getValue().toString());
+            valores.setValorPadrao(Campos.BANCO, banco.getPromptText());
         }
 
         //coloca o texto selecionado como PromptText pra execucao
-        if (CBAgencia.getValue() != null){
-            CBAgencia.setPromptText((String) CBAgencia.getValue());
-            valores.setValorPadrao("Agencias", CBAgencia.getPromptText());
+        if (agencia.getValue() != null){
+            agencia.setPromptText(agencia.getValue().toString());
+            valores.setValorPadrao(Campos.AGENCIA, agencia.getPromptText());
         }
 
         //efetua a execucao do sistema
@@ -129,12 +123,12 @@ public class MenuModel {
                     "cmd.exe",
                     "/c",
                     "start",
-                    System.getProperty("user.dir") + "./src/Scripts/executa.bat",
-                    TFSetBanco.getText(),
-                    CBBanco.getPromptText(),
+                    pathToScipts + "executa.bat",
+                    setbanco.getText(),
+                    banco.getPromptText(),
                     DirExecucao,
-                    TFCaminhoExecucao.getText(),
-                    CBAgencia.getPromptText()
+                    execucao.getText(),
+                    agencia.getPromptText()
 
             });
         } catch (IOException e) {
@@ -142,9 +136,9 @@ public class MenuModel {
         }
 
         //define os novos valores pardrao para a execucao
-        valores.setValorPadrao("DirExeExecucao", TFCaminhoExecucao.getText());
-        valores.setValorPadrao("DefaultSetBanco", TFSetBanco.getText());
-        valores.setValorPadrao("DefaultBanco", CBBanco.getPromptText());
-        valores.setValorPadrao("DefaultAgencia", CBAgencia.getPromptText());*/
+        valores.setValorPadrao(Campos.EXECUCAO, execucao.getText());
+        valores.setValorPadrao(Campos.SETBANCO, setbanco.getText());
+        valores.setValorPadrao(Campos.BANCO, banco.getPromptText());
+        valores.setValorPadrao(Campos.AGENCIA, agencia.getPromptText());
     }
 }

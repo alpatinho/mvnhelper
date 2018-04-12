@@ -14,116 +14,79 @@ public class MenuController {
 
     @FXML private TabPane TPPrincipal;
 
+    //COMPILAR
     @FXML private TextField TFSubsistema;
+    @FXML private Button BTNBuscarSubsistema;
+    @FXML private Button BTNCompilarSubsistema;
 
     @FXML private CheckBox CKDebug;
 
-    @FXML private Button BTNBuscarSubsistema;
-
+    @FXML private TextField TFMacrosistema;
     @FXML private Button BTNBuscarMacrosistema;
-
-    @FXML private Button BTNCompilarSubsistema;
-
     @FXML private Button BTNCompilarMacrosistema;
 
-    @FXML private TextField TFMacrosistema;
-
-    @FXML private Button BTNDestinoExe;
+    //MOVER
+    @FXML private TextField TFOrigemExe;
+    @FXML private Button BTNOrigemExe;
 
     @FXML private TextField TFDestinoExe;
-
-    @FXML private TextField TFOrigemExe;
-
-    @FXML private Button BTNOrigemExe;
+    @FXML private Button BTNDestinoExe;
 
     @FXML private Button BTNMoverExe;
 
+    //EXECUTAR
     @FXML private TextField TFCaminhoExecucao;
-
     @FXML private Button BTNCaminhoExecucao;
+
+    @FXML private TextField TFSetBanco;
+    @FXML private ComboBox<?> CBBanco;
+    @FXML private ComboBox<?> CBAgencia;
 
     @FXML private Button BTNExecutar;
 
-    @FXML private ComboBox<?> CBAgencia;
-
-    @FXML private ComboBox<?> CBBanco;
-
-    @FXML private TextField TFSetBanco;
-
-    @FXML private Label AccLogo;
-
-    @FXML private Button BTNAdicionarBanco;
-
-    @FXML private Button AdicionarAgencia;
-
+    //CONFIG
     @FXML private TextField TFPadraoBusca;
-
     @FXML private Button BTNBuscaPadrao;
 
-    @FXML void ActionBuscarDestinoExe() {
-       TFDestinoExe.setText(model.buscaDiretorio("DirDestinoExe"));
-    }
+    //METODOS DE ACOES
+    //COMPILAR
+    @FXML void ActionBuscarSubsistema() {TFSubsistema.setText(model.buscaDiretorio(Campos.SUBSISTEMA, Campos.EXECUCAO));}
 
-    @FXML void ActionBuscarCaminhoExecucao() {
-        TFCaminhoExecucao.setText(model.buscaDiretorio("DirExeExecucao"));
-    }
+    @FXML void ActionCompilarSubsistema() {model.Compila(TFSubsistema, null);}
 
-    @FXML void ActionBuscarMacrosistema() {
-        TFMacrosistema.setText(model.buscaDiretorio("DirMacrosistema"));
-    }
+    @FXML void ActionDebug() {model.debug(CKDebug.isSelected());}
 
-    @FXML void ActionBuscarOrigemExe() {
-        TFOrigemExe.setText(model.buscaDiretorio("DirOrigemExe"));
-    }
+    @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(model.buscaDiretorio(Campos.MACROSISTEMA, Campos.EXECUCAO));}
 
-    @FXML void ActionBuscarSubsistema() {
-        TFSubsistema.setText(model.buscaDiretorio("DirSubsistema"));
-    }
+    @FXML void ActionCompilarMacrosistema() {model.Compila(TFMacrosistema, TFOrigemExe);}
 
-    @FXML void ActionCompilarMacrosistema() {
+    //MOVER
+    @FXML void ActionBuscarOrigemExe() {TFOrigemExe.setText(model.buscaDiretorio(Campos.MOVERORIGEM, Campos.EXECUCAO));}
 
-    }
+    @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(model.buscaDiretorio(Campos.MOVERDESTINO, Campos.EXECUCAO));}
 
-    @FXML void ActionCompilarSubsistema() {
+    @FXML void ActionMoverExe() {model.Mover(TFOrigemExe, TFDestinoExe, TFCaminhoExecucao);}
 
-    }
+    //EXECUTAR
+    @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(model.buscaDiretorio(Campos.EXECUCAO, Campos.EXECUCAO));}
 
-    @FXML void ActionDebug() {
-        model.debug(CKDebug.isSelected());
-    }
+    @FXML void ActionExecutar() {model.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);}
 
-    @FXML void ActionExecutar() {
-        model.executar();
-    }
-
-    @FXML void ActionMoverExe() {
-        model.Mover();
-    }
-
-    @FXML void ActionBuscaPadrao() {
-        TFPadraoBusca.setText(model.buscaDiretorio("DirDestinoExe"));
-    }
-
-    @FXML void ActionBuscaBanco() {
-
-    }
-
-    @FXML void ActionBuscarAgencia() {
-
-    }
+    //CONFIGS
+    @FXML void ActionBuscaPadrao() {TFPadraoBusca.setText(model.buscaDiretorio(Campos.PADRAOBUSCA, null));}
 
     @FXML void initialize() {
-        TFSubsistema.setText(valores.getValorPadrao("DirSubsistema"));
-        TFMacrosistema.setText(valores.getValorPadrao("DirMacrosistema"));
-        TFOrigemExe.setText(valores.getValorPadrao("DirOrigemExe"));
-        TFDestinoExe.setText(valores.getValorPadrao("DirDestinoExe"));
-        TFCaminhoExecucao.setText(valores.getValorPadrao("DirExeExecucao"));
-        TFSetBanco.setText(valores.getValorPadrao("DefaultSetBanco"));
-        TFPadraoBusca.setText(valores.getValorPadrao("DirPadraoBusca"));
-        CBBanco.setPromptText(valores.getValorPadrao("DefaultBanco"));
-        CBAgencia.setPromptText(valores.getValorPadrao("DefaultAgencia"));
-        CBBanco.setItems(valores.getValores("Bancos"));
-        CBAgencia.setItems(valores.getValores("Agencias"));
+        TFSubsistema.setText(valores.getValorPadrao(Campos.SUBSISTEMA));
+        TFMacrosistema.setText(valores.getValorPadrao(Campos.MACROSISTEMA));
+        TFOrigemExe.setText(valores.getValorPadrao(Campos.MOVERORIGEM));
+        TFDestinoExe.setText(valores.getValorPadrao(Campos.MOVERDESTINO));
+        TFCaminhoExecucao.setText(valores.getValorPadrao(Campos.EXECUCAO));
+        TFSetBanco.setText(valores.getValorPadrao(Campos.SETBANCO));
+        TFPadraoBusca.setText(valores.getValorPadrao(Campos.PADRAOBUSCA));
+        CBBanco.setPromptText(valores.getValorPadrao(Campos.BANCO));
+        CBAgencia.setPromptText(valores.getValorPadrao(Campos.AGENCIA));
+        CBBanco.setItems(valores.getValores(Campos.LISTABANCO));
+        CBAgencia.setItems(valores.getValores(Campos.LISTAAGENCIA));
 
     }
 }

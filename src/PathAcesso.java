@@ -6,7 +6,7 @@ import java.io.File;
 
 public class PathAcesso {
 
-    public String buscaArquivo(Stage busca) {
+    public String buscaArquivo(Stage busca, Campos padraoBusca) {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Busca de EXECUTAVEL");
@@ -20,7 +20,7 @@ public class PathAcesso {
         return null;
     }
 
-    public String buscaDiretorio(Stage busca){
+    public String buscaDiretorio(Stage busca, Campos padraoBusca){
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Busca de DIRETORIO");
         File selectedDiretory = directoryChooser.showDialog(busca);

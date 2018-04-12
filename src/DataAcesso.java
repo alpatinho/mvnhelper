@@ -17,31 +17,30 @@ public class DataAcesso {
     private static Properties conf = new Properties();
     private static String confPatch = "./src/Data/";
 
-    public String getValorPadrao(String campo) {
+    public String getValorPadrao(Campos campo) {
         String valor;
         try {
             conf.load(new FileInputStream(confPatch + "DefaultValues.conf"));
-            valor = conf.getProperty(campo);
+            valor = conf.getProperty(campo.toString());
         } catch (IOException e) {
             return e.getMessage();
         }
         return valor;
     }
 
-    public void setValorPadrao(String campo, String valor) {
+    public void setValorPadrao(Campos campo, String valor) {
         try {
-            conf.setProperty(campo, valor);
+            conf.setProperty(campo.toString(), valor);
             conf.store(new FileOutputStream(confPatch + "DefaultValues.conf"), null);
         } catch (IOException e) {
             e.getMessage();
         }
     }
 
-    public ObservableList getValores(String arquivo) {
+    public ObservableList getValores(Campos lista) {
         ArrayList<String> valores = new ArrayList<>();
         ObservableList<String> valoresFinal = FXCollections.observableList(valores);
-
-        Path local = Paths.get(confPatch + arquivo + ".conf");
+        Path local = Paths.get(confPatch + lista.toString() + ".conf");
         try (Scanner sc = new Scanner(Files.newBufferedReader(local, Charset.defaultCharset()))) {
             sc.useDelimiter("\r\n|\n");
             while (sc.hasNext()) {
