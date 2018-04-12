@@ -1,0 +1,15 @@
+public enum Campos {
+
+    SETBANCO,
+    BANCO,
+    MACROSISTEMA,
+    MOVERORIGEM,
+    SUBSISTEMA,
+    AGENCIA,
+    MOVERDESTINO,
+    EXECUCAO,
+    LISTAAGENCIA,
+    LISTABANCO,
+    PADRAOBUSCA;
+
+}
