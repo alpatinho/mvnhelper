@@ -26,7 +26,6 @@ public class MenuController {
     @FXML private Button BTNCompilarMacrosistema;
 
     //MOVER
-    @FXML private TextField TFOrigemExe;
     @FXML private Button BTNOrigemExe;
 
     @FXML private TextField TFDestinoExe;
@@ -52,20 +51,18 @@ public class MenuController {
     //COMPILAR
     @FXML void ActionBuscarSubsistema() {TFSubsistema.setText(model.buscaDiretorio(Campos.SUBSISTEMA, Campos.EXECUCAO));}
 
-    @FXML void ActionCompilarSubsistema() {model.Compila(TFSubsistema, null);}
+    @FXML void ActionCompilarSubsistema() {model.Compila(TFSubsistema);}
 
     @FXML void ActionDebug() {model.debug(CKDebug.isSelected());}
 
     @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(model.buscaDiretorio(Campos.MACROSISTEMA, Campos.EXECUCAO));}
 
-    @FXML void ActionCompilarMacrosistema() {model.Compila(TFMacrosistema, TFOrigemExe);}
+    @FXML void ActionCompilarMacrosistema() {model.Compila(TFMacrosistema);}
 
     //MOVER
-    @FXML void ActionBuscarOrigemExe() {TFOrigemExe.setText(model.buscaDiretorio(Campos.MOVERORIGEM, Campos.EXECUCAO));}
-
     @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(model.buscaDiretorio(Campos.MOVERDESTINO, Campos.EXECUCAO));}
 
-    @FXML void ActionMoverExe() {model.Mover(TFOrigemExe, TFDestinoExe, TFCaminhoExecucao);}
+    @FXML void ActionMoverExe() {model.Mover(TFDestinoExe, TFCaminhoExecucao);}
 
     //EXECUTAR
     @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(model.buscaDiretorio(Campos.EXECUCAO, Campos.EXECUCAO));}
@@ -78,7 +75,6 @@ public class MenuController {
     @FXML void initialize() {
         TFSubsistema.setText(valores.getValorPadrao(Campos.SUBSISTEMA));
         TFMacrosistema.setText(valores.getValorPadrao(Campos.MACROSISTEMA));
-        TFOrigemExe.setText(valores.getValorPadrao(Campos.MOVERORIGEM));
         TFDestinoExe.setText(valores.getValorPadrao(Campos.MOVERDESTINO));
         TFCaminhoExecucao.setText(valores.getValorPadrao(Campos.EXECUCAO));
         TFSetBanco.setText(valores.getValorPadrao(Campos.SETBANCO));

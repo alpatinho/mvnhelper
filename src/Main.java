@@ -17,7 +17,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("./Img/MvnHelper_Logo.jpg")));
+        //primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("./Img/MvnHelper_Logo.jpg")));
         primaryStage.setTitle("MVN Helper V_0.1");
 
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));

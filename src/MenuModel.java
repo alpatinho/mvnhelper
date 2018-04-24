@@ -33,7 +33,7 @@ public class MenuModel {
         return caminho;
     }
 
-    public void Compila(TextField sistema, TextField origem){
+    public void Compila(TextField sistema){
         try {
             Runtime.getRuntime().exec(
                 new String[]{
@@ -50,17 +50,17 @@ public class MenuModel {
             );
 
             //Captura e salva o nome do exe define valor de origem
-            if(origem != null) {
-                File folder = new File(valores.getValorPadrao(Campos.MACROSISTEMA) + pathToExe);
-                File[] listOfFiles = folder.listFiles();
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    if (listOfFiles[i].isFile()) {
-                        if (listOfFiles[i].getName().endsWith(".exe"))
-                            valores.setValorPadrao(Campos.NOMEEXE, listOfFiles[i].getName()+ "\\");
-                        origem.setText(valores.getValorPadrao(Campos.SUBSISTEMA) + nomeExe);
-                    }
-                }
-            }
+//            if(origem != null) {
+//                File folder = new File(valores.getValorPadrao(Campos.MACROSISTEMA) + pathToExe);
+//                File[] listOfFiles = folder.listFiles();
+//                for (int i = 0; i < listOfFiles.length; i++) {
+//                    if (listOfFiles[i].isFile()) {
+//                        if (listOfFiles[i].getName().endsWith(".exe"))
+//                            valores.setValorPadrao(Campos.NOMEEXE, listOfFiles[i].getName()+ "\\");
+//                        origem.setText(valores.getValorPadrao(Campos.SUBSISTEMA) + nomeExe);
+//                    }
+//                }
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,14 +76,14 @@ public class MenuModel {
         }
     }
 
-    public void Mover(TextField origem, TextField destino, TextField execucao){
+    public void Mover( TextField destino, TextField execucao){
         try {
             Runtime.getRuntime().exec(new String[]{
                     "cmd.exe",
                     "/c",
                     "start",
                     pathToScipts + "copia.bat",
-                    origem.getText(),
+                    //origem.getText(),
                     destino.getText(),
                     destino.getText() + valores.getValorPadrao(Campos.NOMEEXE),
             });
