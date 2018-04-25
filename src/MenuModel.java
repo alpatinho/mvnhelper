@@ -1,39 +1,88 @@
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class MenuModel {
 
-    private DataAcesso valores = new DataAcesso();
-    private PathAcesso diretorios = new PathAcesso();
-    private Stage busca = new Stage();
+    private Acesso valores = new Acesso();
     private String debug = "";
-    private String nomeExe = "";
-    private Image logoAcc = new Image(getClass().getResourceAsStream("./Img/Acc_Logo.png"));
-    private String pathToScipts = System.getProperty("user.dir") + "Data/Scripts/";
-    private String pathToExe = "\\target\\classes\\win32-bcc5.x-xhb0.99.x";
+    private String pathToScipts = System.getProperty("user.dir") + "/src/Scripts/";
 
-    public String buscaArquivo(Campos dir, Campos padraoBusca){
-        String caminho = diretorios.buscaArquivo(busca, padraoBusca);
-        if (caminho != null) {
-            valores.setValorPadrao(dir, caminho);
+    // situacao - OK
+    public boolean validaDiretorioSelecionado (String diretorio){
+        if(diretorio == null){
+            return false;
         }
-        return caminho;
+        File file = new File(diretorio);
+        return file.canRead();
     }
 
-    public String buscaDiretorio(Campos dir, Campos padraoBusca){
-        String caminho = diretorios.buscaDiretorio(busca, padraoBusca);
-        if (caminho != null) {
-            valores.setValorPadrao(dir, caminho);
+    // situacao - OK
+    public String buscaArquivo(String diretorioBusca) {
+        // estancia da janela
+        Stage busca = new Stage();
+        FileChooser fileChooser = new FileChooser();
+
+        // detalhe da janela
+        fileChooser.setTitle("EXECUTAVEL");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Executavel", "*.exe"));
+
+        // busca apartir do valor definido
+        if(validaDiretorioSelecionado(diretorioBusca)){
+            fileChooser.setInitialDirectory(new File(diretorioBusca));
         }
-        return caminho;
+        File selectedFile = fileChooser.showOpenDialog(busca);
+
+        // retorna o caminho completo
+        if (selectedFile != null) {
+            return selectedFile.getAbsolutePath();
+        }
+
+        return null;
     }
 
+    // situacao - OK
+    public String buscaDiretorio(String diretorioBusca){
+
+        // estancia da janela
+        Stage busca = new Stage();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        // detalhe da janela
+        directoryChooser.setTitle("DIRETORIO");
+
+        // busca apartir do valor definido
+        if(validaDiretorioSelecionado(diretorioBusca)) {
+            directoryChooser.setInitialDirectory(new File(diretorioBusca));
+        }
+        File selectedDiretory = directoryChooser.showDialog(busca);
+
+        if (selectedDiretory != null) {
+            return selectedDiretory.getAbsolutePath();
+        }
+
+        return null;
+    }
+
+    // situacao - OK
     public void Compila(TextField sistema){
+        /*
+        * Compila e busca o nome do EXE
+        * define o nome na configuracao do nome
+        */
+
         try {
             Runtime.getRuntime().exec(
                 new String[]{
@@ -49,25 +98,13 @@ public class MenuModel {
                 }
             );
 
-            //Captura e salva o nome do exe define valor de origem
-//            if(origem != null) {
-//                File folder = new File(valores.getValorPadrao(Campos.MACROSISTEMA) + pathToExe);
-//                File[] listOfFiles = folder.listFiles();
-//                for (int i = 0; i < listOfFiles.length; i++) {
-//                    if (listOfFiles[i].isFile()) {
-//                        if (listOfFiles[i].getName().endsWith(".exe"))
-//                            valores.setValorPadrao(Campos.NOMEEXE, listOfFiles[i].getName()+ "\\");
-//                        origem.setText(valores.getValorPadrao(Campos.SUBSISTEMA) + nomeExe);
-//                    }
-//                }
-//            }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
+    // situacao - OK
     public void debug(boolean comDebug){
         if (comDebug){
             debug = "-Ddebug";
@@ -76,25 +113,81 @@ public class MenuModel {
         }
     }
 
-    public void Mover( TextField destino, TextField execucao){
+    // situacao - ERRO na busca do exe no fluxo normal
+    public boolean mover(String destino){
+
+        String origem = valores.getValor(Campos.MACROSISTEMA);
+        System.out.println(origem);
+        String nomeExe;
+
+        if(!validaDiretorioSelecionado(origem)){
+            //origem invalida, busca manual pelo exe
+            mensagem("Executavel não encontrado");
+            origem = buscaArquivo(null);
+            File exeManual = new File(origem);
+            nomeExe = exeManual.getName();
+
+        }else{
+            //origem valida, busca automatica pelo exe
+            nomeExe = buscaNomeExeCompilacao(origem);
+            System.out.println(nomeExe);
+            if (nomeExe == null){
+                mensagem("Verifique se foi gerado o exe corretamente");
+                return false;
+            }
+            origem += "\\" + nomeExe;
+        }
+
+        if (!validaDiretorioSelecionado(destino)){
+            mensagem("Destino invalido!");
+            return false;
+        }else {
+            destino +=  "\\" + nomeExe;
+        }
+
+
+        // define os caminhos para a copia
+        Path caminhoOrigem = Paths.get(origem);
+        Path caminhoDestino = Paths.get(destino);
+        //Files.size()
+
+        // inicia a copia
         try {
-            Runtime.getRuntime().exec(new String[]{
-                    "cmd.exe",
-                    "/c",
-                    "start",
-                    pathToScipts + "copia.bat",
-                    //origem.getText(),
-                    destino.getText(),
-                    destino.getText() + valores.getValorPadrao(Campos.NOMEEXE),
-            });
+            Files.deleteIfExists(caminhoDestino);
+            Files.copy(caminhoOrigem, caminhoDestino);
+            mensagem("COPIADO COM SUCESSO!");
+
+        } catch(FileAlreadyExistsException e) {
+            mensagem("Arquivo já existente");
+            return false;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //Concatena o destino com o nome do exe para execucao rapida
-        execucao.setText(destino.getText()+ valores.getValorPadrao(Campos.NOMEEXE));
+        return true;
     }
 
+    // situacao - OK - RECURSAO TA CAGANDO O RESULTADO, TA SOBREESCREVENDO NO
+    public String buscaNomeExeCompilacao (String diretorio){
+
+        File diretorioBusca = new File(diretorio);
+
+        // get all the files from a directory
+        File[] arquivos = diretorioBusca.listFiles();
+
+        for (File arquivo : arquivos) {
+            if (arquivo.isFile()) {
+                if(arquivo.getName().endsWith(".exe")) {
+                    System.out.println(arquivo.getName());
+                }
+            } else if (arquivo.isDirectory()) {
+                buscaNomeExeCompilacao(arquivo.getAbsolutePath());
+            }
+        }
+        return null;
+    }
+
+    // situacao - INCOMPLETO
     public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia){
 
         //Captura do path do exe soh o diretorio
@@ -108,13 +201,13 @@ public class MenuModel {
         //coloca o texto selecionado como PromptText pra execucao
         if (banco.getValue() != null){
             banco.setPromptText(banco.getValue().toString());
-            valores.setValorPadrao(Campos.BANCO, banco.getPromptText());
+            valores.setValor(Campos.BANCO, banco.getPromptText());
         }
 
         //coloca o texto selecionado como PromptText pra execucao
         if (agencia.getValue() != null){
             agencia.setPromptText(agencia.getValue().toString());
-            valores.setValorPadrao(Campos.AGENCIA, agencia.getPromptText());
+            valores.setValor(Campos.AGENCIA, agencia.getPromptText());
         }
 
         //efetua a execucao do sistema
@@ -136,9 +229,17 @@ public class MenuModel {
         }
 
         //define os novos valores pardrao para a execucao
-        valores.setValorPadrao(Campos.EXECUCAO, execucao.getText());
-        valores.setValorPadrao(Campos.SETBANCO, setbanco.getText());
-        valores.setValorPadrao(Campos.BANCO, banco.getPromptText());
-        valores.setValorPadrao(Campos.AGENCIA, agencia.getPromptText());
+        valores.setValor(Campos.EXECUCAO, execucao.getText());
+        valores.setValor(Campos.SETBANCO, setbanco.getText());
+        valores.setValor(Campos.BANCO, banco.getPromptText());
+        valores.setValor(Campos.AGENCIA, agencia.getPromptText());
+    }
+
+    // situacao - OK
+    public void mensagem(String detalhe){
+        Alert aviso = new Alert(Alert.AlertType.WARNING);
+        aviso.setTitle("AVISO!");
+        aviso.setHeaderText(detalhe);
+        aviso.showAndWait();
     }
 }

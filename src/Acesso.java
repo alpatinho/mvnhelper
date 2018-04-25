@@ -12,12 +12,13 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class DataAcesso {
+//classe funcional porem ineficiente, por enquanto ta bom...
+public class Acesso {
 
     private static Properties conf = new Properties();
     private static String confPatch = "./src/Data/";
 
-    public String getValorPadrao(Campos campo) {
+    public String getValor(Campos campo) {
         String valor;
         try {
             conf.load(new FileInputStream(confPatch + "DefaultValues.conf"));
@@ -28,7 +29,7 @@ public class DataAcesso {
         return valor;
     }
 
-    public void setValorPadrao(Campos campo, String valor) {
+    public void setValor(Campos campo, String valor) {
         try {
             conf.setProperty(campo.toString(), valor);
             conf.store(new FileOutputStream(confPatch + "DefaultValues.conf"), null);
@@ -37,7 +38,7 @@ public class DataAcesso {
         }
     }
 
-    public ObservableList getValores(Campos lista) {
+    public ObservableList getListaValores(Campos lista) {
         ArrayList<String> valores = new ArrayList<>();
         ObservableList<String> valoresFinal = FXCollections.observableList(valores);
         Path local = Paths.get(confPatch + lista.toString() + ".conf");

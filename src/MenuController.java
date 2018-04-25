@@ -1,15 +1,9 @@
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
 
 public class MenuController {
 
-    private DataAcesso valores = new DataAcesso();
+    private Acesso valores = new Acesso();
     private MenuModel model = new MenuModel();
 
     @FXML private TabPane TPPrincipal;
@@ -19,18 +13,16 @@ public class MenuController {
     @FXML private Button BTNBuscarSubsistema;
     @FXML private Button BTNCompilarSubsistema;
 
-    @FXML private CheckBox CKDebug;
-
     @FXML private TextField TFMacrosistema;
     @FXML private Button BTNBuscarMacrosistema;
     @FXML private Button BTNCompilarMacrosistema;
 
-    //MOVER
-    @FXML private Button BTNOrigemExe;
+    //OPCOES
+    @FXML private CheckBox CKDebug;
 
+    //MOVER
     @FXML private TextField TFDestinoExe;
     @FXML private Button BTNDestinoExe;
-
     @FXML private Button BTNMoverExe;
 
     //EXECUTAR
@@ -43,46 +35,72 @@ public class MenuController {
 
     @FXML private Button BTNExecutar;
 
-    //CONFIG
-    @FXML private TextField TFPadraoBusca;
-    @FXML private Button BTNBuscaPadrao;
 
     //METODOS DE ACOES
+
     //COMPILAR
-    @FXML void ActionBuscarSubsistema() {TFSubsistema.setText(model.buscaDiretorio(Campos.SUBSISTEMA, Campos.EXECUCAO));}
+    @FXML void ActionBuscarSubsistema() {
+        TFSubsistema.setText(model.buscaDiretorio(TFSubsistema.getText()));
+        valores.setValor(Campos.SUBSISTEMA, TFSubsistema.getText());
+    }
 
-    @FXML void ActionCompilarSubsistema() {model.Compila(TFSubsistema);}
+    @FXML void ActionCompilarSubsistema() {
+        model.Compila(TFSubsistema);
+        valores.setValor(Campos.SUBSISTEMA, TFSubsistema.getText());
+    }
 
-    @FXML void ActionDebug() {model.debug(CKDebug.isSelected());}
+    @FXML void ActionBuscarMacrosistema() {
+        TFMacrosistema.setText(model.buscaDiretorio(TFMacrosistema.getText()));
+        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
+    }
 
-    @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(model.buscaDiretorio(Campos.MACROSISTEMA, Campos.EXECUCAO));}
+    @FXML void ActionCompilarMacrosistema() {
+        model.Compila(TFMacrosistema);
+        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
+    }
 
-    @FXML void ActionCompilarMacrosistema() {model.Compila(TFMacrosistema);}
+    @FXML void ActionDebug() {
+        model.debug(CKDebug.isSelected());
+        System.out.println(model.buscaNomeExeCompilacao(TFMacrosistema.getText()));
+    }
 
     //MOVER
-    @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(model.buscaDiretorio(Campos.MOVERDESTINO, Campos.EXECUCAO));}
+    @FXML void ActionBuscarDestinoExe() {
+        TFDestinoExe.setText(model.buscaDiretorio(TFDestinoExe.getText()));
+        valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
+    }
 
-    @FXML void ActionMoverExe() {model.Mover(TFDestinoExe, TFCaminhoExecucao);}
+    @FXML void ActionMoverExe() {
+        model.mover(TFDestinoExe.getText());
+        valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
+    }
+
 
     //EXECUTAR
-    @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(model.buscaDiretorio(Campos.EXECUCAO, Campos.EXECUCAO));}
+    @FXML void ActionBuscarCaminhoExecucao() {
+        TFCaminhoExecucao.setText(model.buscaDiretorio(TFCaminhoExecucao.getText()));
+        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
+    }
 
-    @FXML void ActionExecutar() {model.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);}
+    @FXML void ActionExecutar() {
+        model.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);
+        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        valores.setValor(Campos.SETBANCO, TFSetBanco.getText());
+        valores.setValor(Campos.BANCO, CBBanco.getPromptText());
+        valores.setValor(Campos.AGENCIA, CBAgencia.getPromptText());
+    }
 
-    //CONFIGS
-    @FXML void ActionBuscaPadrao() {TFPadraoBusca.setText(model.buscaDiretorio(Campos.PADRAOBUSCA, null));}
 
     @FXML void initialize() {
-        TFSubsistema.setText(valores.getValorPadrao(Campos.SUBSISTEMA));
-        TFMacrosistema.setText(valores.getValorPadrao(Campos.MACROSISTEMA));
-        TFDestinoExe.setText(valores.getValorPadrao(Campos.MOVERDESTINO));
-        TFCaminhoExecucao.setText(valores.getValorPadrao(Campos.EXECUCAO));
-        TFSetBanco.setText(valores.getValorPadrao(Campos.SETBANCO));
-        TFPadraoBusca.setText(valores.getValorPadrao(Campos.PADRAOBUSCA));
-        CBBanco.setPromptText(valores.getValorPadrao(Campos.BANCO));
-        CBAgencia.setPromptText(valores.getValorPadrao(Campos.AGENCIA));
-        CBBanco.setItems(valores.getValores(Campos.LISTABANCO));
-        CBAgencia.setItems(valores.getValores(Campos.LISTAAGENCIA));
+        TFSubsistema.setText(valores.getValor(Campos.SUBSISTEMA));
+        TFMacrosistema.setText(valores.getValor(Campos.MACROSISTEMA));
+        TFDestinoExe.setText(valores.getValor(Campos.MOVERDESTINO));
+        TFCaminhoExecucao.setText(valores.getValor(Campos.EXECUCAO));
+        TFSetBanco.setText(valores.getValor(Campos.SETBANCO));
+        CBBanco.setPromptText(valores.getValor(Campos.BANCO));
+        CBAgencia.setPromptText(valores.getValor(Campos.AGENCIA));
+        CBBanco.setItems(valores.getListaValores(Campos.LISTABANCO));
+        CBAgencia.setItems(valores.getListaValores(Campos.LISTAAGENCIA));
 
     }
 }

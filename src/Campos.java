@@ -4,13 +4,13 @@ public enum Campos {
     MACROSISTEMA,
     MOVERORIGEM,
     MOVERDESTINO,
+    NOMEEXE,
     EXECUCAO,
     SETBANCO,
     BANCO,
     AGENCIA,
     LISTAAGENCIA,
     LISTABANCO,
-    NOMEEXE,
     PADRAOBUSCA;
 
 }
