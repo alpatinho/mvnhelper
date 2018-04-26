@@ -61,7 +61,7 @@ public class MenuController {
 
     @FXML void ActionDebug() {
         model.debug(CKDebug.isSelected());
-        System.out.println(model.buscaNomeExeCompilacao(TFMacrosistema.getText()));
+        System.out.println(model.buscaNomeExe(TFMacrosistema.getText()).getAbsolutePath());
     }
 
     //MOVER

@@ -11,8 +11,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.ArrayList;
 
 public class MenuModel {
 
@@ -113,7 +112,7 @@ public class MenuModel {
         }
     }
 
-    // situacao - ERRO na busca do exe no fluxo normal
+    // situacao - OK (NECESSITA REFATORACAO)
     public boolean mover(String destino){
 
         String origem = valores.getValor(Campos.MACROSISTEMA);
@@ -129,13 +128,14 @@ public class MenuModel {
 
         }else{
             //origem valida, busca automatica pelo exe
-            nomeExe = buscaNomeExeCompilacao(origem);
+            File result = buscaNomeExe(origem);
+            nomeExe = result.getName();
             System.out.println(nomeExe);
-            if (nomeExe == null){
+            if (!validaDiretorioSelecionado(result.getAbsolutePath())){
                 mensagem("Verifique se foi gerado o exe corretamente");
                 return false;
             }
-            origem += "\\" + nomeExe;
+            destino = result.getParent();
         }
 
         if (!validaDiretorioSelecionado(destino)){
@@ -154,7 +154,8 @@ public class MenuModel {
         // inicia a copia
         try {
             Files.deleteIfExists(caminhoDestino);
-            Files.copy(caminhoOrigem, caminhoDestino);
+            Files.copy(caminhoOrigem,
+                        caminhoDestino);
             mensagem("COPIADO COM SUCESSO!");
 
         } catch(FileAlreadyExistsException e) {
@@ -167,24 +168,35 @@ public class MenuModel {
         return true;
     }
 
-    // situacao - OK - RECURSAO TA CAGANDO O RESULTADO, TA SOBREESCREVENDO NO
-    public String buscaNomeExeCompilacao (String diretorio){
+    // situacao - OK (NECESSITA REFATORACAO)
+    public static File buscaNomeExe (String caminho){
+        ArrayList<String> arquivos = new ArrayList<>();
+        String[] Arquivo = busca(caminho, arquivos).toArray(new String[0]);
+        File nomeCaminho = new File(Arquivo[0]);
+        return nomeCaminho;
+    }
+
+    // subordinado ao anterior
+    private static ArrayList<String> busca(String diretorio, ArrayList<String> arquivos){
+        auxbuscaNomeExe(diretorio, arquivos);
+        return arquivos;
+    }
+
+    // subordinado ao anterior
+    private static void auxbuscaNomeExe (String diretorio , ArrayList<String> arquivosExes){
 
         File diretorioBusca = new File(diretorio);
-
-        // get all the files from a directory
         File[] arquivos = diretorioBusca.listFiles();
 
         for (File arquivo : arquivos) {
             if (arquivo.isFile()) {
                 if(arquivo.getName().endsWith(".exe")) {
-                    System.out.println(arquivo.getName());
+                    arquivosExes.add(arquivo.getAbsolutePath());
                 }
             } else if (arquivo.isDirectory()) {
-                buscaNomeExeCompilacao(arquivo.getAbsolutePath());
+                auxbuscaNomeExe(arquivo.getAbsolutePath(), arquivosExes);
             }
         }
-        return null;
     }
 
     // situacao - INCOMPLETO
