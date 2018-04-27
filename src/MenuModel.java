@@ -7,53 +7,92 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class MenuModel {
+class MenuModel {
 
     private Acesso valores = new Acesso();
     private String debug = "";
     private String pathToScipts = System.getProperty("user.dir") + "/src/Scripts/";
 
-    // situacao - OK
-    public boolean validaDiretorioSelecionado (String diretorio){
-        if(diretorio == null){
-            return false;
+    public enum tipoArquivo{
+        EXE(".exe");
+
+        public String tipo;
+
+        tipoArquivo(String t) {
+            tipo = t;
         }
-        File file = new File(diretorio);
-        return file.canRead();
+
     }
 
+    //situacao - OK
+    public void buscaValorTela (TextField campo, boolean arquivo){
+        String valorFinal = "";
+        String valorBusca = null;
+        if(converteFileValido(campo.getText(), null) == null){
+
+        }
+        if (arquivo){
+            if(buscaArquivo(campo.getText()) != null){
+                valorFinal = buscaArquivo(campo.getText()).getAbsolutePath();
+            }
+        }else {
+            if(buscaDiretorio(campo.getText()) != null){
+                valorFinal = buscaDiretorio(campo.getText()).getAbsolutePath();
+            }
+        }
+        campo.setText(valorFinal);
+    }
     // situacao - OK
-    public String buscaArquivo(String diretorioBusca) {
+    public File converteFileValido(String diretorio, String mensagemErro){
+        String mensagemPadrao = "Diretório Invalido";
+        if (mensagemErro == null){
+            mensagemErro = mensagemPadrao;
+        }
+        if(diretorio == null){
+            mensagem(mensagemErro);
+            return null;
+        }
+        File file = new File(diretorio);
+        if (!file.canRead()){
+            mensagem(mensagemErro);
+            return null;
+        }else {
+            return file;
+        }
+    }
+    // situacao - OK
+
+    public File buscaArquivo(String diretorioBusca) {
         // estancia da janela
         Stage busca = new Stage();
         FileChooser fileChooser = new FileChooser();
 
         // detalhe da janela
         fileChooser.setTitle("EXECUTAVEL");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Executavel", "*.exe"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Executavel", tipoArquivo.EXE.tipo));
 
-        // busca apartir do valor definido
-        if(validaDiretorioSelecionado(diretorioBusca)){
+        // buscaCaminhoExe apartir do valor definido
+        if (converteFileValido(diretorioBusca, null) != null) {
             fileChooser.setInitialDirectory(new File(diretorioBusca));
         }
+
         File selectedFile = fileChooser.showOpenDialog(busca);
 
         // retorna o caminho completo
         if (selectedFile != null) {
-            return selectedFile.getAbsolutePath();
+            return selectedFile;
         }
 
         return null;
     }
 
     // situacao - OK
-    public String buscaDiretorio(String diretorioBusca){
+    public File buscaDiretorio(String diretorioBusca){
 
         // estancia da janela
         Stage busca = new Stage();
@@ -62,23 +101,25 @@ public class MenuModel {
         // detalhe da janela
         directoryChooser.setTitle("DIRETORIO");
 
-        // busca apartir do valor definido
-        if(validaDiretorioSelecionado(diretorioBusca)) {
+        // buscaCaminhoExe apartir do valor definido
+
+        if (converteFileValido(diretorioBusca, null) != null) {
             directoryChooser.setInitialDirectory(new File(diretorioBusca));
         }
+
         File selectedDiretory = directoryChooser.showDialog(busca);
 
         if (selectedDiretory != null) {
-            return selectedDiretory.getAbsolutePath();
+            return selectedDiretory;
         }
 
         return null;
     }
 
-    // situacao - OK
+    // situacao - OK - Aguarda implementacao novas features
     public void Compila(TextField sistema){
         /*
-        * Compila e busca o nome do EXE
+        * Compila e buscaCaminhoExe o nome do EXE
         * define o nome na configuracao do nome
         */
 
@@ -103,52 +144,41 @@ public class MenuModel {
 
     }
 
-    // situacao - OK
-    public void debug(boolean comDebug){
-        if (comDebug){
-            debug = "-Ddebug";
-        }else{
-            debug = "";
-        }
-    }
+    // situacao - ERROS
+    public boolean mover(){
 
-    // situacao - OK (NECESSITA REFATORACAO)
-    public boolean mover(String destino){
-
-        String origem = valores.getValor(Campos.MACROSISTEMA);
-        System.out.println(origem);
+        File origem = converteFileValido(valores.getValor(Campos.MACROSISTEMA), "Diretório de origem Invalido");
+        File destino = converteFileValido(valores.getValor(Campos.MOVERDESTINO), "Diretorio de destino Invalido");
+        String origemFinal;
+        String destinoFinal;
         String nomeExe;
 
-        if(!validaDiretorioSelecionado(origem)){
-            //origem invalida, busca manual pelo exe
-            mensagem("Executavel não encontrado");
-            origem = buscaArquivo(null);
-            File exeManual = new File(origem);
-            nomeExe = exeManual.getName();
-
-        }else{
-            //origem valida, busca automatica pelo exe
-            File result = buscaNomeExe(origem);
-            nomeExe = result.getName();
-            System.out.println(nomeExe);
-            if (!validaDiretorioSelecionado(result.getAbsolutePath())){
-                mensagem("Verifique se foi gerado o exe corretamente");
-                return false;
-            }
-            destino = result.getParent();
-        }
-
-        if (!validaDiretorioSelecionado(destino)){
-            mensagem("Destino invalido!");
+        //verifica a origem e captura o nome do exe
+        if(origem == null){
             return false;
         }else {
-            destino +=  "\\" + nomeExe;
+            //procura o exe dentro da origem, se nao encontrar solicida manualmente
+            if(buscaCaminhoExe(origem.getAbsolutePath(), tipoArquivo.EXE.tipo) == null){
+                mensagem("Exe não encontrado");
+                nomeExe = buscaArquivo(origem.getAbsolutePath()).getName();
+            }else {
+                nomeExe = buscaCaminhoExe(origem.getAbsolutePath(), tipoArquivo.EXE.tipo).getName();
+            }
+            origemFinal = origem.getAbsolutePath() + "\\" + nomeExe;;
         }
 
+        if(destino == null){
+            return false;
+        }else {
+            destino = converteFileValido(valores.getValor(Campos.MOVERDESTINO), null);
+            destinoFinal = destino.getAbsolutePath() + "\\" + nomeExe;
+        }
+
+        valores.setValor(Campos.NOMEEXE, nomeExe);
 
         // define os caminhos para a copia
-        Path caminhoOrigem = Paths.get(origem);
-        Path caminhoDestino = Paths.get(destino);
+        Path caminhoOrigem = Paths.get(origemFinal);
+        Path caminhoDestino = Paths.get(destinoFinal);
         //Files.size()
 
         // inicia a copia
@@ -158,43 +188,38 @@ public class MenuModel {
                         caminhoDestino);
             mensagem("COPIADO COM SUCESSO!");
 
-        } catch(FileAlreadyExistsException e) {
-            mensagem("Arquivo já existente");
+        } catch(Exception e) {
+            mensagem("Erro Trizonho");
             return false;
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        valores.setValor(Campos.EXECUCAO, destino.getAbsolutePath());
         return true;
     }
 
-    // situacao - OK (NECESSITA REFATORACAO)
-    public static File buscaNomeExe (String caminho){
-        ArrayList<String> arquivos = new ArrayList<>();
-        String[] Arquivo = busca(caminho, arquivos).toArray(new String[0]);
-        File nomeCaminho = new File(Arquivo[0]);
-        return nomeCaminho;
+    // situacao - OK
+    public File buscaCaminhoExe(String origemBusca, String tipoArquivosBusca){
+        ArrayList<File> arquivosEncontrados = new ArrayList<>();
+        auxBuscaCaminhoArquivo(converteFileValido(origemBusca, "Origem da buscaCaminhoExe por arquivo Invalida"), arquivosEncontrados, tipoArquivosBusca);
+        for(File arquivo: arquivosEncontrados)
+            if (arquivo != null) {
+                return arquivo;
+            }
+        return null;
     }
 
-    // subordinado ao anterior
-    private static ArrayList<String> busca(String diretorio, ArrayList<String> arquivos){
-        auxbuscaNomeExe(diretorio, arquivos);
-        return arquivos;
-    }
+    // auxiliar do metodo anterior
+    private void auxBuscaCaminhoArquivo(File diretorioBusca , ArrayList<File> arquivosEncontrados, String tipoArquivosBusca){
 
-    // subordinado ao anterior
-    private static void auxbuscaNomeExe (String diretorio , ArrayList<String> arquivosExes){
-
-        File diretorioBusca = new File(diretorio);
         File[] arquivos = diretorioBusca.listFiles();
-
-        for (File arquivo : arquivos) {
-            if (arquivo.isFile()) {
-                if(arquivo.getName().endsWith(".exe")) {
-                    arquivosExes.add(arquivo.getAbsolutePath());
+        if(arquivos != null) {
+            for (File arquivo : arquivos) {
+                if (arquivo.isFile()) {
+                    if (arquivo.getName().endsWith(tipoArquivosBusca)) {
+                        arquivosEncontrados.add(arquivo);
+                    }
+                } else if (arquivo.isDirectory()) {
+                    auxBuscaCaminhoArquivo(arquivo, arquivosEncontrados, tipoArquivosBusca);
                 }
-            } else if (arquivo.isDirectory()) {
-                auxbuscaNomeExe(arquivo.getAbsolutePath(), arquivosExes);
             }
         }
     }
@@ -253,5 +278,14 @@ public class MenuModel {
         aviso.setTitle("AVISO!");
         aviso.setHeaderText(detalhe);
         aviso.showAndWait();
+    }
+
+    // situacao - CONVERTER NO METODO OPCOES
+    public void debug(boolean comDebug){
+        if (comDebug){
+            debug = "-Ddebug";
+        }else{
+            debug = "";
+        }
     }
 }

@@ -40,7 +40,7 @@ public class MenuController {
 
     //COMPILAR
     @FXML void ActionBuscarSubsistema() {
-        TFSubsistema.setText(model.buscaDiretorio(TFSubsistema.getText()));
+        model.buscaValorTela(TFSubsistema, false);
         valores.setValor(Campos.SUBSISTEMA, TFSubsistema.getText());
     }
 
@@ -50,7 +50,7 @@ public class MenuController {
     }
 
     @FXML void ActionBuscarMacrosistema() {
-        TFMacrosistema.setText(model.buscaDiretorio(TFMacrosistema.getText()));
+        //TFMacrosistema.setText(model.buscaTela(TFMacrosistema.getText(), false));
         valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
     }
 
@@ -61,24 +61,27 @@ public class MenuController {
 
     @FXML void ActionDebug() {
         model.debug(CKDebug.isSelected());
-        System.out.println(model.buscaNomeExe(TFMacrosistema.getText()).getAbsolutePath());
+        // Teste
+        System.out.println(model.buscaCaminhoExe(TFSubsistema.getText(), ".exe").getAbsolutePath());
     }
 
     //MOVER
     @FXML void ActionBuscarDestinoExe() {
-        TFDestinoExe.setText(model.buscaDiretorio(TFDestinoExe.getText()));
+        //TFDestinoExe.setText(model.buscaTela(TFDestinoExe.getText(), false));
         valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
     }
 
     @FXML void ActionMoverExe() {
-        model.mover(TFDestinoExe.getText());
+        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
         valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
+        model.mover();
+        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
     }
 
 
     //EXECUTAR
     @FXML void ActionBuscarCaminhoExecucao() {
-        TFCaminhoExecucao.setText(model.buscaDiretorio(TFCaminhoExecucao.getText()));
+        //TFCaminhoExecucao.setText(model.buscaTela(TFCaminhoExecucao.getText(), true));
         valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
     }
 

@@ -11,6 +11,4 @@ public enum Campos {
     AGENCIA,
     LISTAAGENCIA,
     LISTABANCO,
-    PADRAOBUSCA;
-
 }
