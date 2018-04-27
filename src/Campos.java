@@ -1,5 +1,4 @@
 public enum Campos {
-
     SUBSISTEMA,
     MACROSISTEMA,
     MOVERORIGEM,

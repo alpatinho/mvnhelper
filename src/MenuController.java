@@ -50,7 +50,7 @@ public class MenuController {
     }
 
     @FXML void ActionBuscarMacrosistema() {
-        //TFMacrosistema.setText(model.buscaTela(TFMacrosistema.getText(), false));
+        model.buscaValorTela(TFMacrosistema, false);
         valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
     }
 
@@ -67,7 +67,7 @@ public class MenuController {
 
     //MOVER
     @FXML void ActionBuscarDestinoExe() {
-        //TFDestinoExe.setText(model.buscaTela(TFDestinoExe.getText(), false));
+        model.buscaValorTela(TFDestinoExe, false);
         valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
     }
 

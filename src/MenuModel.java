@@ -15,26 +15,15 @@ import java.util.ArrayList;
 class MenuModel {
 
     private Acesso valores = new Acesso();
+    private String pathToScipts = System.getProperty("user.dir") + "/src/Data.Scripts/";
     private String debug = "";
-    private String pathToScipts = System.getProperty("user.dir") + "/src/Scripts/";
-
-    public enum tipoArquivo{
-        EXE(".exe");
-
-        public String tipo;
-
-        tipoArquivo(String t) {
-            tipo = t;
-        }
-
-    }
 
     //situacao - OK
     public void buscaValorTela (TextField campo, boolean arquivo){
         String valorFinal = "";
         String valorBusca = null;
-        if(converteFileValido(campo.getText(), null) == null){
-
+        if(stringToFile(campo.getText()) == null){
+            System.out.println(valorBusca);
         }
         if (arquivo){
             if(buscaArquivo(campo.getText()) != null){
@@ -47,19 +36,15 @@ class MenuModel {
         }
         campo.setText(valorFinal);
     }
+
     // situacao - OK
-    public File converteFileValido(String diretorio, String mensagemErro){
-        String mensagemPadrao = "Diretório Invalido";
-        if (mensagemErro == null){
-            mensagemErro = mensagemPadrao;
-        }
-        if(diretorio == null){
-            mensagem(mensagemErro);
+    public File stringToFile(String diretorio){
+        if(diretorio == null || diretorio.equals("")){
             return null;
         }
+
         File file = new File(diretorio);
         if (!file.canRead()){
-            mensagem(mensagemErro);
             return null;
         }else {
             return file;
@@ -73,11 +58,11 @@ class MenuModel {
         FileChooser fileChooser = new FileChooser();
 
         // detalhe da janela
-        fileChooser.setTitle("EXECUTAVEL");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Executavel", tipoArquivo.EXE.tipo));
+        fileChooser.setTitle(TipoArquivo.EXE.getDescricao());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(TipoArquivo.EXE.getDescricao(), TipoArquivo.EXE.getExtensao()));
 
         // buscaCaminhoExe apartir do valor definido
-        if (converteFileValido(diretorioBusca, null) != null) {
+        if (stringToFile(diretorioBusca) != null) {
             fileChooser.setInitialDirectory(new File(diretorioBusca));
         }
 
@@ -103,7 +88,7 @@ class MenuModel {
 
         // buscaCaminhoExe apartir do valor definido
 
-        if (converteFileValido(diretorioBusca, null) != null) {
+        if (stringToFile(diretorioBusca) != null) {
             directoryChooser.setInitialDirectory(new File(diretorioBusca));
         }
 
@@ -147,8 +132,8 @@ class MenuModel {
     // situacao - ERROS
     public boolean mover(){
 
-        File origem = converteFileValido(valores.getValor(Campos.MACROSISTEMA), "Diretório de origem Invalido");
-        File destino = converteFileValido(valores.getValor(Campos.MOVERDESTINO), "Diretorio de destino Invalido");
+        File origem = stringToFile(valores.getValor(Campos.MACROSISTEMA));
+        File destino = stringToFile(valores.getValor(Campos.MOVERDESTINO));
         String origemFinal;
         String destinoFinal;
         String nomeExe;
@@ -158,19 +143,19 @@ class MenuModel {
             return false;
         }else {
             //procura o exe dentro da origem, se nao encontrar solicida manualmente
-            if(buscaCaminhoExe(origem.getAbsolutePath(), tipoArquivo.EXE.tipo) == null){
+            if(buscaCaminhoExe(origem.getAbsolutePath(), TipoArquivo.EXE.getExtensao()) == null){
                 mensagem("Exe não encontrado");
                 nomeExe = buscaArquivo(origem.getAbsolutePath()).getName();
             }else {
-                nomeExe = buscaCaminhoExe(origem.getAbsolutePath(), tipoArquivo.EXE.tipo).getName();
+                nomeExe = buscaCaminhoExe(origem.getAbsolutePath(), TipoArquivo.EXE.getDescricao()).getName();
             }
-            origemFinal = origem.getAbsolutePath() + "\\" + nomeExe;;
+            origemFinal = origem.getAbsolutePath() + "\\" + nomeExe;
         }
 
         if(destino == null){
             return false;
         }else {
-            destino = converteFileValido(valores.getValor(Campos.MOVERDESTINO), null);
+            destino = stringToFile(valores.getValor(Campos.MOVERDESTINO));
             destinoFinal = destino.getAbsolutePath() + "\\" + nomeExe;
         }
 
@@ -199,7 +184,7 @@ class MenuModel {
     // situacao - OK
     public File buscaCaminhoExe(String origemBusca, String tipoArquivosBusca){
         ArrayList<File> arquivosEncontrados = new ArrayList<>();
-        auxBuscaCaminhoArquivo(converteFileValido(origemBusca, "Origem da buscaCaminhoExe por arquivo Invalida"), arquivosEncontrados, tipoArquivosBusca);
+        auxBuscaCaminhoArquivo(stringToFile(origemBusca), arquivosEncontrados, tipoArquivosBusca);
         for(File arquivo: arquivosEncontrados)
             if (arquivo != null) {
                 return arquivo;
@@ -228,12 +213,7 @@ class MenuModel {
     public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia){
 
         //Captura do path do exe soh o diretorio
-        String DirExeExecucao[];
         String DirExecucao = "";
-        DirExeExecucao = execucao.getText().replace("\\", "\\#").split("#");
-        for (int i = 0; i < DirExeExecucao.length - 1; i++) {
-            DirExecucao += DirExeExecucao[i];
-        }
 
         //coloca o texto selecionado como PromptText pra execucao
         if (banco.getValue() != null){
@@ -273,7 +253,7 @@ class MenuModel {
     }
 
     // situacao - OK
-    public void mensagem(String detalhe){
+    private void mensagem(String detalhe){
         Alert aviso = new Alert(Alert.AlertType.WARNING);
         aviso.setTitle("AVISO!");
         aviso.setHeaderText(detalhe);
@@ -289,3 +269,4 @@ class MenuModel {
         }
     }
 }
+
