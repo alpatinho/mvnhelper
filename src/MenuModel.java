@@ -18,23 +18,13 @@ class MenuModel {
     private String pathToScipts = System.getProperty("user.dir") + "/src/Data.Scripts/";
     private String debug = "";
 
-    //situacao - OK
-    public void buscaValorTela (TextField campo, boolean arquivo){
-        String valorFinal = "";
-        String valorBusca = null;
-        if(stringToFile(campo.getText()) == null){
-            System.out.println(valorBusca);
-        }
-        if (arquivo){
-            if(buscaArquivo(campo.getText()) != null){
-                valorFinal = buscaArquivo(campo.getText()).getAbsolutePath();
-            }
+    public String validString(String diretorio){
+        if(diretorio == null){
+            return "";
         }else {
-            if(buscaDiretorio(campo.getText()) != null){
-                valorFinal = buscaDiretorio(campo.getText()).getAbsolutePath();
-            }
+            return diretorio;
         }
-        campo.setText(valorFinal);
+
     }
 
     // situacao - OK
@@ -50,8 +40,8 @@ class MenuModel {
             return file;
         }
     }
-    // situacao - OK
 
+    // situacao - OK
     public File buscaArquivo(String diretorioBusca) {
         // estancia da janela
         Stage busca = new Stage();
@@ -101,35 +91,9 @@ class MenuModel {
         return null;
     }
 
-    // situacao - OK - Aguarda implementacao novas features
-    public void Compila(TextField sistema){
-        /*
-        * Compila e buscaCaminhoExe o nome do EXE
-        * define o nome na configuracao do nome
-        */
-
-        try {
-            Runtime.getRuntime().exec(
-                new String[]{
-                    "cmd.exe",
-                    "/c",
-                    "start",
-                    pathToScipts + "compila.bat",
-                    sistema.getText(),
-                    "mvn",
-                    "clean",
-                    "install",
-                    debug
-                }
-            );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     // situacao - ERROS
+
+    // situacao - REVISAR
     public boolean mover(){
 
         File origem = stringToFile(valores.getValor(Campos.MACROSISTEMA));
@@ -179,6 +143,34 @@ class MenuModel {
         }
         valores.setValor(Campos.EXECUCAO, destino.getAbsolutePath());
         return true;
+    }
+
+    // situacao - OK - Aguarda implementacao novas features
+    public void Compila(TextField sistema){
+        /*
+         * Compila e buscaCaminhoExe o nome do EXE
+         * define o nome na configuracao do nome
+         */
+
+        try {
+            Runtime.getRuntime().exec(
+                    new String[]{
+                            "cmd.exe",
+                            "/c",
+                            "start",
+                            pathToScipts + "compila.bat",
+                            sistema.getText(),
+                            "mvn",
+                            "clean",
+                            "install",
+                            debug
+                    }
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // situacao - OK
