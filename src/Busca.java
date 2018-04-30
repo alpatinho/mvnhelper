@@ -3,6 +3,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Busca {
@@ -33,8 +34,8 @@ public class Busca {
         FileChooser fileChooser = new FileChooser();
 
         // detalhe da janela
-        fileChooser.setTitle(Util.TipoArquivo.EXE.DESCRICAO);
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Util.TipoArquivo.EXE.DESCRICAO, Util.TipoArquivo.EXE.DESCRICAO));
+        fileChooser.setTitle(Util.TipoArquivo.EXE.getDescricao());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Util.TipoArquivo.EXE.getDescricao(), Util.TipoArquivo.EXE.getExtensao()));
 
         // caminhoExe apartir do valor definido
         if (util.stringToFile(diretorioBusca) != null) {
@@ -91,4 +92,5 @@ public class Busca {
             }
         }
     }
+
 }

@@ -64,14 +64,14 @@ class MenuModel {
             origem = util.stringToFile(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA));
             // [AQUI] tenta buscar o exe automaticamente, caso contrario pede busca manual
             try{
-                File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.EXTENSAO);
+                File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.getExtensao());
                 nomeExe = caminhoExe.getName();
                 origemFinal = caminhoExe.getAbsolutePath();
             }catch (NullPointerException e){
                 // [AQUI] verifica o retorno da busca manual, caso invalido retona erro
                 util.exibeMensagem(Util.Mensagens.EXE_NAO_ENCONTRADO, false);
                 try{
-                    File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.EXTENSAO);
+                    File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.getExtensao());
                     nomeExe = caminhoExe.getName();
                     origemFinal = caminhoExe.getAbsolutePath();
                 }catch (NullPointerException err){
@@ -107,7 +107,7 @@ class MenuModel {
                     if (util.exibeEscolha(Util.Mensagens.SOBREESCREVER_EXE)){
                         Files.deleteIfExists(caminhoDestino);
                     }else {
-                        util.exibeMensagem(Util.Mensagens.COPIA_CANCELADA, false);
+                        util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
                         return false;
                     }
                 }
@@ -125,10 +125,22 @@ class MenuModel {
     }
 
     // situacao - TESTAR EFICACIA
-    public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
+    public boolean executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
+        File diretorioExe;
+        if (util.stringToFile(execucao.getText()) == null){
+            try {
+                util.exibeMensagem(Util.Mensagens.ERRO_CAMINHO_EXECUCAO, false);
+                diretorioExe = util.stringToFile(busca.caminho(execucao.getText(), true));
+                acessoVariaveis.setValor(Util.Campos.EXECUCAO, diretorioExe.getAbsolutePath());
+            }catch (Exception err){
+                util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
+                return false;
+            }
+            return false;
+        }else {
+            diretorioExe = util.stringToFile(execucao.getText());
+        }
 
-        //Captura do path do exe soh o diretorio
-        String DirExecucao = "";
 
         //coloca o texto selecionado como PromptText pra execucao
         if (banco.getValue() != null) {
@@ -151,8 +163,8 @@ class MenuModel {
                     Util.SCRIPT_EXECUCAO,
                     setbanco.getText(),
                     banco.getPromptText(),
-                    DirExecucao,
-                    execucao.getText(),
+                    diretorioExe.getParent(), // caminho sem o nome do exe
+                    diretorioExe.getAbsolutePath(), // caminho com o exe
                     agencia.getPromptText()
 
             });
@@ -165,6 +177,7 @@ class MenuModel {
         acessoVariaveis.setValor(Util.Campos.SETBANCO, setbanco.getText());
         acessoVariaveis.setValor(Util.Campos.BANCO, banco.getPromptText());
         acessoVariaveis.setValor(Util.Campos.AGENCIA, agencia.getPromptText());
+        return true;
     }
 
     // situacao - OK

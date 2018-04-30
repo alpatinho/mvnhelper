@@ -1,5 +1,5 @@
-#Mon Apr 30 09:32:05 BRT 2018
-EXECUCAO=T\:\\accenture\\Douglas_Paz\\siac-exe-2.43.0.72-win32-bcc5.x-xhb0.99.x.exe
+#Mon Apr 30 16:11:36 BRT 2018
+EXECUCAO=
 NOMEEXE=TESTE
 BANCO=Banco
 SALVARCK=
@@ -7,8 +7,8 @@ MACROSISTEMA=C\:\\Users\\Douglas Paz\\Documents
 SUBSISTEMA=
 DESTINOCOPIA=C\:\\Users\\Douglas Paz\\Desktop
 DEBUG=
-LISTAAGENCIA=0101
 LISTABANCO=db1coreacn3t
-SETBANCO=SetBanco
+LISTAAGENCIA=0101
 AGENCIA=Agencia
+SETBANCO=SetBanco
 SOBREESCREVER=

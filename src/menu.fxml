@@ -124,7 +124,7 @@
                         <Font name="System Italic" size="16.0" />
                      </font>
                   </CheckBox>
-                  <Label layoutX="20.0" layoutY="376.0" text="&lt;emaill@email.com&gt;" />
+                  <Label layoutX="20.0" layoutY="376.0" text="lucas.bergmann@accenture.com" />
                   <Label fx:id="LBLLogoAccTec" layoutX="570.0" layoutY="340.0" />
                </children>
             </AnchorPane>

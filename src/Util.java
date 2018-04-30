@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public class Util {
 
-    public static final String LOGO_MVNHELPER = System.getProperty("user.dir") +"/Dados/Img/Logo_MvnHelper.jpg";
-    public static final String LOGO_ACC = System.getProperty("user.dir") +"/Dados/Img/Logo_Acc.png";
+    public static final String LOGO_MVNHELPER = System.getProperty("user.dir") + "/Dados/Img/Logo_MvnHelper.jpg";
+    public static final String LOGO_ACC = System.getProperty("user.dir") + "/Dados/Img/Logo_Acc.png";
     public static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/Dados/Scripts/compila.bat";
     public static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/Dados/Scripts/executa.bat";
-    public static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") +"/Dados/VariaveisLocais.prop";
-    public static final String LISTA_AGENCIAS = System.getProperty("user.dir") +"/Dados/ListaAgencias.prop";
-    public static final String LISTA_BANCOS = System.getProperty("user.dir") +"/Dados/ListaBancos.prop";
+    public static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") + "/Dados/VariaveisLocais.prop";
+    public static final String LISTA_AGENCIAS = System.getProperty("user.dir") + "/Dados/ListaAgencias.prop";
+    public static final String LISTA_BANCOS = System.getProperty("user.dir") + "/Dados/ListaBancos.prop";
 
     public File stringToFile(String diretorio){
         if(diretorio == null || diretorio.equals("")){
@@ -32,12 +32,13 @@ public class Util {
         Alert boxMensagem;
         if(erroFatal){
             boxMensagem = new Alert(Alert.AlertType.ERROR);
+            boxMensagem.setContentText("Erro!");
         }else {
             boxMensagem = new Alert(Alert.AlertType.INFORMATION);
+            boxMensagem.setContentText("Aviso!");
         }
-        boxMensagem.setContentText(mensagem.toString());
-        boxMensagem.setHeaderText(mensagem.TITULO);
-        boxMensagem.setContentText(mensagem.DETALHE);
+        boxMensagem.setHeaderText(mensagem.getTitulo());
+        boxMensagem.setContentText(mensagem.getDetalhe());
         boxMensagem.showAndWait();
     }
 
@@ -47,8 +48,8 @@ public class Util {
         ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         escolha.setTitle(mensagens.toString());
-        escolha.setHeaderText(mensagens.TITULO);
-        escolha.setContentText(mensagens.DETALHE);
+        escolha.setHeaderText(mensagens.getTitulo());
+        escolha.setContentText(mensagens.getDetalhe());
         Optional<ButtonType> result = escolha.showAndWait();
         if (result.get() == ButtonType.OK){
             return true;
@@ -72,28 +73,36 @@ public class Util {
     }
 
     public enum TipoArquivo {
-        EXE("Executavel",".exe"),
+        EXE("Executavel","*.exe"),
         XML("XML", ".xml");
 
-        public String DESCRICAO;
-        public String EXTENSAO;
+        private String DESCRICAO;
+        private String EXTENSAO;
 
         TipoArquivo(String descricao, String extensao) {
             this.DESCRICAO = descricao;
             this.EXTENSAO = extensao;
         }
+
+        public String getDescricao(){
+            return DESCRICAO;
+        }
+        public String getExtensao(){
+            return EXTENSAO;
+        }
     }
 
     public enum Mensagens {
-        ERRO_ARQUIVO_CONFIGURACAO("Erro ao Ler arquivos de configuração", System.getProperty("user.dir")),
+        ERRO_ARQUIVO_CONFIGURACAO("Erro ao Ler arquivos de configuração", System.getProperty("user.dir")+"\\Dados"),
         ORIGEM_INVALIDA("Selecione o Executavel manualmente", "A busca automatica é feita a partir do Macrosistema, verifique"),
         DESTINO_INVALIDO("Destino do Arquivo Invalido", "Por Favor, Verifique!"),
         EXE_INVALIDO("EXE SELECIONADO INVALIDO", "Teste novamente!"),
         EXE_NAO_ENCONTRADO("Ops!, Exe não encontrado", "Por Favor Selecione o arquivo manualmente"),
         SOBREESCREVER_EXE("Exe Encontrado no destino", ""),
         EXE_COPIADO_SUCESSO("Executavel Copiado com Sucesso", "(° ʖ °)"),
-        COPIA_CANCELADA("Operacao Cancelada", ""),
+        OPERACAO_CANCELADA("Operacao Cancelada", ""),
         ERRO_COPIAR("Erro ao copiar Arquivo", "Tente  novamente, ou não, vai saber né?"),
+        ERRO_CAMINHO_EXECUCAO("Diretório de execucao inválido", "Selecione Novamente!"),
         ERRO_TRIZONHO("Rolou um erro Trizonho", "Foi mal ai, não sei o que deu");
 
         private String TITULO;
@@ -102,6 +111,14 @@ public class Util {
         Mensagens(String titulo, String detalhe){
             this.TITULO = titulo;
             this.DETALHE = detalhe;
+        }
+
+        public String getTitulo(){
+            return TITULO;
+        }
+
+        public String getDetalhe(){
+            return DETALHE;
         }
     }
 
