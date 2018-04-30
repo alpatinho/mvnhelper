@@ -1,14 +1,17 @@
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class MenuController {
 
-    private Acesso valores = new Acesso();
+    private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private MenuModel model = new MenuModel();
+    private Busca busca = new Busca();
 
     @FXML private TabPane TPPrincipal;
 
-    //COMPILAR
+    // COMPILAR
     @FXML private TextField TFSubsistema;
     @FXML private Button BTNBuscarSubsistema;
     @FXML private Button BTNCompilarSubsistema;
@@ -17,15 +20,19 @@ public class MenuController {
     @FXML private Button BTNBuscarMacrosistema;
     @FXML private Button BTNCompilarMacrosistema;
 
-    //OPCOES
+    // OPCOES_COMPILACAO
     @FXML private CheckBox CKDebug;
 
-    //MOVER
-    @FXML private TextField TFDestinoExe;
-    @FXML private Button BTNDestinoExe;
-    @FXML private Button BTNMoverExe;
 
-    //EXECUTAR
+    // COPIAR
+    @FXML private TextField TFDestinoExe;
+    @FXML private Button BTNDestinoCopia;
+    @FXML private Button BTNCopiarExe;
+
+    @FXML private CheckBox CKSobreescrever;
+
+
+    // EXECUTAR
     @FXML private TextField TFCaminhoExecucao;
     @FXML private Button BTNCaminhoExecucao;
 
@@ -36,72 +43,107 @@ public class MenuController {
     @FXML private Button BTNExecutar;
 
 
-    //METODOS DE ACOES
+    // CONFIGURACOES
+    @FXML private CheckBox CKSalvarEstadoCks;
+    @FXML private Label LBLLogoAccTec;
 
-    //COMPILAR
+    // METODOS DE ACOES
+    // COMPILAR
     @FXML void ActionBuscarSubsistema() {
-        TFSubsistema.setText(model.validString(model.buscaDiretorio(TFSubsistema.getText()).getAbsolutePath()));
-        valores.setValor(Campos.SUBSISTEMA, TFSubsistema.getText());
+        TFSubsistema.setText(busca.caminho(TFSubsistema.getText(), false));
+        acessoVariaveis.setValor(Util.Campos.SUBSISTEMA, TFSubsistema.getText());
     }
 
     @FXML void ActionCompilarSubsistema() {
-        model.Compila(TFSubsistema);
-        valores.setValor(Campos.SUBSISTEMA, TFSubsistema.getText());
+        model.opcoesCompilacao(CKDebug.isSelected());
+        model.compilar(TFSubsistema);
+        acessoVariaveis.setValor(Util.Campos.SUBSISTEMA, TFSubsistema.getText());
     }
 
     @FXML void ActionBuscarMacrosistema() {
-        TFMacrosistema.setText(model.validString(model.buscaDiretorio(TFMacrosistema.getText()).getAbsolutePath()));
-        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
+        TFMacrosistema.setText(busca.caminho(TFMacrosistema.getText(), false));
+        acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
     }
 
     @FXML void ActionCompilarMacrosistema() {
-        model.Compila(TFMacrosistema);
-        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
+        model.opcoesCompilacao(CKDebug.isSelected());
+        model.compilar(TFMacrosistema);
+        acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
     }
 
     @FXML void ActionDebug() {
-        model.debug(CKDebug.isSelected());
+        ActionSalvarEstadoCks();
     }
 
-    //MOVER
+    // COPIAR
     @FXML void ActionBuscarDestinoExe() {
-        TFDestinoExe.setText(model.validString(model.buscaDiretorio(TFDestinoExe.getText()).getAbsolutePath()));
-        valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
+        TFDestinoExe.setText(busca.caminho(TFDestinoExe.getText(), false));
+        acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
     }
 
-    @FXML void ActionMoverExe() {
-        valores.setValor(Campos.MACROSISTEMA, TFMacrosistema.getText());
-        valores.setValor(Campos.MOVERDESTINO, TFDestinoExe.getText());
-        model.mover();
-        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
+    @FXML void ActionCopiarExe() {
+        acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
+        acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
+        model.copiar(CKSobreescrever.isSelected());
+        acessoVariaveis.setValor(Util.Campos.EXECUCAO, TFCaminhoExecucao.getText());
     }
 
 
-    //EXECUTAR
+    // EXECUTAR
     @FXML void ActionBuscarCaminhoExecucao() {
-        TFCaminhoExecucao.setText(model.validString(model.buscaArquivo(TFCaminhoExecucao.getText()).getAbsolutePath()));
-        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao.getText(), true));
+        acessoVariaveis.setValor(Util.Campos.EXECUCAO, TFCaminhoExecucao.getText());
     }
 
     @FXML void ActionExecutar() {
         model.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);
-        valores.setValor(Campos.EXECUCAO, TFCaminhoExecucao.getText());
-        valores.setValor(Campos.SETBANCO, TFSetBanco.getText());
-        valores.setValor(Campos.BANCO, CBBanco.getPromptText());
-        valores.setValor(Campos.AGENCIA, CBAgencia.getPromptText());
+        acessoVariaveis.setValor(Util.Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        acessoVariaveis.setValor(Util.Campos.SETBANCO, TFSetBanco.getText());
+        acessoVariaveis.setValor(Util.Campos.BANCO, CBBanco.getPromptText());
+        acessoVariaveis.setValor(Util.Campos.AGENCIA, CBAgencia.getPromptText());
     }
 
+    // CONFIGURACOES
+    @FXML void ActionSalvarEstadoCks() {
+        if(CKSalvarEstadoCks.isSelected()){
+            acessoVariaveis.setValor(Util.Campos.SALVARCK, "TRUE");
+            acessoVariaveis.setValor(Util.Campos.DEBUG, CKDebug.isSelected() ? "TRUE" : "");
+            acessoVariaveis.setValor(Util.Campos.SOBREESCREVER, CKSobreescrever.isSelected() ? "TRUE" : "");
+        }else {
+            acessoVariaveis.setValor(Util.Campos.SALVARCK, "");
+        }
+    }
+
+    @FXML void ActionSobreescrever(){
+        ActionSalvarEstadoCks();
+    }
+
+    private void inicializaEstadoCks(){
+        if(CKSalvarEstadoCks.isSelected()){
+            if(acessoVariaveis.getValor(Util.Campos.SOBREESCREVER).equals("TRUE")) CKSobreescrever.setSelected(true);
+            if (acessoVariaveis.getValor(Util.Campos.DEBUG).equals("TRUE")) CKDebug.setSelected(true);
+        }
+    }
 
     @FXML void initialize() {
-        TFSubsistema.setText(valores.getValor(Campos.SUBSISTEMA));
-        TFMacrosistema.setText(valores.getValor(Campos.MACROSISTEMA));
-        TFDestinoExe.setText(valores.getValor(Campos.MOVERDESTINO));
-        TFCaminhoExecucao.setText(valores.getValor(Campos.EXECUCAO));
-        TFSetBanco.setText(valores.getValor(Campos.SETBANCO));
-        CBBanco.setPromptText(valores.getValor(Campos.BANCO));
-        CBAgencia.setPromptText(valores.getValor(Campos.AGENCIA));
-        CBBanco.setItems(valores.getListaValores(Campos.LISTABANCO));
-        CBAgencia.setItems(valores.getListaValores(Campos.LISTAAGENCIA));
+        if(acessoVariaveis.getValor(Util.Campos.SALVARCK).equals("TRUE")) {
+            CKSalvarEstadoCks.setSelected(true);
+            inicializaEstadoCks();
+        }
+        LBLLogoAccTec.setGraphic(new ImageView(new Image("file:"+Util.LOGO_ACC)));
+
+        TFSubsistema.setText(acessoVariaveis.getValor(Util.Campos.SUBSISTEMA));
+        TFMacrosistema.setText(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA));
+
+        TFDestinoExe.setText(acessoVariaveis.getValor(Util.Campos.DESTINOCOPIA));
+
+        TFCaminhoExecucao.setText(acessoVariaveis.getValor(Util.Campos.EXECUCAO));
+        TFSetBanco.setText(acessoVariaveis.getValor(Util.Campos.SETBANCO));
+        CBBanco.setPromptText(acessoVariaveis.getValor(Util.Campos.BANCO));
+        CBAgencia.setPromptText(acessoVariaveis.getValor(Util.Campos.AGENCIA));
+        CBBanco.setItems(acessoVariaveis.getListaValores(Util.LISTA_BANCOS));
+        CBAgencia.setItems(acessoVariaveis.getListaValores(Util.LISTA_AGENCIAS));
+
 
     }
 }

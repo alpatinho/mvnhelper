@@ -12,36 +12,38 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Scanner;
 
-//classe funcional porem ineficiente, por enquanto ta bom...
-public class Acesso {
+//classe funcional, porem ineficiente, por enquanto ta bom...
+public class AcessoVariaveis {
 
-    private static Properties conf = new Properties();
-    private static String confPatch = "./src/Data/";
+    private static Properties prop = new Properties();
 
-    public String getValor(Campos campo) {
+    public String getValor(Util.Campos campo) {
         String valor;
         try {
-            conf.load(new FileInputStream(confPatch + "DefaultValues.conf"));
-            valor = conf.getProperty(campo.toString());
+            prop.load(new FileInputStream(Util.VARIAVEIS_LOCAIS));
+            valor = prop.getProperty(campo.toString());
         } catch (IOException e) {
             return e.getMessage();
         }
         return valor;
     }
 
-    public void setValor(Campos campo, String valor) {
+    public void setValor(Util.Campos campo, String valor) {
+        if(valor == null){
+            valor = "";
+        }
         try {
-            conf.setProperty(campo.toString(), valor);
-            conf.store(new FileOutputStream(confPatch + "DefaultValues.conf"), null);
+            prop.setProperty(campo.toString(), valor);
+            prop.store(new FileOutputStream(Util.VARIAVEIS_LOCAIS), null);
         } catch (IOException e) {
             e.getMessage();
         }
     }
 
-    public ObservableList getListaValores(Campos lista) {
+    public ObservableList getListaValores(String lista) {
         ArrayList<String> valores = new ArrayList<>();
         ObservableList<String> valoresFinal = FXCollections.observableList(valores);
-        Path local = Paths.get(confPatch + lista.toString() + ".conf");
+        Path local = Paths.get(lista);
         try (Scanner sc = new Scanner(Files.newBufferedReader(local, Charset.defaultCharset()))) {
             sc.useDelimiter("\r\n|\n");
             while (sc.hasNext()) {
