@@ -3,16 +3,17 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
 import java.io.File;
+import java.util.Optional;
 
 public class Util {
 
-    public static final String LOGO_MVNHELPER = "src/Dados/Img/Logo_MvnHelper.jpg";
-    public static final String LOGO_ACC = "src/Dados/Img/Logo_Acc.png";
-    public static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/src/Dados/Scripts/compila.bat";
-    public static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/src/Dados/Scripts/executa.bat";
-    public static final String VARIAVEIS_LOCAIS = "src/Dados/VariaveisLocais.prop";
-    public static final String LISTA_AGENCIAS = "src/Dados/ListaAgencias.prop";
-    public static final String LISTA_BANCOS = "src/Dados/ListaBancos.prop";
+    public static final String LOGO_MVNHELPER = System.getProperty("user.dir") +"/Dados/Img/Logo_MvnHelper.jpg";
+    public static final String LOGO_ACC = System.getProperty("user.dir") +"/Dados/Img/Logo_Acc.png";
+    public static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/Dados/Scripts/compila.bat";
+    public static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/Dados/Scripts/executa.bat";
+    public static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") +"/Dados/VariaveisLocais.prop";
+    public static final String LISTA_AGENCIAS = System.getProperty("user.dir") +"/Dados/ListaAgencias.prop";
+    public static final String LISTA_BANCOS = System.getProperty("user.dir") +"/Dados/ListaBancos.prop";
 
     public File stringToFile(String diretorio){
         if(diretorio == null || diretorio.equals("")){
@@ -42,22 +43,18 @@ public class Util {
 
     public boolean exibeEscolha(Mensagens mensagens){
         Alert escolha = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnSim = new ButtonType("Sim");
+        ButtonType btnSim = new ButtonType("Sim", ButtonBar.ButtonData.OK_DONE);
         ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         escolha.setTitle(mensagens.toString());
         escolha.setHeaderText(mensagens.TITULO);
         escolha.setContentText(mensagens.DETALHE);
-
-        escolha.getButtonTypes().setAll(btnSim, btnNao);
-        escolha.showAndWait().ifPresent(botao -> {
-            if (botao == btnSim.) {
-                return true;
-            } else{
-                return false;
-            }
-        });
-        return false;
+        Optional<ButtonType> result = escolha.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public enum Campos {
@@ -88,6 +85,7 @@ public class Util {
     }
 
     public enum Mensagens {
+        ERRO_ARQUIVO_CONFIGURACAO("Erro ao Ler arquivos de configuração", System.getProperty("user.dir")),
         ORIGEM_INVALIDA("Selecione o Executavel manualmente", "A busca automatica é feita a partir do Macrosistema, verifique"),
         DESTINO_INVALIDO("Destino do Arquivo Invalido", "Por Favor, Verifique!"),
         EXE_INVALIDO("EXE SELECIONADO INVALIDO", "Teste novamente!"),

@@ -1,15 +1,14 @@
-#Sun Apr 29 11:31:08 BRT 2018
+#Mon Apr 30 09:32:05 BRT 2018
 EXECUCAO=T\:\\accenture\\Douglas_Paz\\siac-exe-2.43.0.72-win32-bcc5.x-xhb0.99.x.exe
-DESTINOCOPIA=C\:\\Users\\Douglas Paz\\Desktop
 NOMEEXE=TESTE
 BANCO=Banco
 SALVARCK=
 MACROSISTEMA=C\:\\Users\\Douglas Paz\\Documents
 SUBSISTEMA=
+DESTINOCOPIA=C\:\\Users\\Douglas Paz\\Desktop
 DEBUG=
-LISTABANCO=db1coreacn3t
 LISTAAGENCIA=0101
-AGENCIA=Agencia
+LISTABANCO=db1coreacn3t
 SETBANCO=SetBanco
-PADRAOBUSCA=C\:\\SISTEMAS\\LEGADO
+AGENCIA=Agencia
 SOBREESCREVER=
