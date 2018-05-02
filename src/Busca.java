@@ -66,9 +66,9 @@ public class Busca {
     }
 
     // situacao - OK
-    public File caminhoExe(File origemBusca, String tipoArquivosBusca){
+    public File caminhoExe(File origemBusca){
         ArrayList<File> arquivosEncontrados = new ArrayList<>();
-        auxCaminhoExe(origemBusca, arquivosEncontrados, tipoArquivosBusca);
+        auxCaminhoExe(origemBusca, arquivosEncontrados);
         for(File arquivo: arquivosEncontrados)
             if (arquivo != null) {
                 return arquivo;
@@ -77,17 +77,17 @@ public class Busca {
     }
 
     // situcao - OK
-    private void auxCaminhoExe(File diretorioBusca , ArrayList<File> arquivosEncontrados, String tipoArquivosBusca){
+    private void auxCaminhoExe(File diretorioBusca , ArrayList<File> arquivosEncontrados){
 
         File[] arquivos = diretorioBusca.listFiles();
         if(arquivos != null) {
             for (File arquivo : arquivos) {
                 if (arquivo.isFile()) {
-                    if (arquivo.getName().endsWith(tipoArquivosBusca)) {
+                    if (arquivo.getName().endsWith(".exe")) {
                         arquivosEncontrados.add(arquivo);
                     }
                 } else if (arquivo.isDirectory()) {
-                    auxCaminhoExe(arquivo, arquivosEncontrados, tipoArquivosBusca);
+                    auxCaminhoExe(arquivo, arquivosEncontrados);
                 }
             }
         }

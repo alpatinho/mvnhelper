@@ -64,14 +64,14 @@ class MenuModel {
             origem = util.stringToFile(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA));
             // [AQUI] tenta buscar o exe automaticamente, caso contrario pede busca manual
             try{
-                File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.getExtensao());
+                File caminhoExe = busca.caminhoExe(origem);
                 nomeExe = caminhoExe.getName();
                 origemFinal = caminhoExe.getAbsolutePath();
             }catch (NullPointerException e){
                 // [AQUI] verifica o retorno da busca manual, caso invalido retona erro
                 util.exibeMensagem(Util.Mensagens.EXE_NAO_ENCONTRADO, false);
                 try{
-                    File caminhoExe = busca.caminhoExe(origem, Util.TipoArquivo.EXE.getExtensao());
+                    File caminhoExe = busca.caminhoExe(origem);
                     nomeExe = caminhoExe.getName();
                     origemFinal = caminhoExe.getAbsolutePath();
                 }catch (NullPointerException err){
@@ -124,7 +124,7 @@ class MenuModel {
         return true;
     }
 
-    // situacao - TESTAR EFICACIA
+    // situacao - OK
     public boolean executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
         File diretorioExe;
         if (util.stringToFile(execucao.getText()) == null){
