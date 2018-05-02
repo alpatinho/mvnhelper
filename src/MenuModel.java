@@ -37,7 +37,7 @@ class MenuModel {
 
     }
 
-    // situacao - TESTAR EFICACIA
+    // situacao - OK
     public boolean copiar(boolean sobreescrever) {
 
         File origem;
@@ -120,11 +120,11 @@ class MenuModel {
             util.exibeMensagem(Util.Mensagens.ERRO_COPIAR, true);
             return false;
         }
-        acessoVariaveis.setValor(Util.Campos.EXECUCAO, destino.getAbsolutePath());
+        acessoVariaveis.setValor(Util.Campos.EXECUCAO, destinoFinal);
         return true;
     }
 
-    // situacao - OK
+    // situacao - ERROS
     public boolean executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
         File diretorioExe;
         if (util.stringToFile(execucao.getText()) == null){
@@ -140,7 +140,6 @@ class MenuModel {
         }else {
             diretorioExe = util.stringToFile(execucao.getText());
         }
-
 
         //coloca o texto selecionado como PromptText pra execucao
         if (banco.getValue() != null) {
@@ -165,7 +164,7 @@ class MenuModel {
                     banco.getPromptText(),
                     diretorioExe.getParent(), // caminho sem o nome do exe
                     diretorioExe.getAbsolutePath(), // caminho com o exe
-                    agencia.getPromptText()
+                    "AG" + agencia.getPromptText()
 
             });
         } catch (IOException e) {

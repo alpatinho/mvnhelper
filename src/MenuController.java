@@ -79,13 +79,14 @@ public class MenuController {
     @FXML void ActionBuscarDestinoExe() {
         TFDestinoExe.setText(busca.caminho(TFDestinoExe.getText(), false));
         acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
+        TFCaminhoExecucao.setText(acessoVariaveis.getValor(Util.Campos.EXECUCAO));
     }
 
     @FXML void ActionCopiarExe() {
         acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
         acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
         model.copiar(CKSobreescrever.isSelected());
-        acessoVariaveis.setValor(Util.Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        TFCaminhoExecucao.setText(acessoVariaveis.getValor(Util.Campos.EXECUCAO));
     }
 
 

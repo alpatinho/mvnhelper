@@ -20,7 +20,7 @@ public class Main extends Application{
         primaryStage.getIcons().add(new Image("file:"+Util.LOGO_MVNHELPER));
         primaryStage.setFullScreen(false);
         primaryStage.setResizable(false);
-        primaryStage.setTitle("MVN Helper V_0.2");
+        primaryStage.setTitle("MVN Helper V_0.2.2");
 
         Parent root = FXMLLoader.load(getClass().getResource("menu.fxml"));
 

@@ -39,7 +39,7 @@ public class Busca {
 
         // caminhoExe apartir do valor definido
         if (util.stringToFile(diretorioBusca) != null) {
-            fileChooser.setInitialDirectory(new File(diretorioBusca));
+            fileChooser.setInitialDirectory(new File(util.stringToFile(diretorioBusca).getParent()));
         }
 
         return fileChooser.showOpenDialog(busca);
@@ -47,7 +47,6 @@ public class Busca {
 
     // situacao - OK
     private File auxDiretorio(String diretorioBusca){
-
         // estancia da janela
         Stage busca = new Stage();
         DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -56,7 +55,6 @@ public class Busca {
         directoryChooser.setTitle("DIRETORIO");
 
         // caminhoExe apartir do valor definido
-
         if (util.stringToFile(diretorioBusca) != null) {
             directoryChooser.setInitialDirectory(new File(diretorioBusca));
         }
