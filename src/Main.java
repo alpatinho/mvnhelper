@@ -17,7 +17,7 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        primaryStage.getIcons().add(new Image("file:" + Util.LOGO_MVNHELPER));
+        primaryStage.getIcons().add(new Image("file:" + Util.ConfigPath.LOGO_MVNHELPER.getCaminho()));
         primaryStage.setFullScreen(false);
         primaryStage.setResizable(false);
         primaryStage.setTitle("MVN Helper V_0.3.0");

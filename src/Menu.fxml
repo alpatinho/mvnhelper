@@ -85,9 +85,9 @@
                   <ComboBox fx:id="CBAgencia" editable="true" layoutX="37.0" layoutY="310.0" prefHeight="25.0" prefWidth="362.0" />
                   <ComboBox fx:id="CBBanco" editable="true" layoutX="37.0" layoutY="222.0" prefHeight="25.0" prefWidth="361.0" />
                   <TextField fx:id="TFSetBanco" layoutX="37.0" layoutY="145.0" prefHeight="25.0" prefWidth="362.0" />
-                  <CheckBox fx:id="CKHabilitarAutoLogin" layoutX="454.0" layoutY="247.0" mnemonicParsing="false" onAction="#ActionHabilitarAutoLogin" prefHeight="25.0" prefWidth="212.0" text="Habilitar Auto LogIn">
+                  <CheckBox fx:id="CKHabilitarAutoLogin" layoutX="515.0" layoutY="247.0" mnemonicParsing="false" onAction="#ActionHabilitarAutoLogin" prefHeight="25.0" prefWidth="173.0" text="Habilitar Auto LogIn">
                      <font>
-                        <Font name="System Italic" size="16.0" />
+                        <Font name="System Italic" size="14.0" />
                      </font>
                   </CheckBox>
                   <TextField fx:id="TFLogin" layoutX="515.0" layoutY="279.0" />
@@ -107,7 +107,7 @@
                         <Font name="System Italic" size="12.0" />
                      </font>
                   </Label>
-                  <Button fx:id="BTNExecutarComDebug" disable="true" layoutX="598.0" layoutY="122.0" mnemonicParsing="false" onAction="#ActionExecutarComDebug" text="...DEBUG">
+                  <Button fx:id="BTNExecutarComDebug" layoutX="598.0" layoutY="122.0" mnemonicParsing="false" onAction="#ActionExecutarComDebug" text="...DEBUG">
                      <font>
                         <Font size="13.0" />
                      </font>

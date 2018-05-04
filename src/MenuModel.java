@@ -22,7 +22,7 @@ class MenuModel {
                             "cmd.exe",
                             "/c",
                             "start",
-                            Util.SCRIPT_COMPILACAO,
+                            Util.ConfigPath.SCRIPT_COMPILACAO.getCaminho(),
                             sistema.getText(),
                             "mvn",
                             "clean",
@@ -149,7 +149,7 @@ class MenuModel {
                     "cmd.exe",
                     "/c",
                     "start",
-                    Util.SCRIPT_EXECUCAO,
+                    Util.ConfigPath.SCRIPT_EXECUCAO.getCaminho(),
                     setbanco.getText(),
                     banco.getPromptText(),
                     diretorioExe.getParent(), // caminho sem o nome do exe
@@ -191,7 +191,7 @@ class MenuModel {
             util.exibeMensagem(Util.Mensagens.ERRO_SALVAR_CAMINHO_FONTES, false);
             return;
         }
-        String caminhoArquivoNovo = copia(Paths.get(Util.PATH_FONTES), Paths.get(caminhoExecucao).getParent(), sobreescrever);
+        String caminhoArquivoNovo = copia(Paths.get(Util.ConfigPath.PATH_FONTES.getCaminho()), Paths.get(caminhoExecucao).getParent(), sobreescrever);
         acessoVariaveis.setPathFontes(caminhoArquivoNovo, caminhoFontes);
     }
 }

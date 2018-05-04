@@ -21,7 +21,7 @@ class AcessoVariaveis {
     String getValor(Util.Campos campo) {
         String valor = "";
         try {
-            prop.load(new FileInputStream(Util.VARIAVEIS_LOCAIS));
+            prop.load(new FileInputStream(Util.ConfigPath.VARIAVEIS_LOCAIS.getCaminho()));
             valor = prop.getProperty(campo.toString());
         } catch (IOException e) {
             util.exibeMensagem(Util.Mensagens.ERRO_ARQUIVO_CONFIGURACAO, true);
@@ -35,7 +35,7 @@ class AcessoVariaveis {
         }
         try {
             prop.setProperty(campo.toString(), valor);
-            prop.store(new FileOutputStream(Util.VARIAVEIS_LOCAIS), null);
+            prop.store(new FileOutputStream(Util.ConfigPath.VARIAVEIS_LOCAIS.getCaminho()), null);
         } catch (IOException e) {
             util.exibeMensagem(Util.Mensagens.ERRO_ARQUIVO_CONFIGURACAO, true);
         }

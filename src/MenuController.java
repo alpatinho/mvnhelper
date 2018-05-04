@@ -150,7 +150,7 @@ public class MenuController {
         clipboard.setContents(new StringSelection(TFDestinoFontes.getText()), null);
         LBLConfirmacaoVisual.setText("COPIADO");
     }
-    @FXML void ActionSalvarCaminhoDestinoFontes(){// TODO
+    @FXML void ActionSalvarCaminhoDestinoFontes(){
         model.salvaCaminhoFontes(TFCaminhoExecucao.getText(), TFDestinoFontes.getText(), CKSobreescrever.isSelected());
     }
     @FXML void ActionLimparTabelaFontes(){// TODO
@@ -191,7 +191,7 @@ public class MenuController {
             TFSenha.setText(acessoVariaveis.getValor(Util.Campos.SENHA));
             ActionHabilitarAutoLogin();
         }
-        LBLLogoAccTec.setGraphic(new ImageView(new Image("file:"+Util.LOGO_ACC)));
+        LBLLogoAccTec.setGraphic(new ImageView(new Image("file:"+Util.ConfigPath.LOGO_ACC.getCaminho())));
         TFSubsistema.setText(acessoVariaveis.getValor(Util.Campos.SUBSISTEMA));
         TFMacrosistema.setText(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA));
         TFDestinoExe.setText(acessoVariaveis.getValor(Util.Campos.DESTINOCOPIA));
@@ -199,8 +199,8 @@ public class MenuController {
         TFSetBanco.setText(acessoVariaveis.getValor(Util.Campos.SETBANCO));
         CBBanco.setPromptText(acessoVariaveis.getValor(Util.Campos.BANCO));
         CBAgencia.setPromptText(acessoVariaveis.getValor(Util.Campos.AGENCIA));
-        CBBanco.setItems(acessoVariaveis.getListaValores(Util.LISTA_BANCOS));
-        CBAgencia.setItems(acessoVariaveis.getListaValores(Util.LISTA_AGENCIAS));
+        CBBanco.setItems(acessoVariaveis.getListaValores(Util.ConfigPath.LISTA_BANCOS.getCaminho()));
+        CBAgencia.setItems(acessoVariaveis.getListaValores(Util.ConfigPath.LISTA_AGENCIAS.getCaminho()));
         TFDestinoFontes.setText(acessoVariaveis.getValor(Util.Campos.FONTES));
     }
 }

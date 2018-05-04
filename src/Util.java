@@ -7,15 +7,6 @@ import java.util.Optional;
 
 class Util {
 
-    static final String LOGO_MVNHELPER = System.getProperty("user.dir") + "/Dados/Img/Logo_MvnHelper.jpg";
-    static final String LOGO_ACC = System.getProperty("user.dir") + "/Dados/Img/Logo_Acc.png";
-    static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/Dados/Scripts/compila.bat";
-    static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/Dados/Scripts/executa.bat";
-    static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") + "/Dados/Variaveis/VariaveisLocais.prop";
-    static final String LISTA_AGENCIAS = System.getProperty("user.dir") + "/Dados/Variaveis/ListaAgencias.prop";
-    static final String LISTA_BANCOS = System.getProperty("user.dir") + "/Dados/Variaveis/ListaBancos.prop";
-    static final String PATH_FONTES = System.getProperty("user.dir") + "/Dados/init.cld";
-
     File stringToFile(String diretorio){
         if(diretorio == null || diretorio.equals("")){
             return null;
@@ -53,6 +44,27 @@ class Util {
         escolha.setContentText(mensagens.getDetalhe());
         Optional<ButtonType> result = escolha.showAndWait();
         return result.get() == ButtonType.OK;
+    }
+
+    public enum ConfigPath{
+        LOGO_MVNHELPER("/Dados/Img/Logo_MvnHelper.jpg"),
+        LOGO_ACC("/Dados/Img/Logo_Acc.png"),
+        SCRIPT_COMPILACAO("/Dados/Scripts/compila.bat"),
+        SCRIPT_EXECUCAO("/Dados/Scripts/executa.bat"),
+        VARIAVEIS_LOCAIS("/Dados/Variaveis/VariaveisLocais.prop"),
+        LISTA_AGENCIAS("/Dados/Variaveis/ListaAgencias.prop"),
+        LISTA_BANCOS("/Dados/Variaveis/ListaBancos.prop"),
+        PATH_FONTES("/Dados/init.cld");
+
+        private String caminho;
+
+        ConfigPath(String caminhoConfig){
+            this.caminho = caminhoConfig;
+        }
+
+        public String getCaminho(){
+            return System.getProperty("user.dir") + caminho;
+        }
     }
 
     public enum Campos {
