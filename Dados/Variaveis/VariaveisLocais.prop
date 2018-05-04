@@ -1,0 +1,16 @@
+#Fri May 04 13:10:23 BRT 2018
+EXECUCAO=T\:\\accenture\\Douglas_Paz\\DEBUG\\siac-exe-2.46.0.53-win32-bcc5.x-xhb0.99.x.exe
+AUTOLOGIN=TRUE
+NOMEEXE=siac-exe-2.46.0.53-win32-bcc5.x-xhb0.99.x.exe
+LOGIN=ag\#s
+BANCO=db1coreacn3t
+SALVARCK=TRUE
+MACROSISTEMA=C\:\\SISTEMAS\\LEGADO\\SIAC-2.46.0-81932\\siac-exe
+SUBSISTEMA=C\:\\SISTEMAS\\LEGADO\\CCRP-6.54.0-96061\\ccrp-clipper
+DESTINOCOPIA=T\:\\accenture\\Douglas_Paz\\DEBUG
+FONTES=C\:\\Users\\douglas.da.rosa.paz\\Documents
+DEBUG=TRUE
+SENHA=teste123
+AGENCIA=0101
+SETBANCO=setbanco_acn
+SOBREESCREVER=

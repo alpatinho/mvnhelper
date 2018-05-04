@@ -1,6 +1,7 @@
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,8 +15,7 @@ class MenuModel {
     private Util util = new Util();
     private String debug = "";
 
-    // situacao - OK - Aguarda implementacao novas features
-    public void compilar(TextField sistema) {
+    void compilar(TextField sistema) {
         try {
             Runtime.getRuntime().exec(
                     new String[]{
@@ -37,46 +37,36 @@ class MenuModel {
 
     }
 
-    // situacao - OK
-    public boolean copiar(boolean sobreescrever) {
+    void copiarEXE(boolean sobreescrever) {
 
         File origem;
         File destino;
-        String origemFinal;
-        String destinoFinal;
-        String nomeExe;
 
         // VERIFICA A ORIGEM E ATRIBUI O NOME DO EXE
-        // [AQUI] verifica se o campo Macrosistem/OrigemExe das variaveis Locais Invalido
+        // [FLUXO 1] verifica se o campo Macrosistem/OrigemExe das variaveis eh Locais Invalido
         if(util.stringToFile(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA)) == null){
             util.exibeMensagem(Util.Mensagens.ORIGEM_INVALIDA, false);
             // [AQUI] solicita selecao manual do exe, caso invalida retorna erro
             try{
                 origem = util.stringToFile(busca.caminho(null, true));
-                nomeExe = origem.getName();
-                origemFinal = origem.getAbsolutePath();
             }catch (NullPointerException e){
-                util.exibeMensagem(Util.Mensagens.EXE_INVALIDO, true);
-                return false;
+                util.exibeMensagem(Util.Mensagens.ARQUIVO_INVALIDO, true);
+                return;
             }
-        // [AQUI] atribui na origem o campo Macrosistema
+        // [FLUXO 2] se o campo for valido Macrosistem/OrigemExe atribui a origem o valor completo
         }else{
             origem = util.stringToFile(acessoVariaveis.getValor(Util.Campos.MACROSISTEMA));
             // [AQUI] tenta buscar o exe automaticamente, caso contrario pede busca manual
             try{
-                File caminhoExe = busca.caminhoExe(origem);
-                nomeExe = caminhoExe.getName();
-                origemFinal = caminhoExe.getAbsolutePath();
+                origem = busca.caminhoExe(origem);
             }catch (NullPointerException e){
-                // [AQUI] verifica o retorno da busca manual, caso invalido retona erro
-                util.exibeMensagem(Util.Mensagens.EXE_NAO_ENCONTRADO, false);
+                util.exibeMensagem(Util.Mensagens.ARQUIVO_NAO_ENCONTRADO, false);
                 try{
-                    File caminhoExe = busca.caminhoExe(origem);
-                    nomeExe = caminhoExe.getName();
-                    origemFinal = caminhoExe.getAbsolutePath();
+                    origem = util.stringToFile(busca.caminho(origem.getAbsolutePath(), true));
                 }catch (NullPointerException err){
-                    util.exibeMensagem(Util.Mensagens.EXE_INVALIDO, true);
-                    return false;
+                    util.exibeMensagem(Util.Mensagens.ARQUIVO_INVALIDO, true);
+                    util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
+                    return;
                 }
             }
         }
@@ -85,47 +75,47 @@ class MenuModel {
         // [AQUI] verifica se o campo Destino das variaveis Locais eh Invalido
         if(util.stringToFile(acessoVariaveis.getValor(Util.Campos.DESTINOCOPIA)) == null){
             util.exibeMensagem(Util.Mensagens.DESTINO_INVALIDO, true);
-            return false;
+            return;
         }else {
             // [AQUI] caso valido atribui no campo destino o valor
             destino = util.stringToFile(acessoVariaveis.getValor(Util.Campos.DESTINOCOPIA));
-            destinoFinal = destino.getAbsolutePath() + "\\" + nomeExe;
         }
 
-        acessoVariaveis.setValor(Util.Campos.NOMEEXE, nomeExe);
-
         // Define os caminhos para a copia
-        Path caminhoOrigem = Paths.get(origemFinal);
-        Path caminhoDestino = Paths.get(destinoFinal);
+        Path caminhoOrigem = Paths.get(origem.getAbsolutePath());
+        Path caminhoDestino = Paths.get(destino.getAbsolutePath());
+        String nomeArquivoDestino = copia(caminhoOrigem, caminhoDestino, sobreescrever);
 
-        // Inicia a copia
+        acessoVariaveis.setValor(Util.Campos.EXECUCAO, nomeArquivoDestino);
+    }
+
+    private String copia(Path origem, Path destino, boolean sobreescrever){
+        String arquivo = origem.getFileName().toString();
+        destino = Paths.get(destino + "\\" + arquivo);
+
         try {
             if(sobreescrever){
-                Files.deleteIfExists(caminhoDestino);
+                Files.deleteIfExists(destino);
             }else {
-                if(Files.exists(caminhoDestino)){
-                    if (util.exibeEscolha(Util.Mensagens.SOBREESCREVER_EXE)){
-                        Files.deleteIfExists(caminhoDestino);
+                if(Files.exists(destino)){
+                    if (util.exibeEscolha(Util.Mensagens.SOBREESCREVER)){
+                        Files.deleteIfExists(destino);
                     }else {
                         util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
-                        return false;
+                        return null;
                     }
                 }
             }
-            Files.copy(caminhoOrigem,
-                       caminhoDestino);
-            util.exibeMensagem(Util.Mensagens.EXE_COPIADO_SUCESSO, false);
+            Files.copy(origem, destino);
+            util.exibeMensagem(Util.Mensagens.OPERACAO_SUCESSO, false);
 
         } catch (Exception e) {
             util.exibeMensagem(Util.Mensagens.ERRO_COPIAR, true);
-            return false;
         }
-        acessoVariaveis.setValor(Util.Campos.EXECUCAO, destinoFinal);
-        return true;
+        return destino.toString();
     }
 
-    // situacao - ERROS
-    public boolean executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
+    void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
         File diretorioExe;
         if (util.stringToFile(execucao.getText()) == null){
             try {
@@ -134,9 +124,9 @@ class MenuModel {
                 acessoVariaveis.setValor(Util.Campos.EXECUCAO, diretorioExe.getAbsolutePath());
             }catch (Exception err){
                 util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
-                return false;
+                return;
             }
-            return false;
+            return;
         }else {
             diretorioExe = util.stringToFile(execucao.getText());
         }
@@ -170,20 +160,39 @@ class MenuModel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        //define os novos acessoVariaveis pardrao para a execucao
-        acessoVariaveis.setValor(Util.Campos.EXECUCAO, execucao.getText());
-        acessoVariaveis.setValor(Util.Campos.SETBANCO, setbanco.getText());
-        acessoVariaveis.setValor(Util.Campos.BANCO, banco.getPromptText());
-        acessoVariaveis.setValor(Util.Campos.AGENCIA, agencia.getPromptText());
-        return true;
     }
 
-    // situacao - OK
-    public void opcoesCompilacao(boolean debug) {
+    void autoLogIn(String login, String senha, String agencia) {
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(util.exibeEscolha(Util.Mensagens.EFETUAR_AUTO_LOGIN)){
+            try{
+                AutoLogger autoLogger = new AutoLogger();
+                autoLogger.login(login, senha, agencia);
+            }catch (AWTException e){
+                util.exibeMensagem(Util.Mensagens.ERRO_AUTOLOGGER, false);
+            }
+        }
+    }
+
+    void opcoesCompilacao(boolean debug) {
         if (debug) {
             this.debug = Util.OpcoesCompilacao.DEBUG.paramentro;
         }
+    }
+
+    void salvaCaminhoFontes(String caminhoExecucao, String caminhoFontes, boolean sobreescrever){
+
+        if((util.stringToFile(caminhoExecucao) == null) || (util.stringToFile(caminhoFontes) == null)){
+            util.exibeMensagem(Util.Mensagens.ERRO_SALVAR_CAMINHO_FONTES, false);
+            return;
+        }
+        String caminhoArquivoNovo = copia(Paths.get(Util.PATH_FONTES), Paths.get(caminhoExecucao).getParent(), sobreescrever);
+        acessoVariaveis.setPathFontes(caminhoArquivoNovo, caminhoFontes);
     }
 }
 

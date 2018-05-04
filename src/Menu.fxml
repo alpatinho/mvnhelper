@@ -8,6 +8,8 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -83,11 +85,72 @@
                   <ComboBox fx:id="CBAgencia" editable="true" layoutX="37.0" layoutY="310.0" prefHeight="25.0" prefWidth="362.0" />
                   <ComboBox fx:id="CBBanco" editable="true" layoutX="37.0" layoutY="222.0" prefHeight="25.0" prefWidth="361.0" />
                   <TextField fx:id="TFSetBanco" layoutX="37.0" layoutY="145.0" prefHeight="25.0" prefWidth="362.0" />
+                  <CheckBox fx:id="CKHabilitarAutoLogin" layoutX="454.0" layoutY="247.0" mnemonicParsing="false" onAction="#ActionHabilitarAutoLogin" prefHeight="25.0" prefWidth="212.0" text="Habilitar Auto LogIn">
+                     <font>
+                        <Font name="System Italic" size="16.0" />
+                     </font>
+                  </CheckBox>
+                  <TextField fx:id="TFLogin" layoutX="515.0" layoutY="279.0" />
+                  <TextField fx:id="TFSenha" layoutX="515.0" layoutY="310.0" />
+                  <Label layoutX="454.0" layoutY="282.0" text="Login:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="452.0" layoutY="313.0" text="Senha:">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="517.0" layoutY="364.0" text="Use # para o numero de AG">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="BTNExecutarComDebug" disable="true" layoutX="598.0" layoutY="122.0" mnemonicParsing="false" onAction="#ActionExecutarComDebug" text="...DEBUG">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Button>
+                  <Separator layoutX="424.0" layoutY="199.0" prefHeight="0.0" prefWidth="287.0" />
                   <Separator layoutX="424.0" orientation="VERTICAL" prefHeight="436.0" prefWidth="0.0" />
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab text="Config &amp; Info">
+      <Tab closable="false" text="DEBUG">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <TableView fx:id="TBOrigemFonte" layoutX="31.0" layoutY="122.0" prefHeight="178.0" prefWidth="532.0">
+                    <columns>
+                      <TableColumn fx:id="TCNomeFonte" editable="false" prefWidth="150.0" sortable="false" text="NOME" />
+                      <TableColumn fx:id="TCCaminhoFonte" editable="false" prefWidth="381.0" sortable="false" text="CAMINHO LOCAL" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <TextField fx:id="TFDestinoFontes" layoutX="31.0" layoutY="65.0" prefHeight="25.0" prefWidth="533.0" />
+                  <Label layoutX="31.0" layoutY="39.0" text="DESTINO FONTES">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="BTNBuscarDestinoFontes" layoutX="587.0" layoutY="65.0" mnemonicParsing="false" onAction="#ActionBuscarDestinoFontes" prefHeight="25.0" prefWidth="93.0" text="Buscar" />
+                  <Button fx:id="BTNBuscarFontes" layoutX="587.0" layoutY="122.0" mnemonicParsing="false" onAction="#ActionBuscarFontes" prefHeight="122.0" prefWidth="93.0" text="Buscar&#10;Fonte(s)" textAlignment="CENTER" />
+                  <Button fx:id="BTNAtualizarFontesDEBUG" layoutX="217.0" layoutY="323.0" mnemonicParsing="false" onAction="#ActionAtualizarFontesDestino" prefHeight="57.0" prefWidth="278.0" text="ATUALIZAR FONTES" />
+                  <Button fx:id="BTNCopiarCaminhoDestinoFontes" layoutX="356.0" layoutY="27.0" mnemonicParsing="false" onAction="#ActionCopiarCaminhoDestinoFontes" text="Copiar caminho" />
+                  <Button fx:id="BTNSalvarCaminhoDestinoFontes" layoutX="467.0" layoutY="27.0" mnemonicParsing="false" onAction="#ActionSalvarCaminhoDestinoFontes" text="Salvar caminho" />
+                  <Button fx:id="BTNLimparTabelaFontes" layoutX="587.0" layoutY="254.0" mnemonicParsing="false" onAction="#ActionLimparTabelaFontes" prefHeight="48.0" prefWidth="94.0" text="Limpar" textAlignment="CENTER" />
+                  <Label fx:id="LBLConfirmacaoVisual" layoutX="602.0" layoutY="29.0" textAlignment="CENTER" textFill="#09b503">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
+        </content>
+      </Tab>
+      <Tab closable="false" text="Config &amp; Info">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>

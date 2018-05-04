@@ -1,34 +1,35 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //classe funcional, porem ineficiente, por enquanto ta bom...
-public class AcessoVariaveis {
+class AcessoVariaveis {
 
     private static Properties prop = new Properties();
     private Util util = new Util();
 
-    public String getValor(Util.Campos campo) {
+    String getValor(Util.Campos campo) {
         String valor = "";
         try {
             prop.load(new FileInputStream(Util.VARIAVEIS_LOCAIS));
             valor = prop.getProperty(campo.toString());
         } catch (IOException e) {
             util.exibeMensagem(Util.Mensagens.ERRO_ARQUIVO_CONFIGURACAO, true);
-        } catch (Exception err){
-            return err.getMessage();
         }
         return valor;
     }
 
-    public void setValor(Util.Campos campo, String valor) {
+    void setValor(Util.Campos campo, String valor) {
         if(valor == null){
             valor = "";
         }
@@ -37,26 +38,31 @@ public class AcessoVariaveis {
             prop.store(new FileOutputStream(Util.VARIAVEIS_LOCAIS), null);
         } catch (IOException e) {
             util.exibeMensagem(Util.Mensagens.ERRO_ARQUIVO_CONFIGURACAO, true);
-        } catch (Exception err){
-            err.getMessage();
         }
     }
 
-    public ObservableList getListaValores(String lista) {
-        ArrayList<String> valores = new ArrayList<>();
-        ObservableList<String> valoresFinal = FXCollections.observableList(valores);
+    ObservableList getListaValores(String lista) {
+        ObservableList<String> valoresFinal;
 
-        try (Scanner leitura = new Scanner(new File(lista))) {
-            leitura.useDelimiter("\r\n|\n");
-            while (leitura.hasNext()) {
-                valores.add(leitura.next());
-            }
+        try (Stream<String> stream = Files.lines(Paths.get(lista))) {
+             valoresFinal = stream.collect(Collectors.toCollection(FXCollections::observableArrayList));
+             return valoresFinal;
+
         } catch (IOException e) {
             util.exibeMensagem(Util.Mensagens.ERRO_ARQUIVO_CONFIGURACAO, true);
-        } catch (Exception err){
-            err.getMessage();
         }
-        return valoresFinal;
+        return null;
+    }
+
+    void setPathFontes(String caminhoArquivo, String caminhoFontes){
+        try {
+            Stream<String> lines = Files.lines(Paths.get(caminhoArquivo));
+            List<String> replaced = lines.map(line -> line.replace("#", caminhoFontes)).collect(Collectors.toList());
+            Files.write(Paths.get(caminhoArquivo), replaced);
+            lines.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -5,17 +5,18 @@ import javafx.scene.control.ButtonType;
 import java.io.File;
 import java.util.Optional;
 
-public class Util {
+class Util {
 
-    public static final String LOGO_MVNHELPER = System.getProperty("user.dir") + "/Dados/Img/Logo_MvnHelper.jpg";
-    public static final String LOGO_ACC = System.getProperty("user.dir") + "/Dados/Img/Logo_Acc.png";
-    public static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/Dados/Scripts/compila.bat";
-    public static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/Dados/Scripts/executa.bat";
-    public static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") + "/Dados/VariaveisLocais.prop";
-    public static final String LISTA_AGENCIAS = System.getProperty("user.dir") + "/Dados/ListaAgencias.prop";
-    public static final String LISTA_BANCOS = System.getProperty("user.dir") + "/Dados/ListaBancos.prop";
+    static final String LOGO_MVNHELPER = System.getProperty("user.dir") + "/Dados/Img/Logo_MvnHelper.jpg";
+    static final String LOGO_ACC = System.getProperty("user.dir") + "/Dados/Img/Logo_Acc.png";
+    static final String SCRIPT_COMPILACAO = System.getProperty("user.dir") + "/Dados/Scripts/compila.bat";
+    static final String SCRIPT_EXECUCAO = System.getProperty("user.dir") + "/Dados/Scripts/executa.bat";
+    static final String VARIAVEIS_LOCAIS = System.getProperty("user.dir") + "/Dados/Variaveis/VariaveisLocais.prop";
+    static final String LISTA_AGENCIAS = System.getProperty("user.dir") + "/Dados/Variaveis/ListaAgencias.prop";
+    static final String LISTA_BANCOS = System.getProperty("user.dir") + "/Dados/Variaveis/ListaBancos.prop";
+    static final String PATH_FONTES = System.getProperty("user.dir") + "/Dados/init.cld";
 
-    public File stringToFile(String diretorio){
+    File stringToFile(String diretorio){
         if(diretorio == null || diretorio.equals("")){
             return null;
         }
@@ -28,7 +29,7 @@ public class Util {
         }
     }
 
-    public void exibeMensagem(Mensagens mensagem, boolean erroFatal){
+    void exibeMensagem(Mensagens mensagem, boolean erroFatal){
         Alert boxMensagem;
         if(erroFatal){
             boxMensagem = new Alert(Alert.AlertType.ERROR);
@@ -42,39 +43,40 @@ public class Util {
         boxMensagem.showAndWait();
     }
 
-    public boolean exibeEscolha(Mensagens mensagens){
+    boolean exibeEscolha(Mensagens mensagens){
         Alert escolha = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnSim = new ButtonType("Sim", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btnNao = new ButtonType("Não", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType btnSim = new ButtonType("SIM", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnNao = new ButtonType("NAO", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         escolha.setTitle(mensagens.toString());
         escolha.setHeaderText(mensagens.getTitulo());
         escolha.setContentText(mensagens.getDetalhe());
         Optional<ButtonType> result = escolha.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
-        } else {
-            return false;
-        }
+        return result.get() == ButtonType.OK;
     }
 
     public enum Campos {
         SUBSISTEMA,
         MACROSISTEMA,
+        DEBUG,
         DESTINOCOPIA,
-        NOMEEXE,
         EXECUCAO,
         SETBANCO,
         BANCO,
         AGENCIA,
+        AUTOLOGIN,
+        LOGIN,
+        SENHA,
+        FONTES,
         SALVARCK,
-        DEBUG,
         SOBREESCREVER,
     }
 
     public enum TipoArquivo {
+        ANY("Todos Arquivos", "*.*"),
         EXE("Executavel","*.exe"),
-        XML("XML", ".xml");
+        PRG("Fonte Legado", "*.prg"),
+        XML("XML", "*.xml");
 
         private String DESCRICAO;
         private String EXTENSAO;
@@ -96,13 +98,17 @@ public class Util {
         ERRO_ARQUIVO_CONFIGURACAO("Erro ao Ler arquivos de configuração", System.getProperty("user.dir")+"\\Dados"),
         ORIGEM_INVALIDA("Selecione o Executavel manualmente", "A busca automatica é feita a partir do Macrosistema, verifique"),
         DESTINO_INVALIDO("Destino do Arquivo Invalido", "Por Favor, Verifique!"),
-        EXE_INVALIDO("EXE SELECIONADO INVALIDO", "Teste novamente!"),
-        EXE_NAO_ENCONTRADO("Ops!, Exe não encontrado", "Por Favor Selecione o arquivo manualmente"),
-        SOBREESCREVER_EXE("Exe Encontrado no destino", ""),
-        EXE_COPIADO_SUCESSO("Executavel Copiado com Sucesso", "(° ʖ °)"),
+        ARQUIVO_INVALIDO("ARQUIVO SELECIONADO INVALIDO", "Teste novamente!"),
+        ARQUIVO_NAO_ENCONTRADO("Ops!, Arquivo não encontrado", "Por Favor Selecione o arquivo manualmente"),
+        SOBREESCREVER("Arquivo Encontrado no destino", "Deseja sobreescrever ?"),
+        OPERACAO_SUCESSO("Operação concluida com Sucesso", "(° ʖ °)"),
         OPERACAO_CANCELADA("Operacao Cancelada", ""),
-        ERRO_COPIAR("Erro ao copiar Arquivo", "Tente  novamente, ou não, vai saber né?"),
+        ERRO_COPIAR("Erro ao copiarEXE Arquivo", "Tente  novamente, ou não, vai saber né?"),
         ERRO_CAMINHO_EXECUCAO("Diretório de execucao inválido", "Selecione Novamente!"),
+        ERRO_LOGIN_CARACTER_INVALIDO("Caracter não reconhecido", "Verifique o login automático"),
+        ERRO_AUTOLOGGER("Ops! Erro no LogIn automático", "Tente novamente mais tarde"),
+        EFETUAR_AUTO_LOGIN("Efetuar Login automático ?", ""),
+        ERRO_SALVAR_CAMINHO_FONTES("Destino dos Fontes ou caminho do Executavel inválidos", "Por Favor, Verifique!"),
         ERRO_TRIZONHO("Rolou um erro Trizonho", "Foi mal ai, não sei o que deu");
 
         private String TITULO;
