@@ -1,3 +1,5 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
@@ -7,9 +9,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 class MenuModel {
 
+    private javafx.collections.ObservableList<ArquivoFonte> listaArquivosFontes = FXCollections.observableArrayList();
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Busca busca = new Busca();
     private Util util = new Util();
@@ -48,7 +52,7 @@ class MenuModel {
             util.exibeMensagem(Util.Mensagens.ORIGEM_INVALIDA, false);
             // [AQUI] solicita selecao manual do exe, caso invalida retorna erro
             try{
-                origem = util.stringToFile(busca.caminho(null, true));
+                origem = util.stringToFile(busca.caminho(null,true));
             }catch (NullPointerException e){
                 util.exibeMensagem(Util.Mensagens.ARQUIVO_INVALIDO, true);
                 return;
@@ -62,7 +66,7 @@ class MenuModel {
             }catch (NullPointerException e){
                 util.exibeMensagem(Util.Mensagens.ARQUIVO_NAO_ENCONTRADO, false);
                 try{
-                    origem = util.stringToFile(busca.caminho(origem.getAbsolutePath(), true));
+                    origem = util.stringToFile(busca.caminho(origem.getAbsolutePath(),  true));
                 }catch (NullPointerException err){
                     util.exibeMensagem(Util.Mensagens.ARQUIVO_INVALIDO, true);
                     util.exibeMensagem(Util.Mensagens.OPERACAO_CANCELADA, true);
@@ -194,5 +198,34 @@ class MenuModel {
         String caminhoArquivoNovo = copia(Paths.get(Util.ConfigPath.PATH_FONTES.getCaminho()), Paths.get(caminhoExecucao).getParent(), sobreescrever);
         acessoVariaveis.setPathFontes(caminhoArquivoNovo, caminhoFontes);
     }
+
+    ObservableList<ArquivoFonte> getArquivosFontes(){
+        return listaArquivosFontes;
+    }
+
+    void addListaFontesDrop(List<File> arquivos){
+        arquivos.forEach((fonte) -> listaArquivosFontes.add(0, new ArquivoFonte(fonte.getAbsolutePath())));
+    }
+
+    void addListaFontes(String caminho){
+        List<File> arquivos;
+        try {
+            arquivos = busca.multiArquivos(caminho);
+        }catch (Exception e){
+            return;
+        }
+        arquivos.forEach((fonte) -> listaArquivosFontes.add(0, new ArquivoFonte(fonte.getAbsolutePath())));
+    }
+
+    void atualizaFontes(String destinoFontes){
+        try {
+            util.stringToFile(destinoFontes);
+        }catch (NullPointerException e){
+            util.exibeMensagem(Util.Mensagens.DESTINO_INVALIDO, false);
+            return;
+        }
+        listaArquivosFontes.forEach((fonte)-> copia(Paths.get(fonte.getCaminhoArquivo()), Paths.get(destinoFontes), true) );
+    }
+
 }
 

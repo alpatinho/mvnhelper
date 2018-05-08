@@ -1,3 +1,4 @@
+import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -9,17 +10,40 @@ import java.util.List;
 class Busca {
 
     private Util util = new Util();
+    AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
 
     String caminho(String caminho, boolean arquivo){
         if(arquivo){
             try {
-                return auxArquivo(caminho).getAbsolutePath();
+                String aux = auxArquivo(caminho).getAbsolutePath();
+                return aux;
             }catch(NullPointerException e){
                 return null;
             }
         }else {
             try {
-                return auxDiretorio(caminho).getAbsolutePath();
+                String aux = auxDiretorio(caminho).getAbsolutePath();
+                return aux;
+            }catch(NullPointerException e){
+                return null;
+            }
+        }
+    }
+
+    String caminho(TextField caminho, Util.Campos campo, boolean arquivo){
+        if(arquivo){
+            try {
+                String aux = auxArquivo(caminho.getText()).getAbsolutePath();
+                acessoVariaveis.setValor(campo, caminho.getText());
+                return aux;
+            }catch(NullPointerException e){
+                return null;
+            }
+        }else {
+            try {
+                String aux = auxDiretorio(caminho.getText()).getAbsolutePath();
+                acessoVariaveis.setValor(campo, caminho.getText());
+                return aux;
             }catch(NullPointerException e){
                 return null;
             }

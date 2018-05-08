@@ -2,9 +2,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -16,8 +20,12 @@ public class MenuController {
     private MenuModel model = new MenuModel();
     private Busca busca = new Busca();
 
-    // ABAS... ainda nao precisei
+    // Painel principal e abas...
     @FXML private TabPane TPPrincipal;
+    @FXML private Tab TBCompilacao;
+    @FXML private Tab TBExecucao;
+    @FXML private Tab TBDebug;
+    @FXML private Tab TBConfig;
 
     // COMPILAR
     @FXML private TextField TFSubsistema;
@@ -39,10 +47,9 @@ public class MenuController {
     @FXML private TextField TFCaminhoExecucao;
     @FXML private Button BTNCaminhoExecucao;
     @FXML private TextField TFSetBanco;
-    @FXML private ComboBox<?> CBBanco;
-    @FXML private ComboBox<?> CBAgencia;
+    @FXML private ComboBox<String> CBBanco;
+    @FXML private ComboBox<String> CBAgencia;
     @FXML private Button BTNExecutar;
-    @FXML private Button BTNExecutarComDebug;
     @FXML private CheckBox CKHabilitarAutoLogin;
     @FXML private TextField TFLogin;
     @FXML private TextField TFSenha;
@@ -53,12 +60,13 @@ public class MenuController {
     @FXML private Button BTNCopiarCaminhoDestinoFontes;
     @FXML private Button BTNSalvarCaminhoDestinoFontes;
     @FXML private Label LBLConfirmacaoVisual;
-    @FXML private TableView<?> TBOrigemFonte;
-    @FXML private TableColumn<?, ?> TCNomeFonte;
-    @FXML private TableColumn<?, ?> TCCaminhoFonte;
+    @FXML private TableView<ArquivoFonte> TVOrigemFonte;
+    @FXML private TableColumn<ArquivoFonte, String> TCNomeFonte;
+    @FXML private TableColumn<ArquivoFonte, String> TCCaminhoFonte;
     @FXML private Button BTNBuscarFontes;
-    @FXML private Button BTNLimparTabelaFontes;
-    @FXML private Button BTNAtualizarFontesDEBUG;
+    @FXML private Button BTNRemoverSelecionado;
+    @FXML private Button BTNRemoverTodos;
+    @FXML private Button BTNAtualizarFontes;
 
     // CONFIGURACOES
     @FXML private CheckBox CKSalvarEstadoCks;
@@ -67,33 +75,35 @@ public class MenuController {
     // ACOES
     // COMPILAR
     @FXML void ActionBuscarSubsistema() {
-        TFSubsistema.setText(busca.caminho(TFSubsistema.getText(), false));
-        acessoVariaveis.setValor(Util.Campos.SUBSISTEMA, TFSubsistema.getText());
+        TFSubsistema.setText(busca.caminho(TFSubsistema, Util.Campos.SUBSISTEMA, false));
     }
+
     @FXML void ActionCompilarSubsistema() {
         model.opcoesCompilacao(CKDebug.isSelected());
         model.compilar(TFSubsistema);
         acessoVariaveis.setValor(Util.Campos.SUBSISTEMA, TFSubsistema.getText());
     }
+
     @FXML void ActionBuscarMacrosistema() {
-        TFMacrosistema.setText(busca.caminho(TFMacrosistema.getText(), false));
-        acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
+        TFMacrosistema.setText(busca.caminho(TFMacrosistema, Util.Campos.MACROSISTEMA, false));
     }
+
     @FXML void ActionCompilarMacrosistema() {
         model.opcoesCompilacao(CKDebug.isSelected());
         model.compilar(TFMacrosistema);
         acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
     }
+
     @FXML void ActionDebug() {
         ActionSalvarEstadoCks();
     }
 
     // COPIAR
     @FXML void ActionBuscarDestinoExe() {
-        TFDestinoExe.setText(busca.caminho(TFDestinoExe.getText(), false));
-        acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
+        TFDestinoExe.setText(busca.caminho(TFDestinoExe, Util.Campos.DESTINOCOPIA, false));
         TFCaminhoExecucao.setText(acessoVariaveis.getValor(Util.Campos.EXECUCAO));
     }
+
     @FXML void ActionCopiarExe() {
         acessoVariaveis.setValor(Util.Campos.MACROSISTEMA, TFMacrosistema.getText());
         acessoVariaveis.setValor(Util.Campos.DESTINOCOPIA, TFDestinoExe.getText());
@@ -103,8 +113,7 @@ public class MenuController {
 
     // EXECUTAR
     @FXML void ActionBuscarCaminhoExecucao() {
-        TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao.getText(), true));
-        acessoVariaveis.setValor(Util.Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao, Util.Campos.EXECUCAO, true));
     }
     @FXML void ActionExecutar() {
         model.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);
@@ -116,9 +125,7 @@ public class MenuController {
             model.autoLogIn(TFLogin.getText(), TFSenha.getText(), CBAgencia.getPromptText());
         }
     }
-    @FXML void ActionExecutarComDebug(){// TODO
 
-    }
     @FXML void ActionHabilitarAutoLogin(){
         if(CKHabilitarAutoLogin.isSelected()){
             TFLogin.setEditable(false);
@@ -139,25 +146,50 @@ public class MenuController {
 
     // DEBUG
     @FXML void ActionBuscarDestinoFontes(){
-        TFDestinoFontes.setText(busca.caminho(TFDestinoFontes.getText(), false));
-        acessoVariaveis.setValor(Util.Campos.FONTES, TFDestinoFontes.getText());
+        TFDestinoFontes.setText(busca.caminho(TFDestinoFontes, Util.Campos.FONTES, false));
     }
-    @FXML void ActionBuscarFontes(){// TODO
-        busca.multiArquivos(TFDestinoFontes.getText());
+
+    @FXML void ActionBuscarFontes(){
+        model.addListaFontes(TFDestinoFontes.getText());
+        TVOrigemFonte.setItems(model.getArquivosFontes());
     }
+
     @FXML void ActionCopiarCaminhoDestinoFontes(){
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(TFDestinoFontes.getText()), null);
         LBLConfirmacaoVisual.setText("COPIADO");
     }
+
     @FXML void ActionSalvarCaminhoDestinoFontes(){
         model.salvaCaminhoFontes(TFCaminhoExecucao.getText(), TFDestinoFontes.getText(), CKSobreescrever.isSelected());
     }
-    @FXML void ActionLimparTabelaFontes(){// TODO
 
+    @FXML void ActionAtualizarFontesDestino(){
+        model.atualizaFontes(TFDestinoFontes.getText());
     }
-    @FXML void ActionAtualizarFontesDestino(){// TODO
 
+    @FXML void ActionRemoverSelecionado(){
+        model.getArquivosFontes().remove(TVOrigemFonte.getSelectionModel().getSelectedItem());
+    }
+
+    @FXML void ActionRemoverTodos(){
+        model.getArquivosFontes().removeAll(model.getArquivosFontes());
+    }
+
+    void DragOver(final DragEvent drag){
+        final Dragboard db = drag.getDragboard();
+        TVOrigemFonte.setStyle("-fx-border-color: red;"
+                + "-fx-background-color: #C6C6C6;"
+                + "-fx-border-style: solid;");
+        drag.acceptTransferModes(TransferMode.COPY);
+        drag.consume();
+    }
+
+    void DragDrop(final DragEvent drop){
+        final Dragboard db = drop.getDragboard();
+        if(db.hasFiles()) model.addListaFontesDrop(db.getFiles());
+        TVOrigemFonte.setItems(model.getArquivosFontes());
+        drop.consume();
     }
 
     // CONFIGURACOES
@@ -171,9 +203,11 @@ public class MenuController {
             acessoVariaveis.setValor(Util.Campos.SALVARCK, "");
         }
     }
+
     @FXML void ActionSobreescrever(){
         ActionSalvarEstadoCks();
     }
+
     private void inicializaEstadoCks(){
         if(CKSalvarEstadoCks.isSelected()){
             if(acessoVariaveis.getValor(Util.Campos.SOBREESCREVER).equals("TRUE")) CKSobreescrever.setSelected(true);
@@ -202,5 +236,10 @@ public class MenuController {
         CBBanco.setItems(acessoVariaveis.getListaValores(Util.ConfigPath.LISTA_BANCOS.getCaminho()));
         CBAgencia.setItems(acessoVariaveis.getListaValores(Util.ConfigPath.LISTA_AGENCIAS.getCaminho()));
         TFDestinoFontes.setText(acessoVariaveis.getValor(Util.Campos.FONTES));
+        TCCaminhoFonte.setCellValueFactory((valor) -> valor.getValue().caminhoArquivoProperty());
+        TCNomeFonte.setCellValueFactory((valor) -> valor.getValue().nomeArquivoProperty());
+        TVOrigemFonte.setOnDragOver(this::DragOver);
+        TVOrigemFonte.setOnDragDropped(this::DragDrop);
+        TVOrigemFonte.setOnDragExited(event -> TVOrigemFonte.setStyle("-fx-border-color: #C8C8C8;"));
     }
 }
