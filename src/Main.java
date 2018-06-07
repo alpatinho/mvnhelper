@@ -1,3 +1,5 @@
+import Core.Enums;
+import Core.Util;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,13 +18,13 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
-        primaryStage.getIcons().add(new Image("file:" + Util.ConfigPath.LOGO_MVNHELPER.getCaminho()));
+        new Util().getMap();
+        primaryStage.getIcons().add(new Image("file:" + Enums.ConfigPath.LOGO_MVNHELPER.getCaminho()));
         primaryStage.setFullScreen(false);
         primaryStage.setResizable(false);
         primaryStage.setTitle("MVN Helper V_0.3.0");
 
-        Parent root = FXMLLoader.load(getClass().getResource("Menu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

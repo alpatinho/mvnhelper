@@ -1,17 +1,18 @@
-import java.awt.AWTException;
-import java.awt.Robot;
+package Core;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-class AutoLogger {
+public class AutoLogger {
 
     private final Robot robo;
     private Util util = new Util();
 
-    AutoLogger() throws AWTException {
+    public AutoLogger() throws AWTException {
         this.robo = new Robot();
     }
 
-    void login (String login, String senha, String agencia){
+    public void login (String login, String senha, String agencia){
         alteraSelecao();
         escreve(login, agencia);
         digito(KeyEvent.VK_ENTER);
@@ -213,11 +214,9 @@ class AutoLogger {
                 break;
             case '>': shiftDigito(KeyEvent.VK_PERIOD);
                 break;
-            case '?': shiftDigito(KeyEvent.VK_SLASH);
-                break;
             case ' ': digito(KeyEvent.VK_SPACE);
                 break;
-            default: util.exibeMensagem(Util.Mensagens.ERRO_LOGIN_CARACTER_INVALIDO, false);
+            default: util.exibeMensagem(Enums.Mensagens.ERRO_LOGIN_CARACTER_INVALIDO, false);
         }
 
     }

@@ -1,3 +1,5 @@
+package Core;
+
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -7,30 +9,28 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-class Busca {
+public class Busca {
 
     private Util util = new Util();
-    AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
+    private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
 
-    String caminho(String caminho, boolean arquivo){
+    public String caminho(String caminho, boolean arquivo){
         if(arquivo){
             try {
-                String aux = auxArquivo(caminho).getAbsolutePath();
-                return aux;
+                return auxArquivo(caminho).getAbsolutePath();
             }catch(NullPointerException e){
                 return null;
             }
         }else {
             try {
-                String aux = auxDiretorio(caminho).getAbsolutePath();
-                return aux;
+                return auxDiretorio(caminho).getAbsolutePath();
             }catch(NullPointerException e){
                 return null;
             }
         }
     }
 
-    String caminho(TextField caminho, Util.Campos campo, boolean arquivo){
+    public String caminho(TextField caminho, Enums.Campos campo, boolean arquivo){
         if(arquivo){
             try {
                 String aux = auxArquivo(caminho.getText()).getAbsolutePath();
@@ -50,41 +50,14 @@ class Busca {
         }
     }
 
-    List<File> multiArquivos(String caminho){
-        try {
-            return auxMultiplosArquivos(caminho);
-        }catch(NullPointerException e){
-            return null;
-        }
-    }
-
-    private List<File> auxMultiplosArquivos(String diretorioBusca){
-        // estancia da janela
-        Stage busca = new Stage();
-        FileChooser fileChooser = new FileChooser();
-
-        // detalhe da janela
-        fileChooser.setTitle(Util.TipoArquivo.PRG.getDescricao());
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter(Util.TipoArquivo.PRG.getDescricao(), Util.TipoArquivo.PRG.getExtensao()),
-                new FileChooser.ExtensionFilter(Util.TipoArquivo.ANY.getDescricao(), Util.TipoArquivo.ANY.getExtensao()));
-
-        // caminhoExe apartir do valor definido
-        if (util.stringToFile(diretorioBusca) != null) {
-            fileChooser.setInitialDirectory(new File(util.stringToFile(diretorioBusca).getParent()));
-        }
-
-        return fileChooser.showOpenMultipleDialog(busca);
-    }
-
     private File auxArquivo(String diretorioBusca) {
         // estancia da janela
         Stage busca = new Stage();
         FileChooser fileChooser = new FileChooser();
 
         // detalhe da janela
-        fileChooser.setTitle(Util.TipoArquivo.EXE.getDescricao());
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Util.TipoArquivo.EXE.getDescricao(), Util.TipoArquivo.EXE.getExtensao()));
+        fileChooser.setTitle(Enums.TipoArquivo.EXE.getDescricao());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(Enums.TipoArquivo.EXE.getDescricao(), Enums.TipoArquivo.EXE.getExtensao()));
 
         // caminhoExe apartir do valor definido
         if (util.stringToFile(diretorioBusca) != null) {
@@ -111,7 +84,34 @@ class Busca {
 
     }
 
-    File caminhoExe(File origemBusca){
+    public List<File> multiArquivos(String caminho){
+        try {
+            return auxMultiplosArquivos(caminho);
+        }catch(NullPointerException e){
+            return null;
+        }
+    }
+
+    private List<File> auxMultiplosArquivos(String diretorioBusca){
+        // estancia da janela
+        Stage busca = new Stage();
+        FileChooser fileChooser = new FileChooser();
+
+        // detalhe da janela
+        fileChooser.setTitle(Enums.TipoArquivo.PRG.getDescricao());
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter(Enums.TipoArquivo.PRG.getDescricao(), Enums.TipoArquivo.PRG.getExtensao()),
+                new FileChooser.ExtensionFilter(Enums.TipoArquivo.ANY.getDescricao(), Enums.TipoArquivo.ANY.getExtensao()));
+
+        // caminhoExe apartir do valor definido
+        if (util.stringToFile(diretorioBusca) != null) {
+            fileChooser.setInitialDirectory(new File(util.stringToFile(diretorioBusca).getParent()));
+        }
+
+        return fileChooser.showOpenMultipleDialog(busca);
+    }
+
+    public File caminhoExe(File origemBusca){
         ArrayList<File> arquivosEncontrados = new ArrayList<>();
         auxCaminhoExe(origemBusca, arquivosEncontrados);
         for (File arquivo : arquivosEncontrados) {
@@ -130,12 +130,17 @@ class Busca {
                 if (arquivo.isFile()) {
                     if (arquivo.getName().endsWith(".exe")) {
                         arquivosEncontrados.add(arquivo);
+                        return;
                     }
                 } else if (arquivo.isDirectory()) {
                     auxCaminhoExe(arquivo, arquivosEncontrados);
                 }
             }
         }
+    }
+
+    String mapeamento(String Sigla){
+        return null;
     }
 
 }

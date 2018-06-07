@@ -1,0 +1,37 @@
+@ECHO OFF
+REM VARIAVEIS DEFINIDAS NO PROGRAMA
+set banco=%1%
+set cExe=%2%
+set agencia=%3%
+IF EXIST %WINDIR%\OMVSX.VXD DEL %WINDIR%\OMVSX.VXD
+IF EXIST %WINDIR%\OMVDD.DLL DEL %WINDIR%\OMVDD.DLL
+
+REM VALORES QUE PODEM SER ALTERADOS PERIODICAMENTE
+SET BLASTER=
+SET MEDNODEADDR=172.21.15.70
+SET MEDSOCKET=19C8
+
+IF "%banco%" == "COREDB" GOTO COREDB
+IF "%banco%" == "COREDBREP" GOTO COREDBREP
+GOTO ERRO
+
+:COREDB
+SET MEDCS=coresc:1531/siac2:dedicated
+GOTO RUN
+
+:COREDBREP
+SET MEDCS=coredbrep:1531/siac1:dedicated
+GOTO RUN
+
+:RUN
+@ECHO on
+TEACC.EXE /WAN C:\ %cExe% %agencia% /IPTS:172.21.15.70 /IPCLI:172.19.79.167
+pause
+
+:ERRO
+ECHO.-------------------------------------------------
+ECHO.----            BANCO INCORRETO             -----
+ECHO.-------------------------------------------------
+PAUSE
+:FIM
+PAUSE
