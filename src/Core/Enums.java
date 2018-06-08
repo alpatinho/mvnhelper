@@ -1,5 +1,7 @@
 package Core;
 
+import java.time.LocalDateTime;
+
 public class Enums {
     public enum ConfigPath{
         LOGO_MVNHELPER("/Dados/Img/Logo_MvnHelper.jpg"),
@@ -64,6 +66,7 @@ public class Enums {
     }
 
     public enum Mensagens {
+        MVN_HELPER_VERSION("MVN Helper V 0.3.0", " "),
         ERRO_ARQUIVO_CONFIGURACAO("Erro ao Ler arquivos de configuração", System.getProperty("user.dir")+"\\Dados\\variaveis"),
         EXE_ORIGEM_INVALIDA("Selecione o Executavel manualmente", "A busca automatica é feita a partir do Macrosistema, verifique"),
         ORIGEM_INVALIDA("Campo de Origem Invalido", "Por favor, verifique"),

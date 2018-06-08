@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="550.0" minWidth="670.0" prefHeight="550.0" prefWidth="670.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+  <tabs>
+    <Tab text="COMPILACAO">
+         <content>
+            <SplitPane dividerPositions="0.47718631178707227" minHeight="250.0" minWidth="520.0" orientation="VERTICAL" prefHeight="250.0" prefWidth="520.0">
+              <items>
+                  <AnchorPane minHeight="250.0" minWidth="670.0" prefHeight="250.0" prefWidth="670.0">
+                     <children>
+                        <Label layoutX="30.0" layoutY="14.0" prefHeight="20.0" text="SUBSISTEMA" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="TFSubsistema" layoutX="24.0" layoutY="46.0" prefHeight="25.0" prefWidth="300.0" promptText="Componente Clipper a ser compilado" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="40.0" />
+                        <Button layoutX="326.0" layoutY="46.0" mnemonicParsing="false" onAction="#ActionBuscarSubsistema" prefHeight="25.0" prefWidth="60.0" text="Buscar" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="40.0" />
+                        <Button layoutX="407.0" layoutY="46.0" mnemonicParsing="false" onAction="#ActionCompilarSubsistema" text="COMPILAR" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="40.0" />
+                        <Label layoutX="30.0" layoutY="84.0" prefHeight="20.0" text="MACROSISTEMA" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="80.0">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="TFMacrosistema" layoutX="24.0" layoutY="116.0" prefHeight="25.0" prefWidth="300.0" promptText="Componente Clipper a ser compilado" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="110.0" />
+                        <Button layoutX="327.0" layoutY="116.0" mnemonicParsing="false" onAction="#ActionBuscarMacrosistema" prefHeight="25.0" prefWidth="60.0" text="Buscar" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="110.0" />
+                        <Button layoutX="407.0" layoutY="116.0" mnemonicParsing="false" onAction="#ActionCompilarMacrosistema" text="COMPILAR" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="110.0" />
+                        <Label layoutX="30.0" layoutY="177.0" prefHeight="20.0" text="DESTINO COPIAS" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="170.0">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="TFDestinoExe" layoutX="21.0" layoutY="206.0" onAction="#ActionBuscarDestinoExe" prefHeight="25.0" prefWidth="300.0" promptText="Destino do executável e dos fontes" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="200.0" />
+                        <Button layoutX="327.0" layoutY="206.0" mnemonicParsing="false" onAction="#ActionBuscarDestinoExe" prefHeight="25.0" prefWidth="59.0" text="Buscar" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="200.0" />
+                        <Button layoutX="407.0" layoutY="205.0" mnemonicParsing="false" onAction="#ActionCopiarExe" prefHeight="27.0" prefWidth="86.0" text="COPIAR EXE" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="200.0" />
+                        <Label layoutX="333.0" layoutY="9.0" prefHeight="25.0" prefWidth="155.0" text="Opções de compilacao" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="15.0">
+                           <font>
+                              <Font name="System Italic" size="16.0" />
+                           </font>
+                        </Label>
+                        <CheckBox fx:id="CKDebug" layoutX="394.0" layoutY="66.0" mnemonicParsing="false" onAction="#ActionDebug" text="Debug" AnchorPane.rightAnchor="90.0" AnchorPane.topAnchor="50.0">
+                           <font>
+                              <Font name="System Italic" size="14.0" />
+                           </font>
+                        </CheckBox>
+                        <Separator layoutX="509.0" layoutY="5.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane minHeight="270.0" minWidth="670.0" prefHeight="256.0" prefWidth="670.0">
+                     <children>
+                        <Label layoutX="31.0" layoutY="110.0" prefHeight="20.0" text="Fontes para Debug" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="TVOrigemFonte" layoutX="31.0" layoutY="146.0" prefHeight="230.0" prefWidth="560.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="40.0">
+                           <columns>
+                              <TableColumn fx:id="TCNomeFonte" editable="false" prefWidth="181.0" sortType="DESCENDING" sortable="false" text="NOME" />
+                              <TableColumn fx:id="TCCaminhoFonte" editable="false" prefWidth="640.0" sortType="DESCENDING" sortable="false" text="CAMINHO LOCAL" />
+                           </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Button layoutX="607.0" layoutY="146.0" mnemonicParsing="false" onAction="#ActionBuscarFontes" prefHeight="60.0" prefWidth="80.0" text="Buscar&#10;Fonte(s)" textAlignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="40.0" />
+                        <Button layoutX="607.0" layoutY="203.0" mnemonicParsing="false" onAction="#ActionAtualizarFontesDestino" prefHeight="40.0" text="ATUALIZAR FONTES" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="310.0" AnchorPane.rightAnchor="100.0" />
+                        <Button layoutX="292.0" layoutY="379.0" mnemonicParsing="false" onAction="#ActionRemoverSelecionado" prefHeight="40.0" prefWidth="140.0" text="Remover selecionado" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="160.0" />
+                        <Button layoutX="446.0" layoutY="378.0" mnemonicParsing="false" onAction="#ActionRemoverTodos" prefHeight="40.0" prefWidth="140.0" text="Remover Todos" textAlignment="CENTER" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </content>
+    </Tab>
+    <Tab text="EXECUCAO">
+         <content>
+            <AnchorPane minHeight="450.0" minWidth="400.0" prefHeight="450.0" prefWidth="400.0">
+               <children>
+                  <Label layoutX="37.0" layoutY="24.0" prefHeight="20.0" text="Executável Sistema" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="TFCaminhoExecucao" layoutX="37.0" layoutY="59.0" prefHeight="25.0" prefWidth="300.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="40.0" />
+                  <Button layoutX="339.0" layoutY="59.0" mnemonicParsing="false" onAction="#ActionBuscarCaminhoExecucao" prefWidth="60.0" text="Buscar" AnchorPane.leftAnchor="330.0" AnchorPane.topAnchor="40.0" />
+                  <Label layoutX="37.0" layoutY="111.0" prefHeight="25.0" prefWidth="185.0" text="Comando de Set Banco:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="100.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="TFSetBanco" layoutX="37.0" layoutY="145.0" prefHeight="25.0" prefWidth="370.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="130.0" />
+                  <Label layoutX="37.0" layoutY="188.0" prefHeight="20.0" text="Banco " AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="170.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="CBBanco" editable="true" layoutX="37.0" layoutY="222.0" prefHeight="25.0" prefWidth="370.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="200.0" />
+                  <Label layoutX="37.0" layoutY="279.0" prefHeight="20.0" prefWidth="68.0" text="Agência" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="250.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="CBAgencia" editable="true" layoutX="37.0" layoutY="310.0" prefHeight="25.0" prefWidth="370.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="280.0" />
+                  <Button layoutX="34.0" layoutY="385.0" mnemonicParsing="false" onAction="#ActionExecutar" prefHeight="80.0" prefWidth="330.0" text="EXECUTAR" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="40.0" />
+                  <Button layoutX="34.0" layoutY="463.0" mnemonicParsing="false" onAction="#ActionAtualizarExecutar" prefHeight="30.0" prefWidth="330.0" text="Atualizar fontes &amp; Executar" textAlignment="CENTER" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="40.0">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="451.0" layoutY="228.0" prefHeight="30.0" prefWidth="130.0" text="B o t  L o g i n" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="220.0">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="CKHabilitarAutoLogin" layoutX="466.0" layoutY="283.0" mnemonicParsing="false" onAction="#ActionHabilitarAutoLogin" prefHeight="20.0" prefWidth="150.0" text="Habilitar Auto LogIn" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="270.0">
+                     <font>
+                        <Font name="System Italic" size="14.0" />
+                     </font>
+                  </CheckBox>
+                  <Label layoutX="452.0" layoutY="313.0" prefHeight="20.0" prefWidth="40.0" text="Login:" AnchorPane.rightAnchor="165.0" AnchorPane.topAnchor="310.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="TFLogin" layoutX="451.0" layoutY="350.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="335.0" />
+                  <Label layoutX="465.0" layoutY="381.0" prefHeight="20.0" prefWidth="45.0" text="Senha:" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="375.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="TFSenha" layoutX="465.0" layoutY="406.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="400.0" />
+                  <Label layoutX="454.0" layoutY="446.0" text="Use # para o numero de AG" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="430.0">
+                     <font>
+                        <Font name="System Italic" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="LogoExecucao" layoutX="513.0" layoutY="92.0" text="Logo Aqui" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0" />
+                  <Separator layoutX="414.0" layoutY="9.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0.0" />
+                  <Separator layoutX="417.0" layoutY="169.0" prefWidth="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0" />
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab text="Configs &amp; Infos">
+         <content>
+            <SplitPane dividerPositions="0.6737044145873321" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="273.0" prefWidth="670.0">
+                     <children>
+                        <CheckBox fx:id="CKSalvarEstadoCks" layoutX="33.0" layoutY="38.0" mnemonicParsing="false" onAction="#ActionSalvarEstadoCks" prefHeight="20.0" text="Salvar Estado dos CheckBoxes" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                        <CheckBox fx:id="CKSobreescrever" layoutX="33.0" layoutY="85.0" mnemonicParsing="false" onAction="#ActionSobreescrever" prefHeight="25.0" prefWidth="260.0" text="Sempre sobreescrever ao copiar" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="80.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </CheckBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane minHeight="40.0" minWidth="670.0" prefHeight="190.0" prefWidth="670.0">
+                     <children>
+                        <Label layoutX="20.0" layoutY="14.0" prefHeight="15.0" text="Aplicação desenvolvida por:" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
+                        <Label fx:id="LBLVersionNumber" layoutX="540.0" layoutY="23.0" prefHeight="20.0" prefWidth="130.0" text="MvnHelper V 0.3" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="15.0">
+                           <font>
+                              <Font name="Copperplate Gothic Light" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="LBLVersionDate" layoutX="567.0" layoutY="51.0" text="16/05/2018" AnchorPane.rightAnchor="55.0" AnchorPane.topAnchor="45.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="14.0" layoutY="48.0" prefHeight="20.0" text="Douglas Paz" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="50.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="20.0" layoutY="113.0" prefHeight="20.0" text="Lucas Bergmann" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="110.0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="20.0" layoutY="85.0" prefHeight="15.0" text="douglas.da.rosa.paz@accenture.com" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="75.0" />
+                        <Label layoutX="30.0" layoutY="138.0" text="lucas.bergmann@accenture.com" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="135.0" />
+                        <Label fx:id="LBLLogoAccTec" layoutX="585.0" layoutY="94.0" prefHeight="20.0" prefWidth="20.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="90.0" />
+                        <Separator layoutX="459.0" orientation="VERTICAL" prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="180.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>

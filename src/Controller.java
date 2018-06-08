@@ -40,7 +40,6 @@ public class Controller {
     @FXML private TextField TFSenha;
 
     // DEBUG
-    @FXML private TextField TFDestinoFontes;
     @FXML private TableView<ArquivoFonte> TVOrigemFonte;
     @FXML private TableColumn<ArquivoFonte, String> TCNomeFonte;
     @FXML private TableColumn<ArquivoFonte, String> TCCaminhoFonte;
@@ -86,13 +85,8 @@ public class Controller {
     }
 
     // DEBUG
-    @FXML void ActionBuscarDestinoFontes(){TFDestinoFontes.setText(busca.caminho(TFDestinoFontes, Enums.Campos.FONTES, false));}
-    @FXML void ActionBuscarFontes(){ abaDebug.buscaListaFontes(TFDestinoFontes.getText(), TVOrigemFonte);}
-    @FXML void ActionCopiarCaminhoDestinoFontes(){
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(new StringSelection(TFDestinoFontes.getText()), null);
-    }
-    @FXML void ActionSalvarCaminhoDestinoFontes(){ abaDebug.salvaCaminhoFontes(TFCaminhoExecucao.getText(), TFDestinoFontes.getText(), CKSobreescrever.isSelected());}
+    @FXML void ActionBuscarFontes(){ abaDebug.buscaListaFontes(null, TVOrigemFonte);}
+    @FXML void ActionSalvarCaminhoDestinoFontes(){ abaDebug.salvaCaminhoFontes(TFCaminhoExecucao.getText(), TFDestinoExe.getText(), CKSobreescrever.isSelected());}
     private void tabelaFontes(){
         TCCaminhoFonte.setCellValueFactory((valor) -> valor.getValue().caminhoArquivoProperty());
         TCNomeFonte.setCellValueFactory((valor) -> valor.getValue().nomeArquivoProperty());
@@ -104,7 +98,7 @@ public class Controller {
         TVOrigemFonte.setOnDragExited(event -> TVOrigemFonte.setStyle("-fx-border-color: #C8C8C8;"));
         TVOrigemFonte.setOnMouseClicked((event) -> abaDebug.doubleClickFonte(event, TVOrigemFonte));
     }
-    @FXML void ActionAtualizarFontesDestino(){abaDebug.atualizaFontesDestino(TFDestinoFontes.getText());}
+    @FXML void ActionAtualizarFontesDestino(){abaDebug.atualizaFontesDestino(TFDestinoExe.getText());}
     @FXML void ActionRemoverSelecionado(){abaDebug.getArquivosFontes().remove(TVOrigemFonte.getSelectionModel().getSelectedItem());}
     @FXML void ActionRemoverTodos(){abaDebug.getArquivosFontes().removeAll(abaDebug.getArquivosFontes());}
 
@@ -134,6 +128,7 @@ public class Controller {
     // INICIALIZACAO
     @FXML void initialize() {
         inicializaEstadoCks();
+
         LBLLogoAccTec.setGraphic(new ImageView(new Image("file:"+ Enums.ConfigPath.LOGO_ACC.getCaminho())));
         TFSubsistema.setText(acessoVariaveis.getValor(Enums.Campos.SUBSISTEMA));
         TFMacrosistema.setText(acessoVariaveis.getValor(Enums.Campos.MACROSISTEMA));
@@ -144,7 +139,6 @@ public class Controller {
         CBAgencia.setPromptText(acessoVariaveis.getValor(Enums.Campos.AGENCIA));
         CBBanco.setItems(acessoVariaveis.getListaValores(Enums.ConfigPath.LISTA_BANCOS.getCaminho()));
         CBAgencia.setItems(acessoVariaveis.getListaValores(Enums.ConfigPath.LISTA_AGENCIAS.getCaminho()));
-        TFDestinoFontes.setText(acessoVariaveis.getValor(Enums.Campos.FONTES));
         tabelaFontes();
     }
 }

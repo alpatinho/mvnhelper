@@ -20,11 +20,9 @@ public class Main extends Application{
     public void start(Stage primaryStage) throws Exception {
         new Util().getMap();
         primaryStage.getIcons().add(new Image("file:" + Enums.ConfigPath.LOGO_MVNHELPER.getCaminho()));
-        primaryStage.setFullScreen(false);
-        primaryStage.setResizable(false);
-        primaryStage.setTitle("MVN Helper V_0.3.0");
+        primaryStage.setTitle(Enums.Mensagens.MVN_HELPER_VERSION.getTitulo());
 
-        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MvnHelper.fxml"));
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
