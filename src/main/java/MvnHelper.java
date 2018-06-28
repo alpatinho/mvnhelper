@@ -22,7 +22,7 @@ public class MvnHelper extends Application{
         primaryStage.getIcons().add(new Image("file:" + Enums.ConfigPath.LOGO_MVNHELPER.getCaminho()));
         primaryStage.setTitle(Enums.Mensagens.MVN_HELPER_VERSION.getTitulo());
 
-        Parent root = FXMLLoader.load(getClass().getResource("MvnHelper.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/MvnHelper.fxml"));
 
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

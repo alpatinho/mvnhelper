@@ -43,6 +43,7 @@ public class Controller {
     @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(busca.caminho(TFMacrosistema, Enums.Campos.MACROSISTEMA, false));}
     @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(busca.caminho(TFDestinoExe, Enums.Campos.DESTINOCOPIA, false));}
     @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao, Enums.Campos.EXECUCAO, true));}
+    @FXML void ActionBuscarFontes(){}
 
     @FXML void ActionCompilarSubsistema() {
         abaCompilacao.opcoesCompilacao(CKDebug.isSelected());
