@@ -1,3 +1,5 @@
+package Abas;
+
 import Core.AcessoVariaveis;
 import Core.Busca;
 import Core.Enums;
@@ -9,13 +11,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class AbaCompilacao {
+public class AbaCompilacao {
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Util util = new Util();
     private Busca busca = new Busca();
     private String debug = "";
 
-    void compilar(TextField sistema, Enums.Campos campo) {
+    public void compilar(TextField sistema, Enums.Campos campo) {
         try {
             Runtime.getRuntime().exec(
                     new String[]{
@@ -38,31 +40,13 @@ class AbaCompilacao {
 
     }
 
-    void opcoesCompilacao(boolean debug) {
+    public void opcoesCompilacao(boolean debug) {
         if (debug) {
             this.debug = Enums.opcoesExtras.DEBUG.paramentro;
         }
     }
 
-    void opcaoCommit(String caminhoComponente, String opcao){
-        try {
-            Runtime.getRuntime().exec(
-                new String[]{
-                        "cmd.exe",
-                        "/c",
-                        "start",
-                        Enums.ConfigPath.SCRIPT_OPCAO_COMMIT.getCaminho(),
-                        caminhoComponente,
-                        opcao
-                }
-            );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    void copiarEXE(TextField execucao, boolean sobreescrever) {
+    public void copiarEXE(TextField execucao, boolean sobreescrever) {
 
         File origem;
         File destino;

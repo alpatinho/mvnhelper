@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
-public class Main extends Application{
+public class MvnHelper extends Application{
 
 
     public static void main(String[] args) {

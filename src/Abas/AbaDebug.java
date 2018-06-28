@@ -1,4 +1,9 @@
-import Core.*;
+package Abas;
+
+import Core.ArquivoFonte;
+import Core.Busca;
+import Core.Enums;
+import Core.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
@@ -9,34 +14,18 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
-class AbaDebug {
+public class AbaDebug {
 
 
     private javafx.collections.ObservableList<ArquivoFonte> listaArquivosFontes = FXCollections.observableArrayList();
-    private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Busca busca = new Busca();
     private Util util = new Util();
 
-    ObservableList<ArquivoFonte> getArquivosFontes(){
+    public ObservableList<ArquivoFonte> getArquivosFontes(){
         return listaArquivosFontes;
     }
 
-    void salvaCaminhoFontes(String caminhoExecucao, String caminhoFontes, boolean sobreescrever){
-        if(util.stringToFile(caminhoFontes) == null){
-            util.exibeMensagem(Enums.Mensagens.ORIGEM_INVALIDA, false);
-            return;
-        } else if(util.stringToFile(caminhoExecucao) == null){
-            util.exibeMensagem(Enums.Mensagens.ERRO_SALVAR_CAMINHO, false);
-            return;
-        }
-        String caminhoArquivoNovo = util.copia(Paths.get(Enums.ConfigPath.PATH_FONTES.getCaminho()), Paths.get(caminhoExecucao).getParent(), sobreescrever);
-        if(caminhoArquivoNovo != null){
-            util.exibeMensagem(Enums.Mensagens.OPERACAO_SUCESSO, false);
-            acessoVariaveis.setPathFontes(caminhoArquivoNovo, caminhoFontes);
-        }
-    }
-
-    void buscaListaFontes(String caminho, TableView<ArquivoFonte> tabela){
+    public void buscaListaFontes(String caminho, TableView<ArquivoFonte> tabela){
         try {
             List<File> arquivos = busca.multiArquivos(caminho);
             addListaFontes(arquivos, tabela);
@@ -66,7 +55,7 @@ class AbaDebug {
         }
     }
 
-    void atualizaFontesDestino(String destinoFontes){
+    public void atualizaFontesDestino(String destinoFontes){
         try {
             util.stringToFile(destinoFontes);
         }catch (NullPointerException e){
@@ -81,18 +70,18 @@ class AbaDebug {
         }
     }
 
-    void dragTabelaFontes(final DragEvent drag){
+    public void dragTabelaFontes(final DragEvent drag){
         drag.acceptTransferModes(TransferMode.COPY);
         drag.consume();
     }
 
-    void dropTabelaFontes(final DragEvent drop, TableView<ArquivoFonte> tabela){
+    public void dropTabelaFontes(final DragEvent drop, TableView<ArquivoFonte> tabela){
         final Dragboard db = drop.getDragboard();
         if(db.hasFiles()) addListaFontes(db.getFiles(), tabela);
         drop.consume();
     }
 
-    void doubleClickFonte(MouseEvent event, TableView<ArquivoFonte> tabela) {
+    public void doubleClickFonte(MouseEvent event, TableView<ArquivoFonte> tabela) {
         if(event.getButton() == MouseButton.PRIMARY && event.getClickCount() > 1)
             exibeArquivoExplorer(tabela.getItems().get(tabela.getSelectionModel().getFocusedIndex()).getCaminhoArquivo());
     }

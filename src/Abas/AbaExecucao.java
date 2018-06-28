@@ -1,3 +1,5 @@
+package Abas;
+
 import Core.*;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -6,16 +8,14 @@ import javafx.scene.control.TextField;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-class AbaExecucao {
+public class AbaExecucao {
 
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Util util = new Util();
     private Busca busca = new Busca();
 
-    void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
+    public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
         File diretorioExe;
         if (util.stringToFile(execucao.getText()) == null){
             try {
@@ -92,7 +92,7 @@ class AbaExecucao {
         }
     }
 
-    void checkAutoLogin(CheckBox autoLogin, TextField login, TextField senha){
+    public void checkAutoLogin(CheckBox autoLogin, TextField login, TextField senha){
         if(autoLogin.isSelected()){
             login.setDisable(true);
             senha.setDisable(true);
@@ -109,7 +109,7 @@ class AbaExecucao {
         }
     }
 
-    void autoLogIn(String login, String senha, String agencia) {
+    public void autoLogIn(String login, String senha, String agencia) {
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e) {
