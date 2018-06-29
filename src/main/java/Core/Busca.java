@@ -1,5 +1,6 @@
 package Core;
 
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -12,41 +13,12 @@ import java.util.List;
 public class Busca {
 
     private Util util = new Util();
-    private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
 
-    public String caminho(String caminho, boolean arquivo){
+    public String caminho(String caminho, boolean arquivo) throws NullPointerException{
         if(arquivo){
-            try {
-                return auxArquivo(caminho).getAbsolutePath();
-            }catch(NullPointerException e){
-                return null;
-            }
+            return auxArquivo(caminho).getAbsolutePath();
         }else {
-            try {
-                return auxDiretorio(caminho).getAbsolutePath();
-            }catch(NullPointerException e){
-                return null;
-            }
-        }
-    }
-
-    public String caminho(TextField caminho, Enums.Campos campo, boolean arquivo){
-        if(arquivo){
-            try {
-                String aux = auxArquivo(caminho.getText()).getAbsolutePath();
-                acessoVariaveis.setValor(campo, caminho.getText());
-                return aux;
-            }catch(NullPointerException e){
-                return null;
-            }
-        }else {
-            try {
-                String aux = auxDiretorio(caminho.getText()).getAbsolutePath();
-                acessoVariaveis.setValor(campo, caminho.getText());
-                return aux;
-            }catch(NullPointerException e){
-                return null;
-            }
+            return auxDiretorio(caminho).getAbsolutePath();
         }
     }
 
@@ -84,12 +56,14 @@ public class Busca {
 
     }
 
-    public List<File> multiArquivos(String caminho){
+    public List<File> listaFontes(String caminho){
+        List<File> arquivos = null;
         try {
-            return auxMultiplosArquivos(caminho);
-        }catch(NullPointerException e){
-            return null;
+            arquivos = auxMultiplosArquivos(caminho);
+        }catch (Exception e){
+            util.exibeMensagem(Enums.Mensagens.ARQUIVO_INVALIDO, false);
         }
+        return arquivos;
     }
 
     private List<File> auxMultiplosArquivos(String diretorioBusca){
@@ -138,9 +112,4 @@ public class Busca {
             }
         }
     }
-
-    String mapeamento(String Sigla){
-        return null;
-    }
-
 }

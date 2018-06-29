@@ -2,8 +2,8 @@ package Core;
 
 public class Enums {
     public enum ConfigPath{
-        LOGO_MVNHELPER("/Dados/Img/Logo_MvnHelper.jpg"),
-        LOGO_ACC("/Dados/Img/Logo_Acc.png"),
+        LOGO_MVNHELPER("/Img/Logo_MvnHelper.jpg"),
+        LOGO_ACC("/Img/Logo_Acc.png"),
         SCRIPT_COMPILACAO("/Dados/Scripts/compila.bat"),
         SCRIPT_EXECUCAO("/Dados/Scripts/executa.bat"),
         SCRIPT_MANUAL("/Dados/Scripts/manual.bat"),
@@ -104,7 +104,7 @@ public class Enums {
     }
 
     public enum opcoesExtras {
-        DEBUG("-Ddebug"),
+        DEBUG("-Ddebug "),
         BUILD("sicredi-helper:inc-build"),
         TAG("sicredi-helper:svn-tag");
 

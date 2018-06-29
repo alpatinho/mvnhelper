@@ -61,7 +61,6 @@ public class AcessoVariaveis {
 
     public String tradutorMapeamento(String sigla){
         try(Scanner reader  = new Scanner(Files.newBufferedReader(Paths.get("map.prop")))){
-            //reader.useDelimiter("[\n]");
             String mapeamento;
             while (reader.hasNext()) {
                 mapeamento = reader.next();

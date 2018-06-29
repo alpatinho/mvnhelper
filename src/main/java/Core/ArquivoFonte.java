@@ -10,10 +10,6 @@ public class ArquivoFonte {
     private StringProperty nomeArquivo;
     private StringProperty caminhoArquivo;
 
-    public ArquivoFonte(){
-        this(null);
-    }
-
     public ArquivoFonte(String caminhoArquivo) {
         this.caminhoArquivo = new SimpleStringProperty(caminhoArquivo);
         this.nomeArquivo= new SimpleStringProperty(new File(caminhoArquivo).getName());
@@ -25,10 +21,6 @@ public class ArquivoFonte {
 
     public String getCaminhoArquivo() {
         return caminhoArquivo.get();
-    }
-
-    public void setCaminhoArquivo(String caminhoArquivo) {
-        this.caminhoArquivo.set(caminhoArquivo);
     }
 
     public StringProperty caminhoArquivoProperty() {

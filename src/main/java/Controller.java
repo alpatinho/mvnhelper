@@ -1,5 +1,4 @@
 import Abas.AbaCompilacao;
-import Abas.AbaDebug;
 import Abas.AbaExecucao;
 import Core.AcessoVariaveis;
 import Core.ArquivoFonte;
@@ -10,15 +9,15 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+
 public class Controller {
 
     private AbaCompilacao abaCompilacao = new AbaCompilacao();
     private AbaExecucao abaExecucao = new AbaExecucao();
-    private AbaDebug abaDebug = new AbaDebug();
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Busca busca = new Busca();
 
-    //
     @FXML private Label LBLVersion;
     @FXML private Label LBLVersionDate;
     @FXML private Label LBLLogoAccTec;
@@ -39,33 +38,44 @@ public class Controller {
     @FXML private TableColumn<ArquivoFonte, String> TCNomeFonte;
     @FXML private TableColumn<ArquivoFonte, String> TCCaminhoFonte;
 
-    @FXML void ActionBuscarSubsistema() {TFSubsistema.setText(busca.caminho(TFSubsistema, Enums.Campos.SUBSISTEMA, false));}
-    @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(busca.caminho(TFMacrosistema, Enums.Campos.MACROSISTEMA, false));}
-    @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(busca.caminho(TFDestinoExe, Enums.Campos.DESTINOCOPIA, false));}
-    @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao, Enums.Campos.EXECUCAO, true));}
-    @FXML void ActionBuscarFontes(){}
+    @FXML void ActionBuscarSubsistema() {TFSubsistema.setText(busca.caminho(TFSubsistema.getText(), false));}
+    @FXML void ActionBuscarMacrosistema() {TFMacrosistema.setText(busca.caminho(TFMacrosistema.getText(), false));}
+    @FXML void ActionBuscarDestinoExe() {TFDestinoExe.setText(busca.caminho(TFDestinoExe.getText(), false));}
+    @FXML void ActionBuscarCaminhoExecucao() {TFCaminhoExecucao.setText(busca.caminho(TFCaminhoExecucao.getText(), true));}
+    @FXML void ActionBuscarFontes(){abaCompilacao.addListaFontes(busca.listaFontes(TFDestinoExe.getText()), TVOrigemFonte);}
 
-    @FXML void ActionCompilarSubsistema() {
-        abaCompilacao.opcoesCompilacao(CKDebug.isSelected());
-        abaCompilacao.compilar(TFSubsistema, Enums.Campos.SUBSISTEMA);
-    }
+    @FXML void ActionCompilarSubsistema() {abaCompilacao.compilar(TFSubsistema, Enums.Campos.SUBSISTEMA, opcoesCompilacao());}
+    @FXML void ActionCompilarMacrosistema() {abaCompilacao.compilar(TFMacrosistema, Enums.Campos.MACROSISTEMA, opcoesCompilacao());}
 
-    @FXML void ActionCompilarMacrosistema() {
-        abaCompilacao.opcoesCompilacao(CKDebug.isSelected());
-        abaCompilacao.compilar(TFMacrosistema, Enums.Campos.MACROSISTEMA);
-    }
-
-    @FXML void ActionCopiarExe() {
-        acessoVariaveis.setValor(Enums.Campos.MACROSISTEMA, TFMacrosistema.getText());
-        acessoVariaveis.setValor(Enums.Campos.DESTINOCOPIA, TFDestinoExe.getText());
-        abaCompilacao.copiarEXE(TFCaminhoExecucao, CKSobreescrever.isSelected());
-    }
+    @FXML void ActionCopiarExe() {abaCompilacao.copiarEXE(TFCaminhoExecucao, CKSobreescrever.isSelected());}
 
     @FXML void ActionDebug() {ActionSalvarEstadoCks();}
+    @FXML void ActionSobreescrever(){ActionSalvarEstadoCks();}
 
     @FXML void ActionExecutar() {
-        abaExecucao.executar(TFCaminhoExecucao, TFSetBanco, CBBanco, CBAgencia);
+        abaExecucao.executar(TFCaminhoExecucao.getText(), TFSetBanco.getText(), CBBanco, CBAgencia);
         if(CKHabilitarAutoLogin.isSelected()) abaExecucao.autoLogIn(TFLogin.getText(), TFSenha.getText(), CBAgencia.getPromptText());
+        salvarCamposExecucao();
+    }
+
+    ArrayList<Enums.opcoesExtras> opcoesCompilacao(){
+        ArrayList<Enums.opcoesExtras> opcoes = new ArrayList<>();
+        if(CKDebug.isSelected()) opcoes.add(Enums.opcoesExtras.DEBUG);
+        salvarCamposCompilacao();
+        return opcoes;
+    }
+
+    void salvarCamposCompilacao(){
+        acessoVariaveis.setValor(Enums.Campos.SUBSISTEMA, TFSubsistema.getText());
+        acessoVariaveis.setValor(Enums.Campos.MACROSISTEMA, TFMacrosistema.getText());
+        acessoVariaveis.setValor(Enums.Campos.DESTINOCOPIA, TFDestinoExe.getText());
+    }
+
+    void salvarCamposExecucao(){
+        acessoVariaveis.setValor(Enums.Campos.EXECUCAO, TFCaminhoExecucao.getText());
+        acessoVariaveis.setValor(Enums.Campos.SETBANCO, TFSetBanco.getText());
+        acessoVariaveis.setValor(Enums.Campos.BANCO, CBBanco.getPromptText());
+        acessoVariaveis.setValor(Enums.Campos.AGENCIA, CBAgencia.getPromptText());
     }
 
     @FXML void ActionAtualizarExecutar(){
@@ -82,19 +92,22 @@ public class Controller {
         TCCaminhoFonte.setCellValueFactory((valor) -> valor.getValue().caminhoArquivoProperty());
         TCNomeFonte.setCellValueFactory((valor) -> valor.getValue().nomeArquivoProperty());
         TVOrigemFonte.setOnDragOver((event) -> {
-            abaDebug.dragTabelaFontes(event);
+            abaCompilacao.dragTabelaFontes(event);
             TVOrigemFonte.setStyle("-fx-border-color: red; -fx-background-color: #D6D6D6;");
         });
-        TVOrigemFonte.setOnDragDropped((event) -> abaDebug.dropTabelaFontes(event, TVOrigemFonte));
+        TVOrigemFonte.setOnDragDropped((event) -> abaCompilacao.dropTabelaFontes(event, TVOrigemFonte));
         TVOrigemFonte.setOnDragExited(event -> TVOrigemFonte.setStyle("-fx-border-color: #C8C8C8;"));
-        TVOrigemFonte.setOnMouseClicked((event) -> abaDebug.doubleClickFonte(event, TVOrigemFonte));
+        TVOrigemFonte.setOnMouseClicked((event) -> abaCompilacao.doubleClickFonte(event, TVOrigemFonte));
     }
 
-    @FXML void ActionAtualizarFontesDestino(){abaDebug.atualizaFontesDestino(TFDestinoExe.getText());}
+    @FXML void ActionAtualizarFontesDestino(){
+        abaCompilacao.atualizaFontesDestino(TFDestinoExe.getText());
+        abaCompilacao.salvaCaminhoFontes(TFCaminhoExecucao.getText(), TFDestinoExe.getText(), CKSobreescrever.isSelected());
+    }
 
-    @FXML void ActionRemoverSelecionado(){abaDebug.getArquivosFontes().remove(TVOrigemFonte.getSelectionModel().getSelectedItem());}
+    @FXML void ActionRemoverSelecionado(){abaCompilacao.getArquivosFontes().remove(TVOrigemFonte.getSelectionModel().getSelectedItem());}
 
-    @FXML void ActionRemoverTodos(){abaDebug.getArquivosFontes().removeAll(abaDebug.getArquivosFontes());}
+    @FXML void ActionRemoverTodos(){abaCompilacao.getArquivosFontes().removeAll(abaCompilacao.getArquivosFontes());}
 
     private void inicializaEstadoCks(){
         if(acessoVariaveis.getValor(Enums.Campos.SALVARCK).equals("TRUE")) {
@@ -102,9 +115,10 @@ public class Controller {
             if(acessoVariaveis.getValor(Enums.Campos.SOBREESCREVER).equals("TRUE")) CKSobreescrever.setSelected(true);
             if (acessoVariaveis.getValor(Enums.Campos.DEBUG).equals("TRUE")) CKDebug.setSelected(true);
             if (acessoVariaveis.getValor(Enums.Campos.AUTOLOGIN).equals("TRUE")){CKHabilitarAutoLogin.setSelected(true);
-                TFLogin.setText(acessoVariaveis.getValor(Enums.Campos.LOGIN));
-                TFSenha.setText(acessoVariaveis.getValor(Enums.Campos.SENHA));
-                ActionHabilitarAutoLogin();
+
+            TFLogin.setText(acessoVariaveis.getValor(Enums.Campos.LOGIN));
+            TFSenha.setText(acessoVariaveis.getValor(Enums.Campos.SENHA));
+            ActionHabilitarAutoLogin();
             }
         }
     }
@@ -118,9 +132,6 @@ public class Controller {
         } else acessoVariaveis.setValor(Enums.Campos.SALVARCK, "");
     }
 
-    @FXML void ActionSobreescrever(){ActionSalvarEstadoCks();}
-
-    // INICIALIZACAO
     @FXML void initialize() {
         inicializaEstadoCks();
         LBLLogoAccTec.setGraphic(new ImageView(new Image("file:"+ Enums.ConfigPath.LOGO_ACC.getCaminho())));

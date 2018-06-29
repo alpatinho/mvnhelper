@@ -15,12 +15,12 @@ public class AbaExecucao {
     private Util util = new Util();
     private Busca busca = new Busca();
 
-    public void executar(TextField execucao, TextField setbanco, ComboBox banco, ComboBox agencia) {
+    public void executar(String execucao, String setbanco, ComboBox banco, ComboBox agencia) {
         File diretorioExe;
-        if (util.stringToFile(execucao.getText()) == null){
+        if (util.stringToFile(execucao) == null){
             try {
                 util.exibeMensagem(Enums.Mensagens.ERRO_CAMINHO_EXECUCAO, false);
-                diretorioExe = util.stringToFile(busca.caminho(execucao.getText(), true));
+                diretorioExe = util.stringToFile(busca.caminho(execucao, true));
                 acessoVariaveis.setValor(Enums.Campos.EXECUCAO, diretorioExe.getAbsolutePath());
             }catch (Exception err){
                 util.exibeMensagem(Enums.Mensagens.OPERACAO_CANCELADA, true);
@@ -28,30 +28,27 @@ public class AbaExecucao {
             }
             return;
         }else {
-            diretorioExe = util.stringToFile(execucao.getText());
+            diretorioExe = util.stringToFile(execucao);
         }
 
         //coloca o texto selecionado como PromptText pra execucao
         if (banco.getValue() != null) {
             banco.setPromptText(banco.getValue().toString());
-            acessoVariaveis.setValor(Enums.Campos.BANCO, banco.getPromptText());
         }
 
         //coloca o texto selecionado como PromptText pra execucao
         if (agencia.getValue() != null) {
             agencia.setPromptText(agencia.getValue().toString());
-            acessoVariaveis.setValor(Enums.Campos.AGENCIA, agencia.getPromptText());
         }
 
         //efetua a execucao do sistema
-        if (setbanco.getText().equalsIgnoreCase("MANUAL")) {
+        if (setbanco.equalsIgnoreCase("MANUAL")) {
             util.exibeMensagem(Enums.Mensagens.EXECUCAO_MANUAL, false);
             if(diretorioExe.getAbsolutePath().contains(":")) {
                 String caminhoMapeado = acessoVariaveis.tradutorMapeamento(diretorioExe.getAbsolutePath().substring(0, 1));
                 String caminhoCompleto = caminhoMapeado.concat(diretorioExe.getAbsolutePath().substring(2));
                 executarManual(banco.getPromptText(), caminhoCompleto, agencia.getPromptText());
             }
-
         } else {
             try {
                 Runtime.getRuntime().exec(new String[]{
@@ -59,7 +56,7 @@ public class AbaExecucao {
                         "/c",
                         "start",
                         Enums.ConfigPath.SCRIPT_EXECUCAO.getCaminho(),
-                        setbanco.getText(),
+                        setbanco,
                         banco.getPromptText(),
                         diretorioExe.getParent(), // caminho sem o nome do exe
                         diretorioExe.getAbsolutePath(), // caminho com o exe
@@ -70,10 +67,6 @@ public class AbaExecucao {
                 e.printStackTrace();
             }
         }
-        acessoVariaveis.setValor(Enums.Campos.EXECUCAO, execucao.getText());
-        acessoVariaveis.setValor(Enums.Campos.SETBANCO, setbanco.getText());
-        acessoVariaveis.setValor(Enums.Campos.BANCO, banco.getPromptText());
-        acessoVariaveis.setValor(Enums.Campos.AGENCIA, agencia.getPromptText());
     }
 
     void executarManual(String banco, String caminho, String agencia){
@@ -110,12 +103,6 @@ public class AbaExecucao {
     }
 
     public void autoLogIn(String login, String senha, String agencia) {
-        try {
-            Thread.sleep(7000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         if(util.exibeEscolha(Enums.Mensagens.EFETUAR_AUTO_LOGIN)){
             try{
                 AutoLogger autoLogger = new AutoLogger();

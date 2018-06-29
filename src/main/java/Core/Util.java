@@ -79,8 +79,8 @@ public class Util {
 
     public boolean exibeEscolha(Enums.Mensagens mensagens){
         Alert escolha = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType btnSim = new ButtonType("SIM", ButtonBar.ButtonData.OK_DONE);
-        ButtonType btnNao = new ButtonType("NAO", ButtonBar.ButtonData.CANCEL_CLOSE);
+        new ButtonType("SIM", ButtonBar.ButtonData.OK_DONE);
+        new ButtonType("NAO", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         escolha.setTitle(mensagens.toString());
         escolha.setHeaderText(mensagens.getTitulo());
