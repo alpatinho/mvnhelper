@@ -29,6 +29,7 @@ public class Enums {
         SUBSISTEMA,
         MACROSISTEMA,
         DEBUG,
+        DEPLOYSVC,
         DESTINOCOPIA,
         EXECUCAO,
         SETBANCO,
@@ -105,6 +106,7 @@ public class Enums {
 
     public enum opcoesExtras {
         DEBUG("-Ddebug "),
+        DEPLOYSVC("-DdeploySvc "),
         BUILD("sicredi-helper:inc-build"),
         TAG("sicredi-helper:svn-tag");
 

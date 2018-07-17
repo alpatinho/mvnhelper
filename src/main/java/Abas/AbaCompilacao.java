@@ -20,22 +20,32 @@ public class AbaCompilacao {
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Util util = new Util();
     private Busca busca = new Busca();
-    private String opcoesCompilacao = "";
+    private String parametrosCompilacao = "";
 
-    public void compilar(TextField sistema, Enums.Campos campo, ArrayList<Enums.opcoesExtras> opcoesCompilacao) {
+    public void compilar(TextField sistema, Enums.Campos caminhoSistema, ArrayList<Enums.opcoesExtras> parametros) {
         StringBuilder opcao = new StringBuilder();
-        for (Enums.opcoesExtras extra: opcoesCompilacao) {
+        for (Enums.opcoesExtras extra: parametros) {
             opcao.append(extra.paramentro);
         }
-        this.opcoesCompilacao = opcao.toString();
-        compilar(sistema, campo);
+        this.parametrosCompilacao = opcao.toString();
+        compilar(sistema, caminhoSistema);
     }
 
     void compilar(TextField sistema, Enums.Campos campo) {
         try {
-            Runtime.getRuntime().exec("cmd.exe /c start " +
-                Enums.ConfigPath.SCRIPT_COMPILACAO.getCaminho() + sistema.getText() +
-                " mvn clean install " + opcoesCompilacao);
+            Runtime.getRuntime().exec(
+                new String[]{
+                        "cmd.exe",
+                        "/c",
+                        "start",
+                        Enums.ConfigPath.SCRIPT_COMPILACAO.getCaminho(),
+                        sistema.getText(),
+                        "mvn",
+                        "clean",
+                        "install",
+                        parametrosCompilacao
+                }
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }

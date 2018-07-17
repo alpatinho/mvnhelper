@@ -18,6 +18,7 @@ public class Controller {
     private AcessoVariaveis acessoVariaveis = new AcessoVariaveis();
     private Busca busca = new Busca();
 
+    //
     @FXML private Label LBLVersion;
     @FXML private Label LBLVersionDate;
     @FXML private Label LBLLogoAccTec;
@@ -29,6 +30,7 @@ public class Controller {
     @FXML private TextField TFLogin;
     @FXML private TextField TFSenha;
     @FXML private CheckBox CKDebug;
+    @FXML private CheckBox CKDeploySVC;
     @FXML private CheckBox CKSobreescrever;
     @FXML private CheckBox CKSalvarEstadoCks;
     @FXML private CheckBox CKHabilitarAutoLogin;
@@ -50,6 +52,7 @@ public class Controller {
     @FXML void ActionCopiarExe() {abaCompilacao.copiarEXE(TFCaminhoExecucao, CKSobreescrever.isSelected());}
 
     @FXML void ActionDebug() {ActionSalvarEstadoCks();}
+    @FXML void ActionDeploySVC(){ActionSalvarEstadoCks();}
     @FXML void ActionSobreescrever(){ActionSalvarEstadoCks();}
 
     @FXML void ActionExecutar() {
@@ -60,6 +63,7 @@ public class Controller {
 
     ArrayList<Enums.opcoesExtras> opcoesCompilacao(){
         ArrayList<Enums.opcoesExtras> opcoes = new ArrayList<>();
+        if(CKDeploySVC.isSelected()) opcoes.add(Enums.opcoesExtras.DEPLOYSVC);
         if(CKDebug.isSelected()) opcoes.add(Enums.opcoesExtras.DEBUG);
         salvarCamposCompilacao();
         return opcoes;
@@ -114,6 +118,7 @@ public class Controller {
             CKSalvarEstadoCks.setSelected(true);
             if(acessoVariaveis.getValor(Enums.Campos.SOBREESCREVER).equals("TRUE")) CKSobreescrever.setSelected(true);
             if (acessoVariaveis.getValor(Enums.Campos.DEBUG).equals("TRUE")) CKDebug.setSelected(true);
+            if (acessoVariaveis.getValor(Enums.Campos.DEPLOYSVC).equals("TRUE")) CKDeploySVC.setSelected(true);
             if (acessoVariaveis.getValor(Enums.Campos.AUTOLOGIN).equals("TRUE")){CKHabilitarAutoLogin.setSelected(true);
 
             TFLogin.setText(acessoVariaveis.getValor(Enums.Campos.LOGIN));
@@ -127,6 +132,7 @@ public class Controller {
         if (CKSalvarEstadoCks.isSelected()) {
             acessoVariaveis.setValor(Enums.Campos.SALVARCK, "TRUE");
             acessoVariaveis.setValor(Enums.Campos.DEBUG, CKDebug.isSelected() ? "TRUE" : "");
+            acessoVariaveis.setValor(Enums.Campos.DEPLOYSVC, CKDeploySVC.isSelected() ? "TRUE" : "");
             acessoVariaveis.setValor(Enums.Campos.SOBREESCREVER, CKSobreescrever.isSelected() ? "TRUE" : "");
             acessoVariaveis.setValor(Enums.Campos.AUTOLOGIN, CKHabilitarAutoLogin.isSelected() ? "TRUE" : "");
         } else acessoVariaveis.setValor(Enums.Campos.SALVARCK, "");
